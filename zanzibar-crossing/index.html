@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zanzibar Crossing 105km - Race One-Pager</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#5b6675; --line:#d7dde6;
+    --sun:#f4a93b; --sun2:#ef7d3a; --night:#2b3a67; --night2:#16204a;
+    --teal:#0e9488; --paper:#ffffff; --soft:#f4f6f9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:#e9edf2;padding:18px;}
+  .page{max-width:1080px;margin:0 auto;background:var(--paper);border-radius:14px;
+    box-shadow:0 6px 24px rgba(20,30,60,.12);overflow:hidden;}
+  .hdr{background:linear-gradient(100deg,var(--sun),var(--sun2) 45%,var(--night) 100%);
+    color:#fff;padding:20px 26px;display:flex;justify-content:space-between;align-items:flex-end;}
+  .hdr h1{margin:0;font-size:26px;letter-spacing:.3px;}
+  .hdr .sub{font-size:13px;opacity:.92;margin-top:4px;}
+  .hdr .goal{text-align:right;font-size:12px;line-height:1.5;}
+  .hdr .goal b{font-size:20px;display:block;}
+  .wrap{padding:22px 26px;}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal);
+    margin:0 0 10px;border-bottom:2px solid var(--soft);padding-bottom:5px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+  .grid3{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:18px;margin-top:18px;}
+  ul{margin:0;padding-left:18px;}
+  li{font-size:12.5px;line-height:1.55;margin-bottom:2px;color:var(--ink);}
+  li small{color:var(--muted);}
+  .card{background:var(--soft);border-radius:10px;padding:14px 16px;}
+  /* timeline */
+  .tl{margin:6px 0 4px;}
+  .bar{height:26px;border-radius:6px;background:linear-gradient(90deg,
+    var(--sun) 0%, var(--sun2) 26%, #6a5a7e 33%, var(--night) 46%, var(--night2) 100%);
+    position:relative;}
+  .ticks{position:relative;height:96px;margin-top:2px;}
+  .stop{position:absolute;transform:translateX(-50%);text-align:center;width:70px;}
+  .dot{width:11px;height:11px;border-radius:50%;background:#fff;border:3px solid var(--teal);
+    margin:0 auto 3px;}
+  .stop .km{font-size:11px;font-weight:700;}
+  .stop .tm{font-size:10px;line-height:1.35;}
+  .stop .t10{color:var(--teal);font-weight:700;}
+  .stop .t11{color:var(--muted);}
+  .stop .ph{font-size:9px;color:var(--sun2);font-weight:700;}
+  .phaserow{display:flex;gap:10px;margin-top:8px;}
+  .phase{flex:1;border-radius:8px;padding:10px 12px;color:#fff;font-size:11.5px;line-height:1.4;}
+  .p1{background:linear-gradient(120deg,var(--sun),var(--sun2));}
+  .p2{background:linear-gradient(120deg,#6a5a7e,var(--night));}
+  .p3{background:linear-gradient(120deg,var(--night),var(--night2));}
+  .phase b{font-size:13px;}
+  .fuel td,.fuel th{font-size:12px;padding:6px 8px;text-align:left;border-bottom:1px solid var(--line);}
+  .fuel th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px;}
+  .fuel{width:100%;border-collapse:collapse;}
+  .tag{display:inline-block;background:#fde9cf;color:#9a5b13;border-radius:5px;
+    padding:1px 7px;font-size:11px;font-weight:600;}
+  .heat li{margin-bottom:4px;}
+  .foot{font-size:10.5px;color:var(--muted);padding:10px 26px 18px;border-top:1px solid var(--soft);}
+  /* map */
+  .maprow{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px;align-items:stretch;}
+  .mapframe{border:0;width:100%;height:300px;border-radius:10px;}
+  .mapthumb{width:100%;border-radius:10px;display:block;border:1px solid var(--line);}
+  .maplink{font-size:12px;color:var(--teal);word-break:break-all;}
+  .note{font-size:12px;line-height:1.55;}
+  .note b{color:var(--ink);}
+  .step{display:flex;gap:9px;margin-bottom:7px;font-size:12px;line-height:1.45;}
+  .num{flex:0 0 20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  /* page 2 */
+  .crew td,.crew th{font-size:11.5px;padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  .crew th{background:var(--night);color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:.5px;}
+  .crew tr:nth-child(even){background:var(--soft);}
+  .crew{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;}
+  .day{border-left:4px solid var(--sun);}
+  .nite{border-left:4px solid var(--night);}
+  @media print{body{background:#fff;padding:0;}.page{box-shadow:none;border-radius:0;}
+    .pagebreak{page-break-before:always;} .mapframe{display:none;} .mapthumb{display:block;}}
+  @media screen{.mapthumb{display:none;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hdr">
+    <div>
+      <h1>Zanzibar Crossing &middot; 105 km</h1>
+      <div class="sub">South to North &nbsp;|&nbsp; Kizimkazi &rarr; Kilindo +5 km &nbsp;|&nbsp; Start 15:00 &nbsp;|&nbsp; 10 aid stations from My Map</div>
+    </div>
+    <div class="goal">
+      Dual pace <b>10h &amp; 11h</b>
+      <span style="color:#bff0ea">&#9679; 10h</span> &nbsp; <span style="opacity:.75">&#9679; 11h</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ROUTE TIMELINE -->
+    <h2>Route &amp; Aid Stops</h2>
+    <div class="tl">
+      <div class="bar"></div>
+      <div class="ticks">
+        <div class="stop" style="left:0%">    <div class="dot"></div><div class="km">START</div><div class="tm">15:00</div><div class="ph">heat</div></div>
+        <div class="stop" style="left:9.5%">  <div class="dot"></div><div class="km">10 Kizimkazi</div><div class="tm"><span class="t10">16:01</span><br><span class="t11">16:08</span></div></div>
+        <div class="stop" style="left:19%">   <div class="dot"></div><div class="km">20 Ngonga</div><div class="tm"><span class="t10">17:02</span><br><span class="t11">17:17</span></div></div>
+        <div class="stop" style="left:28.6%"> <div class="dot"></div><div class="km">30 Family Din.</div><div class="tm"><span class="t10">18:03</span><br><span class="t11">18:25</span></div><div class="ph">torch on</div></div>
+        <div class="stop" style="left:38.1%"> <div class="dot"></div><div class="km">40 UP Stn</div><div class="tm"><span class="t10">18:56</span><br><span class="t11">19:26</span></div></div>
+        <div class="stop" style="left:47.6%"> <div class="dot"></div><div class="km">50 Tungu</div><div class="tm"><span class="t10">19:49</span><br><span class="t11">20:28</span></div></div>
+        <div class="stop" style="left:60%">   <div class="dot"></div><div class="km">63 Furaha</div><div class="tm"><span class="t10">20:59</span><br><span class="t11">21:47</span></div></div>
+        <div class="stop" style="left:71.4%"> <div class="dot"></div><div class="km">75 Bilal</div><div class="tm"><span class="t10">22:04</span><br><span class="t11">23:03</span></div></div>
+        <div class="stop" style="left:81%">   <div class="dot"></div><div class="km">85 Issa</div><div class="tm"><span class="t10">23:00</span><br><span class="t11">00:08</span></div></div>
+        <div class="stop" style="left:90.5%"> <div class="dot"></div><div class="km">95 Fukuchani</div><div class="tm"><span class="t10">23:55</span><br><span class="t11">01:13</span></div></div>
+        <div class="stop" style="left:100%">  <div class="dot"></div><div class="km">100 Kilindo</div><div class="tm"><span class="t10">00:23</span><br><span class="t11">01:45</span></div><div class="ph">+5km finish</div></div>
+      </div>
+    </div>
+
+    <div class="phaserow">
+      <div class="phase p1"><b>km 0&ndash;30 &middot; Heat</b><br>10h: 6:05 &middot; 11h: 6:50/km. Run by feel, reach dusk fresh.</div>
+      <div class="phase p2"><b>km 30&ndash;70 &middot; Night, cooling</b><br>10h: 5:20 &middot; 11h: 6:05/km. Your conditions. Make time here.</div>
+      <div class="phase p3"><b>km 70&ndash;105 &middot; Deep night</b><br>10h: 5:35 &middot; 11h: 6:30/km. Run flats, hike climbs.</div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin:8px 0 0;"><b style="color:var(--teal);">Finish &mdash; 10h: ~00:50</b> &nbsp;|&nbsp; <b>11h: ~02:18</b>. &nbsp;The whole 10h plan lives or dies on not overcooking the hot first 30km &mdash; bank time at night, not in the sun.</p>
+
+    <!-- MAP -->
+    <h2 style="margin-top:20px;">Route Map</h2>
+    <div class="maprow">
+      <div>
+        <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&z=11" loading="lazy"></iframe>
+        <img class="mapthumb" src="https://www.google.com/maps/d/thumbnail?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" alt="Zanzibar crossing route">
+        <div class="maplink" style="margin-top:6px;">My Map: google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4</div>
+      </div>
+      <div class="card note">
+        <h2>Live Tracking: them vs us</h2>
+        <div class="step"><div class="num">1</div><div>Open the <b>My Map</b> in the Google Maps app (Saved &rarr; Maps) so the route line shows on everyone's phone.</div></div>
+        <div class="step"><div class="num">2</div><div>Runner shares <b>live location</b> (Google Maps &rarr; profile &rarr; Location sharing, or WhatsApp live location) with the crew, set to "until I turn off".</div></div>
+        <div class="step"><div class="num">3</div><div>Crew opens that shared location in Google Maps. The runner's <b>blue dot</b> appears on the same map as the route line, so you see distance to the next aid stop at a glance.</div></div>
+        <div class="step"><div class="num">4</div><div>Backup: match the runner's blue dot to the <b>ETA table</b> (page 2) and your car odometer between stops.</div></div>
+      </div>
+    </div>
+
+    <!-- PACKING -->
+    <div class="grid3">
+      <div class="card">
+        <h2>Car Box</h2>
+        <ul>
+          <li>Cooler + ice, frozen wet towels/buffs</li>
+          <li>Box of water + small bottles (ice some)</li>
+          <li>Pre-mixed syrup flasks, ready to grab</li>
+          <li>Spare shoes + <b>socks (plural)</b> + clothes</li>
+          <li>First aid: disinfectant, irritation cream, anti-chafe stick, blister tape, scissors, needle, plasters</li>
+          <li>Bug spray, sunscreen + SPF lip balm</li>
+          <li>Nutrition: simple syrup, haluwa, salt pills, chapati + PB, bananas, coke</li>
+          <li>Flip flops, wet wipes, toilet paper, bin bag</li>
+          <li>Power bank, cables, spare batteries</li>
+          <li><b>Spare head torch</b> (full backup)</li>
+          <li>Reflective vest + red blinker light</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>On-Body Vest</h2>
+        <ul>
+          <li>2 x 500 ml flasks (water + syrup/coke)</li>
+          <li>2&ndash;3 gels backup</li>
+          <li>Salt pills in ziplock</li>
+          <li>Phone: offline map + live location on</li>
+          <li>Cash, ID / emergency card, whistle</li>
+          <li>Anti-chafe mini, few plasters, TP</li>
+          <li>Day: cap + sunglasses</li>
+          <li>Night: head torch + red blinker</li>
+          <li>Buff (soak to cool)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>To Prepare</h2>
+        <ul>
+          <li>Confirm people to run sections with you</li>
+          <li>Cooler with ice loaded</li>
+          <li>Spare head torch charged</li>
+          <li>Route map on watch (+ phone offline)</li>
+          <li>ID packed</li>
+          <li>Live location shared with crew</li>
+          <li>Brief crew on stop spacing + ETAs</li>
+          <li>Phones + power bank fully charged</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FUEL + HEAT -->
+    <div class="grid" style="margin-top:18px;grid-template-columns:1.3fr 1fr;">
+      <div class="card">
+        <h2>Fueling &middot; per hour</h2>
+        <table class="fuel">
+          <tr><th>Target</th><th>Heat (0&ndash;3.5h)</th><th>Night</th></tr>
+          <tr><td>Carbs</td><td>60&ndash;90 g</td><td>60&ndash;90 g</td></tr>
+          <tr><td>Fluid</td><td>500&ndash;750 ml</td><td>400&ndash;600 ml</td></tr>
+          <tr><td>Salt pill</td><td>every 45&ndash;60 min</td><td>every ~90 min</td></tr>
+        </table>
+        <p style="font-size:11.5px;color:var(--muted);margin:8px 0 0;">
+          Rotate sources so you don't gag: <span class="tag">gel on move</span>
+          <span class="tag">coke/syrup at stop</span> <span class="tag">chapati+PB / haluwa / banana</span>.
+          Skip Naak (bloats). Cold drinks go down easier. Stops under 90 sec.</p>
+      </div>
+      <div class="card heat">
+        <h2>Heat Plan (first 3.5h)</h2>
+        <ul>
+          <li>Pour water over head + neck every stop</li>
+          <li>Ice in cap and in buff</li>
+          <li>Keep pace genuinely easy &ndash; don't chase early "good legs"</li>
+          <li>Sunscreen at start + 1 reapply</li>
+          <li>Most people overcook the first 30 km. Don't.</li>
+        </ul>
+        <h2 style="margin-top:12px;">Night Safety</h2>
+        <ul>
+          <li>Reflective + red blinker on after 18:00</li>
+          <li>Car leapfrogs / runs near you on dark roads</li>
+          <li>Live location live, phone charged</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    Stations &amp; km from the My Map pins. Dual pace: 10h (teal) = 6:05 / 5:20 / 5:35 per km; 11h (grey) = 6:50 / 6:05 / 6:30. Both run easy in the heat and bank time at night.
+    Decide which line you're on by Tungu (50km). Sunset ~18:30. &nbsp; Prepared for Amaury.
+  </div>
+
+  <!-- ============ PAGE 2: CREW CHEAT-SHEET ============ -->
+  <div class="pagebreak"></div>
+  <div class="hdr" style="background:linear-gradient(100deg,var(--night),var(--night2));">
+    <div>
+      <h1>Crew Cheat-Sheet</h1>
+      <div class="sub">What to have ready at each stop &middot; hand it over fast, keep stops under 90 sec</div>
+    </div>
+    <div class="goal">10 stops<b>~10&ndash;13 km apart</b></div>
+  </div>
+
+  <div class="wrap">
+    <h2>At Every Stop</h2>
+    <p class="note" style="margin-top:0;">1 fresh full water flask, every time. New <b>syrup flask every 2nd stop</b>. Quick "how are feet / stomach / mood?" check. Refill, hand food to eat while walking, send off.</p>
+
+    <table class="crew" style="margin-top:10px;">
+      <tr><th>#</th><th>Station</th><th>km</th><th>ETA 10h</th><th>ETA 11h</th><th>Hand to runner</th><th>Crew actions</th></tr>
+      <tr class="day"><td>1</td><td>Kizimkazi</td><td>10</td><td>16:01</td><td>16:08</td><td>Water flask, gel, banana</td><td>Ice in cap, douse head/neck, cold towel</td></tr>
+      <tr class="day"><td>2</td><td>Ngonga Cave</td><td>20</td><td>17:02</td><td>17:17</td><td>Water + <b>syrup</b> flask, coke, chapati+PB</td><td>Reapply sunscreen, ice, douse, salt check</td></tr>
+      <tr class="day"><td>3</td><td>Family Dinner</td><td>30</td><td>18:03</td><td>18:25</td><td>Water flask, gel, haluwa</td><td><b>Dusk: hand torch + blinker + reflective.</b> Cap off. Ice/douse</td></tr>
+      <tr class="nite"><td>4</td><td>UP Station</td><td>40</td><td>18:56</td><td>19:26</td><td>Water + <b>syrup</b> flask, coke, banana</td><td>Confirm torch good, check pace/mood. Pacer can join</td></tr>
+      <tr class="nite"><td>5</td><td>Tungu</td><td>50</td><td>19:49</td><td>20:28</td><td>Water flask, gel, chapati+PB</td><td><b>Foot check</b> if hot spots, tape now</td></tr>
+      <tr class="nite"><td>6</td><td>Furaha Spice Farm</td><td>63</td><td>20:59</td><td>21:47</td><td>Water + <b>syrup</b> flask, coke, haluwa</td><td>Longest leg done (13km). Power-bank top-up phone</td></tr>
+      <tr class="nite"><td>7</td><td>Bilal Spice Farm</td><td>75</td><td>22:04</td><td>23:03</td><td>Water flask, gel, banana</td><td>Swap torch batteries / spare torch</td></tr>
+      <tr class="nite"><td>8</td><td>Issa Spice Farm</td><td>85</td><td>23:00</td><td>00:08</td><td>Water + <b>syrup</b> flask, coke, chapati+PB</td><td>Morale push, keep stop short</td></tr>
+      <tr class="nite"><td>9</td><td>Fukuchani Cave</td><td>95</td><td>23:55</td><td>01:13</td><td>Water flask, gel, coke</td><td>Final 10km. Pacer for the last stretch</td></tr>
+      <tr class="nite"><td>10</td><td>Kilindo (Woop woop)</td><td>100</td><td>00:23</td><td>01:45</td><td>Top-up flask, coke</td><td>Last refill, <b>5km to finish</b>. Send him home</td></tr>
+      <tr class="nite"><td>&#127937;</td><td><b>FINISH</b></td><td>105</td><td>~00:50</td><td>~02:18</td><td colspan="2">Dry clothes, flip flops, food, recovery drink</td></tr>
+    </table>
+
+    <div class="grid" style="margin-top:18px;grid-template-columns:1fr 1fr;">
+      <div class="card note">
+        <h2>Pre-Departure (from 13:30)</h2>
+        <ul>
+          <li>Cooler iced, water + flasks loaded</li>
+          <li>Pre-mix all syrup flasks</li>
+          <li>Spare head torch + power bank charged</li>
+          <li>Runner's live location shared &amp; tested</li>
+          <li>My Map open on crew phones</li>
+          <li>Leave home 14:00, start 15:00</li>
+        </ul>
+      </div>
+      <div class="card note">
+        <h2>If Things Go Wrong</h2>
+        <ul>
+          <li><b>Stomach off:</b> switch to coke + banana, ease pace, drop gels briefly</li>
+          <li><b>Overheating:</b> stop, ice neck/groin, cold towel, walk till HR drops</li>
+          <li><b>Cramps:</b> salt pill + coke, short walk</li>
+          <li><b>Blisters:</b> tape early, don't wait</li>
+          <li><b>Car stays reachable;</b> never let gap exceed one stop on dark roads</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
