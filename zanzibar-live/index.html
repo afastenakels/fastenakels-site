@@ -115,16 +115,12 @@
 </div>
 
 <script>
-  // Paste the live-location share URL here before race day (e.g. a Google Maps "share location" link).
-  var LIVE_URL = "";
+  // Live-location share URL (Google Maps "share location" link).
+  var LIVE_URL = "https://maps.app.goo.gl/8e89eKEtnzshEX9h7";
   if (LIVE_URL) {
     var b = document.getElementById('liveBtn');
     b.className = 'btn';
     b.href = LIVE_URL;
     b.target = '_blank';
     b.innerHTML = '<span class="pulse"></span> Track Amaury live';
-    document.getElementById('liveNote').textContent = 'Opens his live location. The dot moves as he runs.';
-  }
-</script>
-</body>
-</html>
+    document.getElementById('liveNote').innerHTML = 'Opens his live location &mdash; the dot moves as he runs. Tip: in the Google Maps 
