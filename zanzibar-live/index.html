@@ -14,7 +14,10 @@
     font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
     line-height:1.55;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:600px;margin:0 auto;background:var(--paper);min-height:100vh;}
-  header{padding:40px 28px 30px;border-bottom:1px solid var(--rule);}
+  header{position:relative;overflow:hidden;padding:40px 28px 30px;border-bottom:1px solid var(--rule);}
+  .confetti{position:absolute;inset:0;pointer-events:none;z-index:0;}
+  .confetti span{position:absolute;width:9px;height:9px;opacity:.9;}
+  header > *{position:relative;z-index:1;}
   .eyebrow{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin:0;}
   header h1{font-size:31px;line-height:1.12;margin:10px 0 14px;font-weight:700;letter-spacing:-0.3px;}
   .facts{font-size:15px;color:var(--ink);margin:0;}
@@ -24,8 +27,6 @@
   h2{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
     margin:0 0 18px;font-weight:700;}
   .legend{font-size:13.5px;color:var(--muted);margin:-6px 0 20px;}
-  .legend i{font-style:normal;color:var(--live);font-weight:700;}
-  /* timeline */
   .sched{list-style:none;margin:0;padding:0;position:relative;}
   .sched:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--rule);}
   .sched li{position:relative;padding:0 0 22px 28px;}
@@ -38,14 +39,9 @@
     font-variant-numeric:tabular-nums;margin-top:1px;}
   .sched .nt{color:var(--muted);font-weight:400;}
   .small{font-size:13px;color:var(--muted);margin:18px 0 0;}
-  /* now marker */
-  .nowm{position:absolute;left:6px;width:15px;height:15px;border-radius:50%;
-    background:var(--live);border:2px solid var(--paper);transform:translate(-50%,-50%);
-    z-index:5;display:none;}
-  .nowpill{position:absolute;right:0;transform:translateY(-50%);background:var(--live);color:#fff;
-    font-size:12px;font-weight:600;padding:3px 10px;border-radius:4px;white-space:nowrap;
-    z-index:6;display:none;}
-  /* map + button */
+  .nowm{position:absolute;left:6px;width:56px;height:56px;transform:translate(-50%,-50%);
+    background:url('runner.png') center/contain no-repeat;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));z-index:8;display:none;}
   .mapframe{width:100%;height:330px;border:1px solid var(--rule);border-radius:6px;display:block;}
   .maplink{margin-top:12px;font-size:14px;}
   a{color:var(--link);}
@@ -57,7 +53,7 @@
     margin-right:8px;vertical-align:middle;}
   .undertxt{font-size:13px;color:var(--muted);margin:10px 0 0;}
   .join p{font-size:15px;margin:0;}
-  footer{padding:30px 28px calc(60px + env(safe-area-inset-bottom));color:var(--muted);font-size:13.5px;}
+  footer{position:relative;overflow:hidden;padding:30px 28px calc(60px + env(safe-area-inset-bottom));color:var(--muted);font-size:13.5px;}
   footer b{color:var(--ink);}
 </style>
 </head>
@@ -65,16 +61,27 @@
 <div class="wrap">
 
   <header>
+    <div class="confetti" aria-hidden="true">
+      <span style="left:7%;top:16%;background:#e84a8a;transform:rotate(18deg)"></span>
+      <span style="left:18%;top:62%;background:#3a7bd5;border-radius:50%"></span>
+      <span style="left:30%;top:30%;background:#f4c430;transform:rotate(40deg)"></span>
+      <span style="left:46%;top:74%;background:#2bb673;transform:rotate(12deg)"></span>
+      <span style="left:62%;top:22%;background:#e84a8a;border-radius:50%"></span>
+      <span style="left:74%;top:58%;background:#f4c430;transform:rotate(30deg)"></span>
+      <span style="left:84%;top:30%;background:#3a7bd5;transform:rotate(50deg)"></span>
+      <span style="left:91%;top:70%;background:#2bb673;border-radius:50%"></span>
+      <span style="left:54%;top:12%;background:#c2552e;transform:rotate(25deg)"></span>
+      <span style="left:38%;top:84%;background:#3a7bd5;transform:rotate(15deg)"></span>
+    </div>
     <p class="eyebrow">Follow the run</p>
     <h1>Amaury crosses Zanzibar, south to north</h1>
     <p class="facts">105 km on foot &middot; Kizimkazi to Kilindo <span>&middot; Friday 26 June, from 15:00</span></p>
-    <p class="bday">Running it on his birthday.</p>
+    <p class="bday">&#127881; Running it on his birthday.</p>
   </header>
 
-  <!-- SCHEDULE -->
   <section>
     <h2>Where he'll be &amp; when</h2>
-    <p class="legend"><i>&#9679;</i> The red dot tracks roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.</p>
+    <p class="legend">The marker shows roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.</p>
     <ul class="sched">
       <li data-min="0"   data-km="0"><span class="d"></span><span class="pl">Start, Kizimkazi</span><span class="km">0 km</span><span class="tm">15:00 <span class="nt">&middot; hot afternoon start</span></span></li>
       <li data-min="65"  data-km="10"><span class="d"></span><span class="pl">Kizimkazi village</span><span class="km">10 km</span><span class="tm">16:00&ndash;16:10</span></li>
@@ -87,12 +94,10 @@
       <li data-min="575" data-km="95"><span class="d"></span><span class="pl">Fukuchani Cave</span><span class="km">95 km</span><span class="tm">23:55&ndash;01:15</span></li>
       <li data-min="635" data-km="105"><span class="d"></span><span class="pl">Finish, Kilindo</span><span class="km">105 km</span><span class="tm">00:50&ndash;02:20</span></li>
       <div id="nowMarker" class="nowm"></div>
-      <div id="nowPill" class="nowpill"></div>
     </ul>
     <p class="small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
   </section>
 
-  <!-- MAP + LIVE BUTTON -->
   <section>
     <h2>The route &amp; live tracking</h2>
     <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&amp;z=11" loading="lazy"></iframe>
@@ -101,7 +106,6 @@
     <p class="undertxt">Opens his live location; the dot moves once he's running. In the Google Maps app you can open the route map above (Saved &rarr; Maps) to see his dot and the aid stations on one screen.</p>
   </section>
 
-  <!-- BIRTHDAY WHATSAPP -->
   <section>
     <h2>Send him a birthday message</h2>
     <p class="join">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
@@ -109,13 +113,18 @@
     <p class="undertxt">Opens a chat with him. Tap the mic for a voice note, or the clip icon to send a video.</p>
   </section>
 
-  <!-- JOIN -->
   <section class="join">
     <h2>Run a stretch with him</h2>
     <p>Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.</p>
   </section>
 
   <footer>
+    <div class="confetti" aria-hidden="true">
+      <span style="left:12%;top:30%;background:#e84a8a;transform:rotate(20deg)"></span>
+      <span style="left:30%;top:60%;background:#3a7bd5;border-radius:50%"></span>
+      <span style="left:70%;top:35%;background:#f4c430;transform:rotate(35deg)"></span>
+      <span style="left:88%;top:62%;background:#2bb673;border-radius:50%"></span>
+    </div>
     Cheer him on, share the link, come find him on the road.<br>
     <b>Happy birthday, Amaury.</b> 26 June 2026.
   </footer>
@@ -134,31 +143,23 @@
 
   var START_UTC = Date.UTC(2026, 5, 26, 12, 0, 0); // 15:00 EAT (UTC+3)
   function placeNow(){
-    var ul=document.querySelector('.sched'),
-        marker=document.getElementById('nowMarker'),
-        pill=document.getElementById('nowPill');
-    if(!ul||!marker||!pill) return;
+    var ul=document.querySelector('.sched'), marker=document.getElementById('nowMarker');
+    if(!ul||!marker) return;
     var lis=Array.prototype.slice.call(ul.querySelectorAll('li'));
     if(!lis.length) return;
     var ulr=ul.getBoundingClientRect();
     function dotY(li){var d=li.querySelector('.d'),r=d.getBoundingClientRect();return r.top-ulr.top+r.height/2;}
     var mins=(Date.now()-START_UTC)/60000;
-    var firstMin=+lis[0].dataset.min, lastMin=+lis[lis.length-1].dataset.min, y=null, km;
-    if(mins<=firstMin){ y=dotY(lis[0]); pill.textContent='Starts 15:00'; }
-    else if(mins>=lastMin){ y=dotY(lis[lis.length-1]); pill.textContent='Finished'; }
+    var firstMin=+lis[0].dataset.min, lastMin=+lis[lis.length-1].dataset.min, y=null;
+    if(mins<=firstMin){ y=dotY(lis[0]); }
+    else if(mins>=lastMin){ y=dotY(lis[lis.length-1]); }
     else{
       for(var i=0;i<lis.length-1;i++){
         var m0=+lis[i].dataset.min, m1=+lis[i+1].dataset.min;
-        if(mins>=m0&&mins<=m1){
-          var f=(mins-m0)/(m1-m0);
-          y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f;
-          km=+lis[i].dataset.km+(+lis[i+1].dataset.km-+lis[i].dataset.km)*f;
-          pill.textContent='Now ~'+Math.round(km)+' km'; break;
-        }
+        if(mins>=m0&&mins<=m1){ var f=(mins-m0)/(m1-m0); y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f; break; }
       }
     }
-    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block';
-      pill.style.top=y+'px'; pill.style.display='block'; }
+    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block'; }
   }
   window.addEventListener('load', placeNow);
   window.addEventListener('resize', placeNow);
