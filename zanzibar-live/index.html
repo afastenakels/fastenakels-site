@@ -3,103 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Follow Amaury · Zanzibar Crossing 105km</title>
+<title>Follow Amaury · Zanzibar Crossing</title>
 <style>
   :root{
-    --ink:#1a2230; --muted:#5b6675; --line:#dbe1ea;
-    --sun:#f4a93b; --sun2:#ef7d3a; --night:#2b3a67; --night2:#16204a;
-    --teal:#0e9488; --paper:#ffffff; --soft:#f5f7fa;
+    --ink:#1d2733; --paper:#fbfaf7; --card:#ffffff; --rule:#e7e3db;
+    --muted:#6b7280; --accent:#c2552e; --link:#1f6f68; --live:#d23f3f;
   }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink);background:#eef1f5;}
-  .wrap{max-width:640px;margin:0 auto;background:var(--paper);min-height:100vh;}
-  .hero{background:linear-gradient(160deg,var(--sun) 0%,var(--sun2) 38%,var(--night) 100%);
-    color:#fff;padding:34px 24px 30px;text-align:center;}
-  .kick{font-size:13px;letter-spacing:3px;text-transform:uppercase;opacity:.92;}
-  .hero h1{margin:6px 0 4px;font-size:34px;line-height:1.05;}
-  .hero .meta{font-size:15px;opacity:.95;margin-top:8px;line-height:1.5;}
-  .hero .bday{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);
-    border:1px solid rgba(255,255,255,.35);border-radius:30px;padding:5px 14px;font-size:13px;}
-  .live{padding:22px 24px;text-align:center;border-bottom:1px solid var(--line);}
-  .btn{display:inline-block;width:100%;max-width:420px;padding:18px 20px;border-radius:14px;
-    font-size:19px;font-weight:700;text-decoration:none;color:#fff;
-    background:linear-gradient(120deg,var(--teal),#0b7d73);box-shadow:0 6px 18px rgba(14,148,136,.35);}
-  .btn.off{background:#c3cad6;color:#fff;box-shadow:none;}
-  .live small{display:block;color:var(--muted);font-size:13px;margin-top:10px;}
-  .pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:#fff;margin-right:8px;
-    box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:p 1.6s infinite;}
-  @keyframes p{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6);}70%{box-shadow:0 0 0 10px rgba(255,255,255,0);}100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}}
-  section{padding:22px 24px;border-bottom:1px solid var(--line);}
-  h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--teal);margin:0 0 14px;}
+  body{margin:0;background:#efece6;color:var(--ink);
+    font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:600px;margin:0 auto;background:var(--paper);min-height:100vh;}
+  header{padding:40px 28px 30px;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin:0;}
+  header h1{font-size:31px;line-height:1.12;margin:10px 0 14px;font-weight:700;letter-spacing:-0.3px;}
+  .facts{font-size:15px;color:var(--ink);margin:0;}
+  .facts span{color:var(--muted);}
+  .bday{margin:14px 0 0;font-size:14px;color:var(--accent);}
+  section{padding:30px 28px;border-bottom:1px solid var(--rule);}
+  h2{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+    margin:0 0 18px;font-weight:700;}
+  .legend{font-size:13.5px;color:var(--muted);margin:-6px 0 20px;}
+  .legend i{font-style:normal;color:var(--live);font-weight:700;}
+  /* timeline */
   .sched{list-style:none;margin:0;padding:0;position:relative;}
-  .sched:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:3px;
-    background:linear-gradient(var(--sun),var(--night));border-radius:3px;}
-  .sched li{position:relative;padding:0 0 18px 30px;}
+  .sched:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--rule);}
+  .sched li{position:relative;padding:0 0 22px 28px;}
   .sched li:last-child{padding-bottom:0;}
-  .sched .d{position:absolute;left:0;top:3px;width:17px;height:17px;border-radius:50%;
-    background:#fff;border:3px solid var(--teal);}
-  .sched .pl{font-weight:700;font-size:16px;}
-  .sched .km{color:var(--muted);font-size:13px;font-weight:600;}
-  .sched .tm{color:var(--sun2);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;}
-  .sched .nt{color:var(--muted);font-size:13px;}
-  .mapbox iframe{width:100%;height:320px;border:0;border-radius:12px;}
-  .maplink{margin-top:10px;font-size:14px;}
-  .maplink a{color:var(--teal);}
-  .join p{margin:0 0 12px;font-size:15px;line-height:1.6;}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
-  .chip{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:6px 13px;font-size:13px;}
-  .foot{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6;}
-  .foot b{color:var(--ink);}
-  .legend{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5;}
-  .legend b{color:#e23b3e;}
-  .nowm{position:absolute;left:8px;width:22px;height:22px;border-radius:50%;
-    background:#ff4d4f;border:3px solid #fff;transform:translate(-50%,-50%);
-    box-shadow:0 0 0 0 rgba(255,77,79,.6);animation:nowp 1.5s infinite;z-index:5;display:none;}
-  @keyframes nowp{0%{box-shadow:0 0 0 0 rgba(255,77,79,.55);}70%{box-shadow:0 0 0 13px rgba(255,77,79,0);}100%{box-shadow:0 0 0 0 rgba(255,77,79,0);}}
-  .nowpill{position:absolute;right:0;transform:translateY(-50%);background:#ff4d4f;color:#fff;
-    font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px;white-space:nowrap;
-    z-index:6;display:none;box-shadow:0 2px 8px rgba(0,0,0,.18);}
-  .bdaywa{background:linear-gradient(160deg,#fff7ef,#fdeede);text-align:center;}
-  .bdaywa p{font-size:15px;line-height:1.6;margin:0 0 14px;}
-  .btn.wa{background:linear-gradient(120deg,#25D366,#0e8f63);box-shadow:0 6px 18px rgba(18,140,99,.35);}
-  .bdaywa small{display:block;color:var(--muted);font-size:13px;margin-top:10px;}
+  .sched .d{position:absolute;left:0;top:4px;width:13px;height:13px;border-radius:50%;
+    background:var(--paper);border:2px solid #b9b3a7;}
+  .sched .pl{font-weight:600;font-size:16px;}
+  .sched .km{color:var(--muted);font-size:13px;margin-left:6px;}
+  .sched .tm{display:block;color:var(--accent);font-weight:600;font-size:14px;
+    font-variant-numeric:tabular-nums;margin-top:1px;}
+  .sched .nt{color:var(--muted);font-weight:400;}
+  .small{font-size:13px;color:var(--muted);margin:18px 0 0;}
+  /* now marker */
+  .nowm{position:absolute;left:6px;width:15px;height:15px;border-radius:50%;
+    background:var(--live);border:2px solid var(--paper);transform:translate(-50%,-50%);
+    z-index:5;display:none;}
+  .nowpill{position:absolute;right:0;transform:translateY(-50%);background:var(--live);color:#fff;
+    font-size:12px;font-weight:600;padding:3px 10px;border-radius:4px;white-space:nowrap;
+    z-index:6;display:none;}
+  /* map + button */
+  .mapframe{width:100%;height:330px;border:1px solid var(--rule);border-radius:6px;display:block;}
+  .maplink{margin-top:12px;font-size:14px;}
+  a{color:var(--link);}
+  .btn{display:block;text-align:center;text-decoration:none;font-size:16px;font-weight:600;
+    padding:15px 18px;border-radius:6px;margin-top:16px;color:#fff;}
+  .btn-live{background:var(--live);}
+  .btn-wa{background:#0e8f63;}
+  .btn .dotw{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;
+    margin-right:8px;vertical-align:middle;}
+  .undertxt{font-size:13px;color:var(--muted);margin:10px 0 0;}
+  .join p{font-size:15px;margin:0;}
+  footer{padding:30px 28px;color:var(--muted);font-size:13.5px;}
+  footer b{color:var(--ink);}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="hero">
-    <div class="kick">Follow the run</div>
-    <h1>Amaury crosses Zanzibar</h1>
-    <div class="meta">105 km &middot; South &rarr; North &middot; Kizimkazi to Kilindo<br>
-      <b>Friday 26 June</b> &middot; start 15:00</div>
-    <div class="bday">&#127881; It's also his birthday</div>
-  </div>
-
-  <!-- LIVE TRACKING -->
-  <div class="live">
-    <a id="liveBtn" class="btn" href="https://maps.app.goo.gl/8e89eKEtnzshEX9h7" target="_blank"><span class="pulse"></span> Track Amaury live</a>
-    <small id="liveNote">Opens his live location &mdash; the dot moves once he's running on Fri 26 June. Tip: in the Google Maps app, also open the route map above (Saved &rarr; Maps) to see his dot and the aid stations together.</small>
-  </div>
-
-  <!-- BIRTHDAY WHATSAPP -->
-  <section class="bdaywa">
-    <h2>&#127874; Send him a birthday message</h2>
-    <p>He's running this on his birthday. Send a <b>voice note or video</b> on WhatsApp to cheer him on &mdash; he'll play them through the long night kilometres.</p>
-    <a id="waBtn" class="btn wa" href="https://wa.me/447309661235" target="_blank">&#128241; Message Amaury on WhatsApp</a>
-    <small>Opens a chat with him. Tap the mic to record a voice note, or the clip/camera icon to send a video.</small>
-  </section>
+  <header>
+    <p class="eyebrow">Follow the run</p>
+    <h1>Amaury crosses Zanzibar, south to north</h1>
+    <p class="facts">105 km on foot &middot; Kizimkazi to Kilindo <span>&middot; Friday 26 June, from 15:00</span></p>
+    <p class="bday">Running it on his birthday.</p>
+  </header>
 
   <!-- SCHEDULE -->
   <section>
     <h2>Where he'll be &amp; when</h2>
-    <p class="legend"><b>&#9679;</b> The red dot shows roughly where Amaury is now, estimated from his pace. Tap <b style="color:var(--teal)">Track Amaury live</b> above for his exact GPS position.</p>
+    <p class="legend"><i>&#9679;</i> The red dot tracks roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.</p>
     <ul class="sched">
-      <li data-min="0"   data-km="0"><span class="d"></span><span class="pl">Start &middot; Kizimkazi</span> <span class="km">0 km</span><br><span class="tm">15:00</span> <span class="nt">&middot; hot afternoon start</span></li>
-      <li data-min="65"  data-km="10"><span class="d"></span><span class="pl">Kizimkazi village</span> <span class="km">10 km</span><br><span class="tm">16:00&ndash;16:10</span></li>
-      <li data-min="130" data-km="20"><span class="d"></span><span class="pl">Ngonga Cave</span> <span class="km">20 km</span><br><span class="tm">17:00&ndash;17:20</span></li>
-      <li data-min="192" data-km="30"><span class="d"></span><span class="pl">Jozani Forest</span> <span class="km">30 km</span><br><span class="tm">18:00&ndash;18:25</span> <span class="nt">&middot; dusk, head-torches on</span></li>
-      <li data-min="310" data-km="50"><span class="d"></span><span class="pl">Tungu</span> <span class="km">50 km</span><br><span class="tm">19:50&ndash;20:30</span></li>
-      <li data-min="385" data-km="63"><span class="d"></span><span class="pl">Furaha Spice Farm</span> <span class="km">63 km</span><br><span class="tm">21:00&ndash;21:50</span></li>
-      <li data-min="455" data-km="75"><span class="d"></span><span class="pl">Bilal Spice Farm</span> <span class="km">75 km</span><br><span class="tm">22:05&ndash;23:05</sp
+      <li data-min="0"   data-km="0"><span class="d"></span><span class="pl">Start, Kizimkazi</span><span class="km">0 km</span><span class="tm">15:00 <span class="nt">&middot; hot afternoon start</span></span></li>
+      <li data-min="65"  data-km="10"><span class="d"></span><span class="pl">Kizimkazi village</span><span class="km">10 km</span><span class="tm">16:00&ndash;16:10</span></li>
+      <li data-min="130" data-km="20"><span class="d"></span><span class="pl">Ngonga Cave</span><span class="km">20 km</span><span class="tm">17:00&ndash;17:20</span></li>
+      <li data-min="192" data-km="30"><span class="d"></span><span class="pl">Jozani Forest</span><span class="km">30 km</span><span class="tm">18:00&ndash;18:25 <span class="nt">&middot; dusk, head-torches on</span></span></li>
+      <li data-min="310" data-km="50"><span class="d"></span><span class="pl">Tungu</span><span class="km">50 km</span><span class="tm">19:50&ndash;20:30</span></li>
+      <li data-min="385" data-km="63"><span class="d"></span><span class="pl">Furaha Spice Farm</span><span class="km">63 km</span><span class="tm">21:00&ndash;21:50</span></li>
+      <li data-min="455" data-km="75"><span class="d"></span><span class="pl">Bilal Spice Farm</span><span class="km">75 km</span><span class="tm">22:05&ndash;23:05</span></li>
+      <li data-min="515" data-km="85"><span class="d"></span><span class="pl">Issa Spice Farm</span><span class="km">85 km</span><span class="tm">23:00&ndash;00:10</span></li>
+      <li data-min="575" data-km="95"><span class="d"></span><span class="pl">Fukuchani Cave</span><span class="km">95 km</span><span class="tm">23:55&ndash;01:15</span></li>
+      <li data-min="635" data-km="105"><span class="d"></span><span class="pl">Finish, Kilindo</span><span class="km">105 km</span><span class="tm">00:50&ndash;02:20</span></li>
+      <div id="nowMarker" class="nowm"></div>
+      <div id="nowPill" class="nowpill"></div>
+    </ul>
+    <p class="small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
+  </section>
+
+  <!-- MAP + LIVE BUTTON -->
+  <section>
+    <h2>The route &amp; live tracking</h2>
+    <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&z=11" loading="lazy"></iframe>
+    <div class="maplink"><a href="https://www.google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" target="_blank">Open the full route map &rarr;</a></div>
+    <a id="liveBtn" class="btn btn-live" href="https://maps.app.goo.gl/8e89eKEtnzshEX9h7" target="_blank"><span class="dotw"></span>Track Amaury live</a>
+    <p class="undertxt">Opens his live location; the dot moves once he's running. In the Google Maps app you can open the route map above (Saved &rarr; Maps) to see his dot and the aid stations on one screen.</p>
+  </section>
+
+  <!-- BIRTHDAY WHATSAPP -->
+  <section>
+    <h2>Send him a birthday message</h2>
+    <p class="join">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
+    <a id="waBtn" class="btn btn-wa" href="https://wa.me/447309661235" target="_blank">Message Amaury on WhatsApp</a>
+    <p class="undertxt">Opens a chat with him. Tap the mic for a voice note, or the clip icon to send a video.</p>
+  </section>
+
+  <!-- JOIN -->
+  <section class="join">
+    <h2>Run a stretch with him</h2>
+    <p>Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet a
