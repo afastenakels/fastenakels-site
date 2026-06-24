@@ -51,6 +51,19 @@
   .chip{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:6px 13px;font-size:13px;}
   .foot{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6;}
   .foot b{color:var(--ink);}
+  .legend{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5;}
+  .legend b{color:#e23b3e;}
+  .nowm{position:absolute;left:8px;width:22px;height:22px;border-radius:50%;
+    background:#ff4d4f;border:3px solid #fff;transform:translate(-50%,-50%);
+    box-shadow:0 0 0 0 rgba(255,77,79,.6);animation:nowp 1.5s infinite;z-index:5;display:none;}
+  @keyframes nowp{0%{box-shadow:0 0 0 0 rgba(255,77,79,.55);}70%{box-shadow:0 0 0 13px rgba(255,77,79,0);}100%{box-shadow:0 0 0 0 rgba(255,77,79,0);}}
+  .nowpill{position:absolute;right:0;transform:translateY(-50%);background:#ff4d4f;color:#fff;
+    font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px;white-space:nowrap;
+    z-index:6;display:none;box-shadow:0 2px 8px rgba(0,0,0,.18);}
+  .bdaywa{background:linear-gradient(160deg,#fff7ef,#fdeede);text-align:center;}
+  .bdaywa p{font-size:15px;line-height:1.6;margin:0 0 14px;}
+  .btn.wa{background:linear-gradient(120deg,#25D366,#0e8f63);box-shadow:0 6px 18px rgba(18,140,99,.35);}
+  .bdaywa small{display:block;color:var(--muted);font-size:13px;margin-top:10px;}
 </style>
 </head>
 <body>
@@ -70,52 +83,23 @@
     <small id="liveNote">Opens his live location &mdash; the dot moves once he's running on Fri 26 June. Tip: in the Google Maps app, also open the route map above (Saved &rarr; Maps) to see his dot and the aid stations together.</small>
   </div>
 
+  <!-- BIRTHDAY WHATSAPP -->
+  <section class="bdaywa">
+    <h2>&#127874; Send him a birthday message</h2>
+    <p>He's running this on his birthday. Send a <b>voice note or video</b> on WhatsApp to cheer him on &mdash; he'll play them through the long night kilometres.</p>
+    <a id="waBtn" class="btn wa" href="https://wa.me/447309661235" target="_blank">&#128241; Message Amaury on WhatsApp</a>
+    <small>Opens a chat with him. Tap the mic to record a voice note, or the clip/camera icon to send a video.</small>
+  </section>
+
   <!-- SCHEDULE -->
   <section>
     <h2>Where he'll be &amp; when</h2>
+    <p class="legend"><b>&#9679;</b> The red dot shows roughly where Amaury is now, estimated from his pace. Tap <b style="color:var(--teal)">Track Amaury live</b> above for his exact GPS position.</p>
     <ul class="sched">
-      <li><span class="d"></span><span class="pl">Start &middot; Kizimkazi</span> <span class="km">0 km</span><br><span class="tm">15:00</span> <span class="nt">&middot; hot afternoon start</span></li>
-      <li><span class="d"></span><span class="pl">Kizimkazi village</span> <span class="km">10 km</span><br><span class="tm">16:00&ndash;16:10</span></li>
-      <li><span class="d"></span><span class="pl">Ngonga Cave</span> <span class="km">20 km</span><br><span class="tm">17:00&ndash;17:20</span></li>
-      <li><span class="d"></span><span class="pl">Jozani Forest</span> <span class="km">30 km</span><br><span class="tm">18:00&ndash;18:25</span> <span class="nt">&middot; dusk, head-torches on</span></li>
-      <li><span class="d"></span><span class="pl">Tungu</span> <span class="km">50 km</span><br><span class="tm">19:50&ndash;20:30</span></li>
-      <li><span class="d"></span><span class="pl">Furaha Spice Farm</span> <span class="km">63 km</span><br><span class="tm">21:00&ndash;21:50</span></li>
-      <li><span class="d"></span><span class="pl">Bilal Spice Farm</span> <span class="km">75 km</span><br><span class="tm">22:05&ndash;23:05</span></li>
-      <li><span class="d"></span><span class="pl">Issa Spice Farm</span> <span class="km">85 km</span><br><span class="tm">23:00&ndash;00:10</span></li>
-      <li><span class="d"></span><span class="pl">Fukuchani Cave</span> <span class="km">95 km</span><br><span class="tm">23:55&ndash;01:15</span></li>
-      <li><span class="d"></span><span class="pl">Finish &middot; Kilindo</span> <span class="km">105 km</span><br><span class="tm">00:50&ndash;02:20</span> <span class="nt">&middot; Woop woop!</span></li>
-    </ul>
-    <p style="font-size:13px;color:var(--muted);margin:14px 0 0;">Times are a window (faster &ndash; slower pace). Use live tracking for the real position.</p>
-  </section>
-
-  <!-- MAP -->
-  <section class="mapbox">
-    <h2>The route</h2>
-    <iframe src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&z=11" loading="lazy"></iframe>
-    <div class="maplink"><a href="https://www.google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" target="_blank">Open the full route map &rarr;</a></div>
-  </section>
-
-  <!-- JOIN -->
-  <section class="join">
-    <h2>Want to run a bit with him?</h2>
-    <p>Jump in for any distance &ndash; 1 km or 30, day or night. Zero pressure, all paces welcome. Meet at any of the points above and bring:</p>
-    <div class="chips">
-      <span class="chip">Water / a flask</span>
-      <span class="chip">Head torch after dark</span>
-      <span class="chip">Light or reflective gear</span>
-      <span class="chip">Good vibes</span>
-    </div>
-  </section>
-
-  <div class="foot">
-    Cheer him on, share the link, and come find him on the road.<br>
-    <b>Happy birthday, Amaury</b> &middot; 26 June 2026
-  </div>
-
-</div>
-
-<script>
-  // Button is always clickable. live.txt lets the link be swapped from a phone on race day.
-  fetch('live.txt?t=' + Date.now())
-    .then(function(r){ return r.ok ? r.text() : ''; })
-    .then(function(t){ t = (t||'').trim(); if (/^https?:\/\//.test(t)) document.getElementById('liveBtn').hre
+      <li data-min="0"   data-km="0"><span class="d"></span><span class="pl">Start &middot; Kizimkazi</span> <span class="km">0 km</span><br><span class="tm">15:00</span> <span class="nt">&middot; hot afternoon start</span></li>
+      <li data-min="65"  data-km="10"><span class="d"></span><span class="pl">Kizimkazi village</span> <span class="km">10 km</span><br><span class="tm">16:00&ndash;16:10</span></li>
+      <li data-min="130" data-km="20"><span class="d"></span><span class="pl">Ngonga Cave</span> <span class="km">20 km</span><br><span class="tm">17:00&ndash;17:20</span></li>
+      <li data-min="192" data-km="30"><span class="d"></span><span class="pl">Jozani Forest</span> <span class="km">30 km</span><br><span class="tm">18:00&ndash;18:25</span> <span class="nt">&middot; dusk, head-torches on</span></li>
+      <li data-min="310" data-km="50"><span class="d"></span><span class="pl">Tungu</span> <span class="km">50 km</span><br><span class="tm">19:50&ndash;20:30</span></li>
+      <li data-min="385" data-km="63"><span class="d"></span><span class="pl">Furaha Spice Farm</span> <span class="km">63 km</span><br><span class="tm">21:00&ndash;21:50</span></li>
+      <li data-min="455" data-km="75"><span class="d"></span><span class="pl">Bilal Spice Farm</span> <span class="km">75 km</span><br><span class="tm">22:05&ndash;23:05</sp
