@@ -42,6 +42,8 @@
   .nowm{position:absolute;left:6px;width:40px;height:40px;transform:translate(-50%,-50%);
     background:url('/zanzibar-live/runner.png') center/contain no-repeat;
     filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));z-index:8;display:none;}
+  .sched li.passed .d{background:#2bb673;border-color:#2bb673;}
+  .progress{position:absolute;left:6px;top:8px;width:2px;background:#2bb673;transform:translateX(-1px);z-index:1;display:none;}
   .mapframe{width:100%;height:330px;border:1px solid var(--rule);border-radius:6px;display:block;}
   .maplink{margin-top:12px;font-size:14px;}
   a{color:var(--link);}
@@ -94,6 +96,7 @@
       <li data-min="575" data-km="95"><span class="d"></span><span class="pl">Fukuchani Cave</span><span class="km">95 km</span><span class="tm">23:55&ndash;01:15</span></li>
       <li data-min="635" data-km="105"><span class="d"></span><span class="pl">Finish, Kilindo</span><span class="km">105 km</span><span class="tm">00:50&ndash;02:20</span></li>
       <div id="nowMarker" class="nowm"></div>
+      <div id="progressLine" class="progress"></div>
     </ul>
     <p class="small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
   </section>
@@ -141,29 +144,26 @@
     'https://wa.me/447309661235?text=' +
     encodeURIComponent("Happy birthday Amaury! Recording you a little message to cheer you on for the Zanzibar crossing, go smash it.");
 
-  var START_UTC = Date.UTC(2026, 5, 26, 12, 0, 0); // 15:00 EAT (UTC+3)
+  var START_UTC=Date.UTC(2026,5,26,12,0,0);
   function placeNow(){
-    var ul=document.querySelector('.sched'), marker=document.getElementById('nowMarker');
+    var ul=document.querySelector('.sched'),marker=document.getElementById('nowMarker'),prog=document.getElementById('progressLine');
     if(!ul||!marker) return;
     var lis=Array.prototype.slice.call(ul.querySelectorAll('li'));
     if(!lis.length) return;
     var ulr=ul.getBoundingClientRect();
     function dotY(li){var d=li.querySelector('.d'),r=d.getBoundingClientRect();return r.top-ulr.top+r.height/2;}
     var mins=(Date.now()-START_UTC)/60000;
-    var firstMin=+lis[0].dataset.min, lastMin=+lis[lis.length-1].dataset.min, y=null;
+    lis.forEach(function(li){ if(mins>=+li.dataset.min) li.classList.add('passed'); else li.classList.remove('passed'); });
+    var firstMin=+lis[0].dataset.min,lastMin=+lis[lis.length-1].dataset.min,y=null;
     if(mins<=firstMin){ y=dotY(lis[0]); }
     else if(mins>=lastMin){ y=dotY(lis[lis.length-1]); }
-    else{
-      for(var i=0;i<lis.length-1;i++){
-        var m0=+lis[i].dataset.min, m1=+lis[i+1].dataset.min;
-        if(mins>=m0&&mins<=m1){ var f=(mins-m0)/(m1-m0); y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f; break; }
-      }
-    }
-    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block'; }
+    else{ for(var i=0;i<lis.length-1;i++){ var m0=+lis[i].dataset.min,m1=+lis[i+1].dataset.min; if(mins>=m0&&mins<=m1){ var f=(mins-m0)/(m1-m0); y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f; break; } } }
+    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block';
+      if(prog){ if(mins>firstMin){ prog.style.height=Math.max(0,y-8)+'px'; prog.style.display='block'; } else { prog.style.display='none'; } } }
   }
-  window.addEventListener('load', placeNow);
-  window.addEventListener('resize', placeNow);
-  setInterval(placeNow, 30000);
+  window.addEventListener('load',placeNow);
+  window.addEventListener('resize',placeNow);
+  setInterval(placeNow,30000);
   placeNow();
 </script>
 </body>
