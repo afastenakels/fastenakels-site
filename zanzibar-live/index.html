@@ -115,12 +115,11 @@
 </div>
 
 <script>
-  // Live-location share URL (Google Maps "share location" link).
-  var LIVE_URL = "https://maps.app.goo.gl/8e89eKEtnzshEX9h7";
-  if (LIVE_URL) {
+  // The live link is read from live.txt so it can be updated from a phone on race day.
+  function activate(url){
     var b = document.getElementById('liveBtn');
     b.className = 'btn';
-    b.href = LIVE_URL;
+    b.href = url;
     b.target = '_blank';
     b.innerHTML = '<span class="pulse"></span> Track Amaury live';
-    document.getElementById('liveNote').innerHTML = 'Opens his live location &mdash; the dot moves as he runs. Tip: in the Google Maps 
+    document.getElementById('liveNote').innerHTML = 'Opens his live location &mdash; the dot moves as he runs. Tip: in the Google Maps app, also open the route map above (S
