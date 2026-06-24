@@ -66,8 +66,8 @@
 
   <!-- LIVE TRACKING -->
   <div class="live">
-    <a id="liveBtn" class="btn off" href="#">Live tracking starts race day</a>
-    <small id="liveNote"><span class="pulse"></span>Check back from 15:00 on Fri 26 June to see where he is in real time.</small>
+    <a id="liveBtn" class="btn" href="https://maps.app.goo.gl/8e89eKEtnzshEX9h7" target="_blank"><span class="pulse"></span> Track Amaury live</a>
+    <small id="liveNote">Opens his live location &mdash; the dot moves once he's running on Fri 26 June. Tip: in the Google Maps app, also open the route map above (Saved &rarr; Maps) to see his dot and the aid stations together.</small>
   </div>
 
   <!-- SCHEDULE -->
@@ -115,11 +115,7 @@
 </div>
 
 <script>
-  // The live link is read from live.txt so it can be updated from a phone on race day.
-  function activate(url){
-    var b = document.getElementById('liveBtn');
-    b.className = 'btn';
-    b.href = url;
-    b.target = '_blank';
-    b.innerHTML = '<span class="pulse"></span> Track Amaury live';
-    document.getElementById('liveNote').innerHTML = 'Opens his live location &mdash; the dot moves as he runs. Tip: in the Google Maps app, also open the route map above (S
+  // Button is always clickable. live.txt lets the link be swapped from a phone on race day.
+  fetch('live.txt?t=' + Date.now())
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(t){ t = (t||'').trim(); if (/^https?:\/\//.test(t)) document.getElementById('liveBtn').hre
