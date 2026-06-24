@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Follow Amaury · Zanzibar Crossing 105km</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#5b6675; --line:#dbe1ea;
+    --sun:#f4a93b; --sun2:#ef7d3a; --night:#2b3a67; --night2:#16204a;
+    --teal:#0e9488; --paper:#ffffff; --soft:#f5f7fa;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:#eef1f5;}
+  .wrap{max-width:640px;margin:0 auto;background:var(--paper);min-height:100vh;}
+  .hero{background:linear-gradient(160deg,var(--sun) 0%,var(--sun2) 38%,var(--night) 100%);
+    color:#fff;padding:34px 24px 30px;text-align:center;}
+  .kick{font-size:13px;letter-spacing:3px;text-transform:uppercase;opacity:.92;}
+  .hero h1{margin:6px 0 4px;font-size:34px;line-height:1.05;}
+  .hero .meta{font-size:15px;opacity:.95;margin-top:8px;line-height:1.5;}
+  .hero .bday{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.35);border-radius:30px;padding:5px 14px;font-size:13px;}
+  .live{padding:22px 24px;text-align:center;border-bottom:1px solid var(--line);}
+  .btn{display:inline-block;width:100%;max-width:420px;padding:18px 20px;border-radius:14px;
+    font-size:19px;font-weight:700;text-decoration:none;color:#fff;
+    background:linear-gradient(120deg,var(--teal),#0b7d73);box-shadow:0 6px 18px rgba(14,148,136,.35);}
+  .btn.off{background:#c3cad6;color:#fff;box-shadow:none;}
+  .live small{display:block;color:var(--muted);font-size:13px;margin-top:10px;}
+  .pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:#fff;margin-right:8px;
+    box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:p 1.6s infinite;}
+  @keyframes p{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6);}70%{box-shadow:0 0 0 10px rgba(255,255,255,0);}100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+  section{padding:22px 24px;border-bottom:1px solid var(--line);}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--teal);margin:0 0 14px;}
+  .sched{list-style:none;margin:0;padding:0;position:relative;}
+  .sched:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:3px;
+    background:linear-gradient(var(--sun),var(--night));border-radius:3px;}
+  .sched li{position:relative;padding:0 0 18px 30px;}
+  .sched li:last-child{padding-bottom:0;}
+  .sched .d{position:absolute;left:0;top:3px;width:17px;height:17px;border-radius:50%;
+    background:#fff;border:3px solid var(--teal);}
+  .sched .pl{font-weight:700;font-size:16px;}
+  .sched .km{color:var(--muted);font-size:13px;font-weight:600;}
+  .sched .tm{color:var(--sun2);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;}
+  .sched .nt{color:var(--muted);font-size:13px;}
+  .mapbox iframe{width:100%;height:320px;border:0;border-radius:12px;}
+  .maplink{margin-top:10px;font-size:14px;}
+  .maplink a{color:var(--teal);}
+  .join p{margin:0 0 12px;font-size:15px;line-height:1.6;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .chip{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:6px 13px;font-size:13px;}
+  .foot{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6;}
+  .foot b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kick">Follow the run</div>
+    <h1>Amaury crosses Zanzibar</h1>
+    <div class="meta">105 km &middot; South &rarr; North &middot; Kizimkazi to Kilindo<br>
+      <b>Friday 26 June</b> &middot; start 15:00</div>
+    <div class="bday">&#127881; It's also his birthday</div>
+  </div>
+
+  <!-- LIVE TRACKING -->
+  <div class="live">
+    <a id="liveBtn" class="btn off" href="#">Live tracking starts race day</a>
+    <small id="liveNote"><span class="pulse"></span>Check back from 15:00 on Fri 26 June to see where he is in real time.</small>
+  </div>
+
+  <!-- SCHEDULE -->
+  <section>
+    <h2>Where he'll be &amp; when</h2>
+    <ul class="sched">
+      <li><span class="d"></span><span class="pl">Start &middot; Kizimkazi</span> <span class="km">0 km</span><br><span class="tm">15:00</span> <span class="nt">&middot; hot afternoon start</span></li>
+      <li><span class="d"></span><span class="pl">Kizimkazi village</span> <span class="km">10 km</span><br><span class="tm">16:00&ndash;16:10</span></li>
+      <li><span class="d"></span><span class="pl">Ngonga Cave</span> <span class="km">20 km</span><br><span class="tm">17:00&ndash;17:20</span></li>
+      <li><span class="d"></span><span class="pl">Jozani Forest</span> <span class="km">30 km</span><br><span class="tm">18:00&ndash;18:25</span> <span class="nt">&middot; dusk, head-torches on</span></li>
+      <li><span class="d"></span><span class="pl">Tungu</span> <span class="km">50 km</span><br><span class="tm">19:50&ndash;20:30</span></li>
+      <li><span class="d"></span><span class="pl">Furaha Spice Farm</span> <span class="km">63 km</span><br><span class="tm">21:00&ndash;21:50</span></li>
+      <li><span class="d"></span><span class="pl">Bilal Spice Farm</span> <span class="km">75 km</span><br><span class="tm">22:05&ndash;23:05</span></li>
+      <li><span class="d"></span><span class="pl">Issa Spice Farm</span> <span class="km">85 km</span><br><span class="tm">23:00&ndash;00:10</span></li>
+      <li><span class="d"></span><span class="pl">Fukuchani Cave</span> <span class="km">95 km</span><br><span class="tm">23:55&ndash;01:15</span></li>
+      <li><span class="d"></span><span class="pl">Finish &middot; Kilindo</span> <span class="km">105 km</span><br><span class="tm">00:50&ndash;02:20</span> <span class="nt">&middot; Woop woop!</span></li>
+    </ul>
+    <p style="font-size:13px;color:var(--muted);margin:14px 0 0;">Times are a window (faster &ndash; slower pace). Use live tracking for the real position.</p>
+  </section>
+
+  <!-- MAP -->
+  <section class="mapbox">
+    <h2>The route</h2>
+    <iframe src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&z=11" loading="lazy"></iframe>
+    <div class="maplink"><a href="https://www.google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" target="_blank">Open the full route map &rarr;</a></div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="join">
+    <h2>Want to run a bit with him?</h2>
+    <p>Jump in for any distance &ndash; 1 km or 30, day or night. Zero pressure, all paces welcome. Meet at any of the points above and bring:</p>
+    <div class="chips">
+      <span class="chip">Water / a flask</span>
+      <span class="chip">Head torch after dark</span>
+      <span class="chip">Light or reflective gear</span>
+      <span class="chip">Good vibes</span>
+    </div>
+  </section>
+
+  <div class="foot">
+    Cheer him on, share the link, and come find him on the road.<br>
+    <b>Happy birthday, Amaury</b> &middot; 26 June 2026
+  </div>
+
+</div>
+
+<script>
+  // Paste the live-location share URL here before race day (e.g. a Google Maps "share location" link).
+  var LIVE_URL = "";
+  if (LIVE_URL) {
+    var b = document.getElementById('liveBtn');
+    b.className = 'btn';
+    b.href = LIVE_URL;
+    b.target = '_blank';
+    b.innerHTML = '<span class="pulse"></span> Track Amaury live';
+    document.getElementById('liveNote').textContent = 'Opens his live location. The dot moves as he runs.';
+  }
+</script>
+</body>
+</html>
