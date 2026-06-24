@@ -40,7 +40,7 @@
   .sched .nt{color:var(--muted);font-weight:400;}
   .small{font-size:13px;color:var(--muted);margin:18px 0 0;}
   .nowm{position:absolute;left:6px;width:56px;height:56px;transform:translate(-50%,-50%);
-    background:url('runner.png') center/contain no-repeat;
+    background:url('/zanzibar-live/runner.png') center/contain no-repeat;
     filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));z-index:8;display:none;}
   .mapframe{width:100%;height:330px;border:1px solid var(--rule);border-radius:6px;display:block;}
   .maplink{margin-top:12px;font-size:14px;}
@@ -132,7 +132,7 @@
 </div>
 
 <script>
-  fetch('live.txt?t=' + Date.now())
+  fetch('/zanzibar-live/live.txt?t=' + Date.now())
     .then(function(r){ return r.ok ? r.text() : ''; })
     .then(function(t){ t = (t||'').trim(); if (/^https?:\/\//.test(t)) document.getElementById('liveBtn').href = t; })
     .catch(function(){});
