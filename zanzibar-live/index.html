@@ -95,7 +95,7 @@
   <!-- MAP + LIVE BUTTON -->
   <section>
     <h2>The route &amp; live tracking</h2>
-    <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&z=11" loading="lazy"></iframe>
+    <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&amp;z=11" loading="lazy"></iframe>
     <div class="maplink"><a href="https://www.google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" target="_blank">Open the full route map &rarr;</a></div>
     <a id="liveBtn" class="btn btn-live" href="https://maps.app.goo.gl/8e89eKEtnzshEX9h7" target="_blank"><span class="dotw"></span>Track Amaury live</a>
     <p class="undertxt">Opens his live location; the dot moves once he's running. In the Google Maps app you can open the route map above (Saved &rarr; Maps) to see his dot and the aid stations on one screen.</p>
@@ -112,4 +112,58 @@
   <!-- JOIN -->
   <section class="join">
     <h2>Run a stretch with him</h2>
-    <p>Jump in for any distance, 1 km or 30
+    <p>Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.</p>
+  </section>
+
+  <footer>
+    Cheer him on, share the link, come find him on the road.<br>
+    <b>Happy birthday, Amaury.</b> 26 June 2026.
+  </footer>
+
+</div>
+
+<script>
+  fetch('live.txt?t=' + Date.now())
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(t){ t = (t||'').trim(); if (/^https?:\/\//.test(t)) document.getElementById('liveBtn').href = t; })
+    .catch(function(){});
+
+  document.getElementById('waBtn').href =
+    'https://wa.me/447309661235?text=' +
+    encodeURIComponent("Happy birthday Amaury! Recording you a little message to cheer you on for the Zanzibar crossing, go smash it.");
+
+  var START_UTC = Date.UTC(2026, 5, 26, 12, 0, 0); // 15:00 EAT (UTC+3)
+  function placeNow(){
+    var ul=document.querySelector('.sched'),
+        marker=document.getElementById('nowMarker'),
+        pill=document.getElementById('nowPill');
+    if(!ul||!marker||!pill) return;
+    var lis=Array.prototype.slice.call(ul.querySelectorAll('li'));
+    if(!lis.length) return;
+    var ulr=ul.getBoundingClientRect();
+    function dotY(li){var d=li.querySelector('.d'),r=d.getBoundingClientRect();return r.top-ulr.top+r.height/2;}
+    var mins=(Date.now()-START_UTC)/60000;
+    var firstMin=+lis[0].dataset.min, lastMin=+lis[lis.length-1].dataset.min, y=null, km;
+    if(mins<=firstMin){ y=dotY(lis[0]); pill.textContent='Starts 15:00'; }
+    else if(mins>=lastMin){ y=dotY(lis[lis.length-1]); pill.textContent='Finished'; }
+    else{
+      for(var i=0;i<lis.length-1;i++){
+        var m0=+lis[i].dataset.min, m1=+lis[i+1].dataset.min;
+        if(mins>=m0&&mins<=m1){
+          var f=(mins-m0)/(m1-m0);
+          y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f;
+          km=+lis[i].dataset.km+(+lis[i+1].dataset.km-+lis[i].dataset.km)*f;
+          pill.textContent='Now ~'+Math.round(km)+' km'; break;
+        }
+      }
+    }
+    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block';
+      pill.style.top=y+'px'; pill.style.display='block'; }
+  }
+  window.addEventListener('load', placeNow);
+  window.addEventListener('resize', placeNow);
+  setInterval(placeNow, 30000);
+  placeNow();
+</script>
+</body>
+</html>
