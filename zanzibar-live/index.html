@@ -75,15 +75,15 @@
       <span style="left:54%;top:12%;background:#c2552e;transform:rotate(25deg)"></span>
       <span style="left:38%;top:84%;background:#3a7bd5;transform:rotate(15deg)"></span>
     </div>
-    <p class="eyebrow">Follow the run</p>
-    <h1>Amaury crosses Zanzibar, south to north</h1>
-    <p class="facts">105 km on foot &middot; Kizimkazi to Kilindo <span>&middot; Friday 26 June, from 15:00</span></p>
-    <p class="bday">&#127881; Running it on his birthday.</p>
+    <p class="eyebrow" id="t-eyebrow">Follow the run</p>
+    <h1 id="t-title">Amaury crosses Zanzibar, south to north</h1>
+    <p class="facts" id="t-facts">105 km on foot &middot; Kizimkazi to Kilindo <span>&middot; Friday 26 June, from 15:00</span></p>
+    <p class="bday">&#127881; <span id="t-bday">Running it on his birthday.</span></p>
   </header>
 
   <section>
     <h2>Where he'll be &amp; when</h2>
-    <p class="legend">The marker shows roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.</p>
+    <p class="legend" id="t-legend">The marker shows roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.</p>
     <ul class="sched">
       <li data-min="0"   data-km="0"><span class="d"></span><span class="pl">Start, Kizimkazi</span><span class="km">0 km</span><span class="tm">15:00 <span class="nt">&middot; hot afternoon start</span></span></li>
       <li data-min="65"  data-km="10"><span class="d"></span><span class="pl">Kizimkazi village</span><span class="km">10 km</span><span class="tm">16:00&ndash;16:10</span></li>
@@ -98,7 +98,7 @@
       <div id="nowMarker" class="nowm"></div>
       <div id="progressLine" class="progress"></div>
     </ul>
-    <p class="small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
+    <p class="small" id="t-small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
   </section>
 
   <section>
@@ -110,15 +110,15 @@
   </section>
 
   <section>
-    <h2>Send him a birthday message</h2>
-    <p class="join">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
+    <h2 id="t-wa-h">Send him a birthday message</h2>
+    <p class="join" id="t-wa-p">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
     <a id="waBtn" class="btn btn-wa" href="https://wa.me/447309661235" target="_blank">Message Amaury on WhatsApp</a>
     <p class="undertxt">Opens a chat with him. Tap the mic for a voice note, or the clip icon to send a video.</p>
   </section>
 
   <section class="join">
-    <h2>Run a stretch with him</h2>
-    <p>Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.</p>
+    <h2 id="t-join-h">Run a stretch with him</h2>
+    <p id="t-join-p">Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.</p>
   </section>
 
   <footer>
@@ -128,7 +128,7 @@
       <span style="left:70%;top:35%;background:#f4c430;transform:rotate(35deg)"></span>
       <span style="left:88%;top:62%;background:#2bb673;border-radius:50%"></span>
     </div>
-    Cheer him on, share the link, come find him on the road.<br>
+    <span id="t-footer1">Cheer him on, share the link, come find him on the road.</span><br>
     <b>Happy birthday, Amaury.</b> 26 June 2026.
   </footer>
 
@@ -139,6 +139,19 @@
     .then(function(r){ return r.ok ? r.text() : ''; })
     .then(function(t){ t = (t||'').trim(); if (/^https?:\/\//.test(t)) document.getElementById('liveBtn').href = t; })
     .catch(function(){});
+
+  // Friendly text editing: words come from content.txt (edit that file, no HTML).
+  (function(){
+    var map={eyebrow:'t-eyebrow',title:'t-title',facts:'t-facts',birthday:'t-bday',schedule_note:'t-legend',schedule_small:'t-small',whatsapp_heading:'t-wa-h',whatsapp_text:'t-wa-p',join_heading:'t-join-h',join_text:'t-join-p',footer:'t-footer1'};
+    fetch('/zanzibar-live/content.txt?t='+Date.now()).then(function(r){return r.ok?r.text():'';}).then(function(txt){
+      txt.split('\n').forEach(function(line){
+        line=line.replace(/^\uFEFF/,'').trim(); if(!line||line.charAt(0)==='#') return;
+        var i=line.indexOf(':'); if(i<0) return;
+        var key=line.slice(0,i).trim().toLowerCase(), val=line.slice(i+1).trim();
+        if(!val) return; var id=map[key]; if(!id) return; var el=document.getElementById(id); if(el) el.textContent=val;
+      });
+    }).catch(function(){});
+  })();
 
   document.getElementById('waBtn').href =
     'https://wa.me/447309661235?text=' +
