@@ -3,13 +3,15 @@
 # Lines starting with # are ignored. Save with "Commit changes" and the page updates in about 30 seconds.
 
 eyebrow: Follow the run
-title: Amaury crosses Zanzibar, south to north
-facts: 105 km on foot · Kizimkazi to Kilindo · Friday 26 June, from 15:00
-birthday: Running it on his birthday.
-schedule_note: The marker shows roughly where Amaury is now, estimated from his pace. For his exact position, use the live map below.
-schedule_small: Times are a window: earlier if he's quick, later if not. The live map is the real position.
+title: Amaury Crosses Zanzibar: South to North!
+facts: 105 km run · Kizimkazi to Kilindo · Friday 26 June, from 15:00
+birthday: Running it on his birthday!
+schedule_note: The marker shows Amaury's approximate location based on his pace. For his exact position, check the live map below!
+schedule_small: Times are a window: earlier if he's quick, later if he's not. The live map shows his exact position.
+map_note: Opens his live location. Once he's running, the dot will move in real time. In the Google Maps app, you can also open the route map above (Saved → Maps) to see his location and the aid stations together.
 whatsapp_heading: Send him a birthday message
-whatsapp_text: It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.
+whatsapp_button: Send Amaury a Birthday Message to Cheer Him On!
+whatsapp_text: It's his birthday, and he'll be running well into the night. Send a message, voice note or video on WhatsApp to keep him going!!
 join_heading: Run a stretch with him
 join_text: Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.
-footer: Cheer him on, share the link, come find him on the road.
+footer: HAPPY BIRTHDAY, AMAURY!!!

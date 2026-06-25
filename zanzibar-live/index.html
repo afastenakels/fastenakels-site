@@ -76,7 +76,7 @@
       <span style="left:38%;top:84%;background:#3a7bd5;transform:rotate(15deg)"></span>
     </div>
     <p class="eyebrow" id="t-eyebrow">Follow the run</p>
-    <h1 id="t-title">Amaury crosses Zanzibar, south to north</h1>
+    <h1 id="t-title">Amaury Crosses Zanzibar: South to North!</h1>
     <p class="facts" id="t-facts">105 km on foot &middot; Kizimkazi to Kilindo <span>&middot; Friday 26 June, from 15:00</span></p>
     <p class="bday">&#127881; <span id="t-bday">Running it on his birthday.</span></p>
   </header>
@@ -106,13 +106,13 @@
     <iframe class="mapframe" src="https://www.google.com/maps/d/embed?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4&amp;z=11" loading="lazy"></iframe>
     <div class="maplink"><a href="https://www.google.com/maps/d/viewer?mid=1i8FzG9hoiduJmCuSMDhPua0JOufnFP4" target="_blank">Open the full route map &rarr;</a></div>
     <a id="liveBtn" class="btn btn-live" href="https://maps.app.goo.gl/8e89eKEtnzshEX9h7" target="_blank"><span class="dotw"></span>Track Amaury live</a>
-    <p class="undertxt">Opens his live location; the dot moves once he's running. In the Google Maps app you can open the route map above (Saved &rarr; Maps) to see his dot and the aid stations on one screen.</p>
+    <p class="undertxt" id="t-live-note">Opens his live location. Once he's running, the dot will move in real time. In the Google Maps app, you can also open the route map above (Saved &rarr; Maps) to see his location and the aid stations together.</p>
   </section>
 
   <section>
     <h2 id="t-wa-h">Send him a birthday message</h2>
     <p class="join" id="t-wa-p">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
-    <a id="waBtn" class="btn btn-wa" href="https://wa.me/447309661235" target="_blank">Message Amaury on WhatsApp</a>
+    <a id="waBtn" class="btn btn-wa" href="https://wa.me/447309661235" target="_blank">Send Amaury a Birthday Message to Cheer Him On!</a>
     <p class="undertxt">Opens a chat with him. Tap the mic for a voice note, or the clip icon to send a video.</p>
   </section>
 
@@ -128,8 +128,8 @@
       <span style="left:70%;top:35%;background:#f4c430;transform:rotate(35deg)"></span>
       <span style="left:88%;top:62%;background:#2bb673;border-radius:50%"></span>
     </div>
-    <span id="t-footer1">Cheer him on, share the link, come find him on the road.</span><br>
-    <b>Happy birthday, Amaury.</b> 26 June 2026.
+    <b><span id="t-footer1">Cheer him on, share the link, come find him on the road.</span></b><br>
+    26 June 2026.
   </footer>
 
 </div>
@@ -142,7 +142,7 @@
 
   // Friendly text editing: words come from content.txt (edit that file, no HTML).
   (function(){
-    var map={eyebrow:'t-eyebrow',title:'t-title',facts:'t-facts',birthday:'t-bday',schedule_note:'t-legend',schedule_small:'t-small',whatsapp_heading:'t-wa-h',whatsapp_text:'t-wa-p',join_heading:'t-join-h',join_text:'t-join-p',footer:'t-footer1'};
+    var map={eyebrow:'t-eyebrow',title:'t-title',facts:'t-facts',birthday:'t-bday',schedule_note:'t-legend',schedule_small:'t-small',map_note:'t-live-note',whatsapp_heading:'t-wa-h',whatsapp_button:'waBtn',whatsapp_text:'t-wa-p',join_heading:'t-join-h',join_text:'t-join-p',footer:'t-footer1'};
     fetch('/zanzibar-live/content.txt?t='+Date.now()).then(function(r){return r.ok?r.text():'';}).then(function(txt){
       txt.split('\n').forEach(function(line){
         line=line.replace(/^\uFEFF/,'').trim(); if(!line||line.charAt(0)==='#') return;
