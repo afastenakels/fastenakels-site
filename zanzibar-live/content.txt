@@ -12,6 +12,4 @@ map_note: Opens his live location. Once he's running, the dot will move in real 
 whatsapp_heading: Send him a birthday message
 whatsapp_button: Send Amaury a Birthday Message to Cheer Him On!
 whatsapp_text: It's his birthday, and he'll be running well into the night. Send a message, voice note or video on WhatsApp to keep him going!!
-join_heading: Run a stretch with him
-join_text: Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.
 footer: HAPPY BIRTHDAY, AMAURY!!!

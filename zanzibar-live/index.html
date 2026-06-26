@@ -95,6 +95,7 @@
       <li data-min="515" data-km="85"><span class="d"></span><span class="pl">Issa Spice Farm</span><span class="km">85 km</span><span class="tm">23:00&ndash;00:10</span></li>
       <li data-min="575" data-km="95"><span class="d"></span><span class="pl">Fukuchani Cave</span><span class="km">95 km</span><span class="tm">23:55&ndash;01:15</span></li>
       <li data-min="635" data-km="105"><span class="d"></span><span class="pl">Finish, Kilindo</span><span class="km">105 km</span><span class="tm">00:50&ndash;02:20</span></li>
+      <div id="nowMarker" class="nowm"></div>
       <div id="progressLine" class="progress"></div>
     </ul>
     <p class="small" id="t-small">Times are a window: earlier if he's quick, later if not. The live map is the real position.</p>
@@ -113,11 +114,6 @@
     <p class="join" id="t-wa-p">It's his birthday out there. Send a voice note or video on WhatsApp to cheer him on, and he'll play them through the long night kilometres.</p>
     <a id="waBtn" class="btn btn-wa" href="https://wa.me/447309661235" target="_blank">Send Amaury a Birthday Message to Cheer Him On!</a>
     <p class="undertxt">Opens a chat with him. Tap the mic for a voice note, or the clip icon to send a video.</p>
-  </section>
-
-  <section class="join">
-    <h2 id="t-join-h">Run a stretch with him</h2>
-    <p id="t-join-p">Jump in for any distance, 1 km or 30, day or night. All paces welcome. Meet at any point above and bring water, a head torch after dark, and something reflective.</p>
   </section>
 
   <footer>
@@ -158,8 +154,8 @@
 
   var START_UTC=Date.UTC(2026,5,26,12,0,0);
   function placeNow(){
-    var ul=document.querySelector('.sched'),prog=document.getElementById('progressLine');
-    if(!ul||!prog) return;
+    var ul=document.querySelector('.sched'),marker=document.getElementById('nowMarker'),prog=document.getElementById('progressLine');
+    if(!ul||!marker) return;
     var lis=Array.prototype.slice.call(ul.querySelectorAll('li'));
     if(!lis.length) return;
     var ulr=ul.getBoundingClientRect();
@@ -170,7 +166,8 @@
     if(mins<=firstMin){ y=dotY(lis[0]); }
     else if(mins>=lastMin){ y=dotY(lis[lis.length-1]); }
     else{ for(var i=0;i<lis.length-1;i++){ var m0=+lis[i].dataset.min,m1=+lis[i+1].dataset.min; if(mins>=m0&&mins<=m1){ var f=(mins-m0)/(m1-m0); y=dotY(lis[i])+(dotY(lis[i+1])-dotY(lis[i]))*f; break; } } }
-    if(y!=null){ if(mins>firstMin){ prog.style.height=Math.max(0,y-8)+'px'; prog.style.display='block'; } else { prog.style.display='none'; } }
+    if(y!=null){ marker.style.top=y+'px'; marker.style.display='block';
+      if(prog){ if(mins>firstMin){ prog.style.height=Math.max(0,y-8)+'px'; prog.style.display='block'; } else { prog.style.display='none'; } } }
   }
   window.addEventListener('load',placeNow);
   window.addEventListener('resize',placeNow);
