@@ -4,7 +4,7 @@
 
 eyebrow: Follow the run
 title: Amaury Crosses Zanzibar: South to North!
-facts: 105 km run · Kizimkazi to Kilindo · Friday 26 June, from 15:00
+facts: 105 km Run · Kizimkazi to Nungwi · Friday, June 26th · Starting at 15:00 Zanzibar Time
 birthday: Running it on his birthday!
 schedule_note: The marker shows Amaury's approximate location based on his pace. For his exact position, check the live map below!
 schedule_small: Times are a window: earlier if he's quick, later if he's not. The live map shows his exact position.
