@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>CEET — Dispositif de pilotage du redressement</title>
+<style>
+  :root{
+    --navy:#0f2b46; --navy2:#16405f; --green:#1a7f4e; --green-l:#e6f4ec;
+    --red:#c0392b; --red-l:#fdecea; --orange:#d97b0d; --orange-l:#fdf3e3;
+    --grey:#5b6770; --grey-l:#f2f4f6; --line:#dde3e8; --ink:#1c2833;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:#fafbfc; line-height:1.55;}
+  .sans{font-family:'Segoe UI',Arial,sans-serif;}
+  header.top{background:var(--navy); color:#fff; padding:36px 48px 28px;}
+  header.top h1{font-size:26px; font-weight:normal; letter-spacing:.3px;}
+  header.top .sub{font-family:'Segoe UI',Arial,sans-serif; font-size:13px; color:#b8c9d9; margin-top:8px;}
+  header.top .conf{font-family:'Segoe UI',Arial,sans-serif; font-size:11px; color:#8fa6ba; margin-top:4px; text-transform:uppercase; letter-spacing:1px;}
+  nav.tabs{background:var(--navy2); padding:0 48px; display:flex; gap:4px;}
+  nav.tabs button{font-family:'Segoe UI',Arial,sans-serif; font-size:14px; background:none; border:none; color:#c8d6e2; padding:14px 22px; cursor:pointer; border-bottom:3px solid transparent;}
+  nav.tabs button.active{color:#fff; border-bottom-color:var(--green); background:rgba(255,255,255,.06);}
+  main{max-width:1060px; margin:0 auto; padding:40px 48px 80px;}
+  .page{display:none;} .page.visible{display:block;}
+  h2{font-size:21px; color:var(--navy); margin:44px 0 14px; font-weight:normal;}
+  h2 .num{color:var(--green); margin-right:10px;}
+  h3{font-family:'Segoe UI',Arial,sans-serif; font-size:15px; color:var(--navy); margin:24px 0 10px;}
+  p{margin:0 0 12px; font-size:15.5px;}
+  .lead{font-size:17px; color:var(--navy);}
+  .kpi-row{display:flex; gap:14px; flex-wrap:wrap; margin:18px 0;}
+  .kpi{flex:1; min-width:180px; background:#fff; border:1px solid var(--line); border-top:3px solid var(--navy); padding:16px 18px;}
+  .kpi .v{font-family:'Segoe UI',Arial,sans-serif; font-size:26px; font-weight:600; color:var(--navy);}
+  .kpi .l{font-family:'Segoe UI',Arial,sans-serif; font-size:12.5px; color:var(--grey); margin-top:4px;}
+  .box{background:#fff; border:1px solid var(--line); padding:20px 24px; margin:16px 0;}
+  .box.green{border-left:4px solid var(--green); background:var(--green-l);}
+  .box.warn{border-left:4px solid var(--red); background:var(--red-l);}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-family:'Segoe UI',Arial,sans-serif; font-size:13.5px; background:#fff;}
+  th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-weight:600; font-size:12.5px;}
+  td{border:1px solid var(--line); padding:8px 12px; vertical-align:top;}
+  tr:nth-child(even) td{background:var(--grey-l);}
+  .tag{display:inline-block; font-family:'Segoe UI',Arial,sans-serif; font-size:11px; font-weight:600; padding:2px 8px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px;}
+  .tag.r{background:var(--red-l); color:var(--red);} .tag.o{background:var(--orange-l); color:var(--orange);} .tag.g{background:var(--green-l); color:var(--green);}
+  .timeline{border-left:3px solid var(--green); margin:20px 0 20px 8px; padding-left:26px;}
+  .tstep{margin-bottom:26px; position:relative;}
+  .tstep::before{content:''; position:absolute; left:-33px; top:5px; width:11px; height:11px; border-radius:50%; background:var(--green);}
+  .tstep .when{font-family:'Segoe UI',Arial,sans-serif; font-size:12px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:1px;}
+  .tstep h4{font-size:16.5px; color:var(--navy); margin:2px 0 6px; font-weight:normal;}
+  .tstep ul{margin:6px 0 0 18px; font-size:14.5px;}
+  .tstep li{margin-bottom:4px;}
+  .obj-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0;}
+  .obj{background:#fff; border:1px solid var(--line); padding:18px 20px;}
+  .obj .t{font-family:'Segoe UI',Arial,sans-serif; font-weight:700; font-size:14px; color:var(--green); text-transform:uppercase; letter-spacing:.5px;}
+  .obj h4{font-size:17px; color:var(--navy); margin:4px 0 8px; font-weight:normal;}
+  .obj p{font-size:14px; margin-bottom:6px;}
+  .obj .cible{font-family:'Segoe UI',Arial,sans-serif; font-size:13px; background:var(--grey-l); padding:8px 10px; margin-top:8px;}
+  .rule{font-family:'Segoe UI',Arial,sans-serif; font-size:13.5px; padding:10px 14px; background:#fff; border:1px solid var(--line); border-left:3px solid var(--navy); margin:8px 0;}
+  footer{border-top:1px solid var(--line); margin-top:60px; padding-top:16px; font-family:'Segoe UI',Arial,sans-serif; font-size:12px; color:var(--grey);}
+  /* ---- dashboards ---- */
+  .dash{background:#fff; border:1px solid var(--line); margin:22px 0 8px; padding:22px 26px;}
+  .dash .dhead{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--navy); padding-bottom:10px; margin-bottom:16px;}
+  .dash .dhead h4{font-family:'Segoe UI',Arial,sans-serif; font-size:16px; color:var(--navy);}
+  .dash .dhead .meta{font-family:'Segoe UI',Arial,sans-serif; font-size:12px; color:var(--grey);}
+  .cards{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;}
+  .card{flex:1; min-width:150px; border:1px solid var(--line); padding:12px 14px; font-family:'Segoe UI',Arial,sans-serif;}
+  .card .cl{font-size:11.5px; color:var(--grey); text-transform:uppercase; letter-spacing:.4px;}
+  .card .cv{font-size:23px; font-weight:700; margin:3px 0 2px;}
+  .card .ct{font-size:11.5px; color:var(--grey);}
+  .cv.r{color:var(--red);} .cv.o{color:var(--orange);} .cv.g{color:var(--green);} .cv.n{color:var(--navy);}
+  .bar-row{display:flex; align-items:center; gap:10px; margin:7px 0; font-family:'Segoe UI',Arial,sans-serif; font-size:12.5px;}
+  .bar-row .bl{width:210px; text-align:right; color:var(--ink);}
+  .bar-row .btrack{flex:1; background:var(--grey-l); height:20px; position:relative;}
+  .bar-row .bfill{height:100%; background:var(--navy2);}
+  .bar-row .bfill.g{background:var(--green);} .bar-row .bfill.r{background:var(--red);} .bar-row .bfill.o{background:var(--orange);}
+  .bar-row .bv{width:120px; font-weight:600;}
+  .note{font-family:'Segoe UI',Arial,sans-serif; font-size:12px; color:var(--grey); font-style:italic; margin:6px 0 24px;}
+  /* ---- outils à remplir ---- */
+  .fiche{background:#fff; border:1px solid var(--line); margin:20px 0 30px; padding:24px 28px;}
+  .fiche .fhead{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--green); padding-bottom:8px; margin-bottom:6px;}
+  .fiche .fhead h4{font-family:'Segoe UI',Arial,sans-serif; font-size:16px; color:var(--navy);}
+  .fiche .fhead .fwhen{font-family:'Segoe UI',Arial,sans-serif; font-size:12px; color:var(--grey);}
+  .fiche .fuse{font-family:'Segoe UI',Arial,sans-serif; font-size:12.5px; color:var(--grey); margin-bottom:14px;}
+  [contenteditable]{background:#f6f9e8; border-bottom:1px dashed #b9c48a; min-height:1.3em; padding:2px 6px; outline:none;}
+  [contenteditable]:focus{background:#fdfbe3; border-bottom:1px solid var(--orange);}
+  [contenteditable]:empty::before{content:attr(data-ph); color:#a3ab8a; font-style:italic;}
+  .goalfill{font-size:19px; color:var(--navy); text-align:center; padding:18px 22px !important; margin:10px 0;}
+  .flabel{font-family:'Segoe UI',Arial,sans-serif; font-size:11.5px; font-weight:700; color:var(--grey); text-transform:uppercase; letter-spacing:.6px; margin:14px 0 4px;}
+  table.tfill td{padding:6px 8px;} table.tfill td[contenteditable]{background:#f6f9e8;}
+  .toolbar{display:flex; gap:10px; margin:18px 0 4px;}
+  .toolbar button{font-family:'Segoe UI',Arial,sans-serif; font-size:13px; padding:9px 16px; cursor:pointer; border:1px solid var(--navy); background:var(--navy); color:#fff;}
+  .toolbar button.ghost{background:#fff; color:var(--navy);}
+  .check{font-family:'Segoe UI',Arial,sans-serif; font-size:14px; display:flex; gap:10px; align-items:flex-start; padding:7px 4px; border-bottom:1px solid var(--grey-l);}
+  .check input{margin-top:3px; width:16px; height:16px; accent-color:var(--green);}
+  .check.done label{text-decoration:line-through; color:var(--grey);}
+  .langsw button{font-family:'Segoe UI',Arial,sans-serif; font-size:13px; font-weight:600; padding:7px 14px; cursor:pointer; border:1px solid #4a6b8a; background:none; color:#b8c9d9;}
+  .langsw button.active{background:#fff; color:var(--navy); border-color:#fff;}
+  #gate{position:fixed; inset:0; background:var(--navy); z-index:9999; display:flex; align-items:center; justify-content:center;}
+  #gate .gbox{text-align:center; font-family:'Segoe UI',Arial,sans-serif; color:#fff; padding:20px;}
+  #gate h1{font-size:20px; font-weight:normal; margin-bottom:6px;}
+  #gate .gsub{font-size:13px; color:#b8c9d9; margin-bottom:22px;}
+  #gate input{padding:11px 14px; font-size:15px; width:260px; border:none; outline:none;}
+  #gate button{padding:11px 20px; font-size:15px; border:none; background:var(--green); color:#fff; cursor:pointer;}
+  #gate .gerr{color:#f0a898; font-size:13px; height:18px; margin-top:10px;}
+  .fprint{font-family:'Segoe UI',Arial,sans-serif; font-size:11.5px; padding:4px 10px; margin-left:12px; cursor:pointer; border:1px solid var(--navy); background:#fff; color:var(--navy); white-space:nowrap;}
+  @media print{
+    nav.tabs, .toolbar, .langsw, .fprint{display:none !important;}
+    .page.visible{display:block !important;}
+    body.pfiche header.top, body.pfiche .page{display:none !important;}
+    body.pfiche .page.pwrap{display:block !important;}
+    body.pfiche .page.pwrap > *{display:none !important;}
+    body.pfiche .page.pwrap > .fiche.ptarget{display:block !important;}
+    [contenteditable]{background:none; border-bottom:1px solid #ccc;}
+  }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gbox">
+    <h1>CEET — Document protégé / Protected document</h1>
+    <div class="gsub">Entrez le mot de passe pour accéder au document · Enter the password to access the document</div>
+    <input id="pw" type="password" placeholder="Mot de passe / Password" autofocus>
+    <button onclick="checkPw()">Entrer / Enter</button>
+    <div class="gerr" id="pwerr"></div>
+  </div>
+</div>
+
+<header class="top">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <h1 id="htitle">CEET — Dispositif de pilotage du redressement</h1>
+      <div class="sub" id="hsub">Les 90 premiers jours, puis le rythme annuel &nbsp;·&nbsp; Document de travail préparé pour le Directeur Général &nbsp;·&nbsp; Juillet 2026</div>
+      <div class="conf" id="hconf">Confidentiel — chiffres illustratifs à remplacer par les données réelles</div>
+    </div>
+    <div class="langsw">
+      <button id="lfr" class="active" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button id="tab1" class="active" onclick="show(1)">1 · Le dispositif — méthode et 90 jours</button>
+  <button id="tab2" onclick="show(2)">2 · Les tableaux de bord</button>
+  <button id="tab3" onclick="show(3)">3 · Outils à remplir avec l'équipe</button>
+  <button id="tab4" onclick="show(4)">4 · Le Pacte Énergie (Mission 300)</button>
+</nav>
+
+<main>
+
+<!-- ==================== PAGE 1 FR ==================== -->
+<div class="page l-fr visible" id="page1">
+
+  <p class="lead" style="margin-top:8px;">La CEET n'a aujourd'hui ni plan partagé, ni objectifs par direction, ni tableaux de bord. Résultat : chacun gère son urgence, la direction générale n'a pas de prise sur l'entreprise, et l'État comble les trous. Ce document propose un dispositif simple pour que, dans 90 jours, chaque directeur sache ce qu'il doit livrer, avec quels chiffres, et à quel rythme il en rend compte.</p>
+
+  <h2><span class="num">1.</span>Le point de départ</h2>
+  <div class="kpi-row">
+    <div class="kpi"><div class="v">~16 %</div><div class="l">de pertes techniques et commerciales, soit ~30 Mds FCFA de manque à gagner par an</div></div>
+    <div class="kpi"><div class="v">56 Mds FCFA</div><div class="l">mobilisés par l'État entre 2020 et 2025 (combustible, dettes d'importation)</div></div>
+    <div class="kpi"><div class="v">0,21 $/kWh</div><div class="l">coût réel de l'électricité livrée (achats 0,15 + pertes 0,02 + opex 0,04) — parmi les plus chers de la région</div></div>
+    <div class="kpi"><div class="v">3 juin 2026</div><div class="l">prise de fonction du nouveau Directeur Général — la fenêtre d'action est maintenant</div></div>
+  </div>
+  <div class="box warn">
+    <p style="margin:0;"><strong>Le vrai problème n'est pas l'absence de solutions techniques.</strong> C'est l'absence de système de gestion : personne ne peut dire aujourd'hui combien la CEET a encaissé hier, quelles directions tiennent leurs engagements, ni où en est le plan de redressement — parce que ces engagements et ces chiffres n'existent pas sous forme exploitable.</p>
+  </div>
+
+  <h2><span class="num">2.</span>Le principe : un cap, des noms, un rythme, des chiffres</h2>
+  <p>On ne redresse pas une entreprise avec un rapport de 200 pages. On la redresse avec quatre choses :</p>
+  <table>
+    <tr><th style="width:22%;">Élément</th><th>Concrètement</th></tr>
+    <tr><td><strong>Un cap</strong></td><td>4 objectifs d'entreprise pour les 12 prochains mois. Pas 15. Quatre, chiffrés, connus de tous.</td></tr>
+    <tr><td><strong>Des noms</strong></td><td>Chaque objectif, chaque indicateur, chaque action a UN responsable. Une personne, pas une direction.</td></tr>
+    <tr><td><strong>Un rythme</strong></td><td>Des rituels courts et non négociables : point cash quotidien, comité de pilotage hebdomadaire, revue mensuelle par direction.</td></tr>
+    <tr><td><strong>Des chiffres</strong></td><td>Des tableaux de bord partagés, une seule source de vérité, mis à jour même manuellement au début. Voir page 2.</td></tr>
+  </table>
+  <p>La mécanique de déclinaison est en cascade : <strong>un objectif global → 4 objectifs d'entreprise → 3 à 5 objectifs par direction → plans d'action 90 jours avec ressources et échéances</strong>. C'est le séminaire de direction (section 5) qui produit cette cascade — pas un cabinet, pas une note de service. Ce que les directeurs construisent eux-mêmes, ils l'exécutent.</p>
+
+  <h2><span class="num">3.</span>L'objectif global et les 4 objectifs</h2>
+  <p>Tout part d'un objectif global unique : une phrase que chaque agent de la CEET peut retenir, qui dit où l'entreprise doit être dans quelques années. C'est l'étoile polaire du redressement — tout le reste s'y rattache.</p>
+  <div class="box" style="border-left:4px solid var(--green); background:var(--green-l); text-align:center; padding:26px 30px;">
+    <div class="sans" style="font-size:12px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Objectif global — à valider en séminaire</div>
+    <p style="font-size:22px; color:var(--navy); margin:0;">« Livrer l'électricité la moins chère du continent. »</p>
+  </div>
+  <p>Aujourd'hui, le kWh livré coûte <strong>0,21 USD</strong> (achats d'énergie 0,15 + pertes 0,02 + opex 0,04) — l'un des plus chers de la région. Cet objectif donne un critère de décision unique à toute l'entreprise : chaque contrat, chaque investissement, chaque point de pertes se juge à son effet sur le coût du kWh livré. Il est aligné sur le Pacte National Énergie (onglet 4) : accès universel en 2030 suppose une électricité abordable. Un objectif ambitieux se décline en jalons réalistes : 0,21 → 0,15 $/kWh d'ici 3 ans, puis le peloton de tête continental.</p>
+  <p>Les 4 objectifs d'entreprise ci-dessous sont les quatre leviers qui y mènent. Proposition de départ, à amender et chiffrer en séminaire — les cibles sont illustratives. La version à remplir avec l'équipe se trouve dans l'onglet 3.</p>
+  <div class="obj-grid">
+    <div class="obj">
+      <div class="t">Objectif 1 — Cash</div>
+      <h4>Sécuriser la trésorerie et le recouvrement</h4>
+      <p>Sans cash, rien d'autre n'est possible. Visibilité quotidienne sur les encaissements, plan de recouvrement des créances (État, institutions, gros clients), discipline de facturation.</p>
+      <div class="cible"><strong>Cibles ex. :</strong> taux de recouvrement ≥ 95 % · créances &gt; 90 jours réduites de 30 % · position de trésorerie connue chaque matin</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objectif 2 — Pertes</div>
+      <h4>Réduire les pertes techniques et commerciales</h4>
+      <p>Chaque point de pertes vaut ~2 Mds FCFA/an. Programme anti-fraude ciblé, fiabilisation des compteurs, priorisation des feeders les plus dégradés.</p>
+      <div class="cible"><strong>Cibles :</strong> pertes 16 % → 12 % d'ici 2030 (engagement du Pacte), jalon 14 % à 12 mois · 100 % des gros clients contrôlés · compteurs prépayés massifiés</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objectif 3 — Coûts &amp; production</div>
+      <h4>Maîtriser le coût du kWh et sécuriser l'offre</h4>
+      <p>Le contrat le plus cher (CGT, 0,20 $/kWh, 25 % du mix) se renégocie ; le solaire, déjà la source la moins chère du mix (0,09 $), se massifie. Projet phare : <strong>lancer le PPA solaire le plus agressif de la région</strong> (appel d'offres compétitif, cible ≤ 0,05 $/kWh), adossé au pipeline du Pacte (569 MWc solaire d'ici 2030).</p>
+      <div class="cible"><strong>Cibles :</strong> coût réel du kWh livré 0,21 → 0,15 $ en 3 ans · PPA solaire signé ≤ 0,05 $/kWh · disponibilité des centrales ≥ 90 % · plan de génération approuvé avant fin d'année</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objectif 4 — Gestion &amp; service</div>
+      <h4>Installer le système de gestion et restaurer le service</h4>
+      <p>Rituels de pilotage en place, tableaux de bord vivants, responsabilisation des directeurs — et des résultats visibles pour les clients : moins de coupures, raccordements plus rapides.</p>
+      <div class="cible"><strong>Cibles :</strong> 100 % des rituels tenus · SAIDI 52 h → 18 h (cible Pacte 2030), jalon −30 % à 12 mois · délai de raccordement −50 %</div>
+    </div>
+  </div>
+
+  <h2><span class="num">4.</span>Les 90 jours</h2>
+  <div class="timeline">
+    <div class="tstep">
+      <div class="when">Jours 1–15 · Prendre la main</div>
+      <h4>Cash room + diagnostic éclair</h4>
+      <ul>
+        <li><strong>Point cash quotidien dès le jour 1</strong> : encaissements de la veille, position de trésorerie, décaissements à venir. 15 minutes, DG + DAF + Directeur commercial. C'est le premier tableau de bord (page 2, tableau A).</li>
+        <li><strong>Diagnostic éclair par direction</strong> : chaque directeur remet une page — ses 5 chiffres clés, ses 3 problèmes majeurs, ses 3 actions prioritaires. Une page, pas un rapport.</li>
+        <li><strong>Le DG arrête les 4 objectifs</strong> (version provisoire) et nomme un analyste de gestion rattaché à lui pour produire les tableaux de bord.</li>
+        <li>Convocation du séminaire — date bloquée, présence obligatoire.</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Jours 15–30 · Aligner</div>
+      <h4>Séminaire de direction (2 jours) — voir section 5</h4>
+      <ul>
+        <li>Sortie du séminaire : 4 objectifs chiffrés et validés, 3 à 5 objectifs par direction, plans d'action 90 jours nominatifs avec échéances.</li>
+        <li>Document d'engagement signé par chaque directeur — une page par direction.</li>
+        <li>Tableau de bord DG v1 en Excel, produit chaque semaine dès la semaine suivante.</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Jours 30–60 · Exécuter et rendre visible</div>
+      <h4>Rituels + premières victoires</h4>
+      <ul>
+        <li><strong>Comité de pilotage hebdomadaire</strong> (45 min, sur tableau de bord) : chaque directeur en 3 minutes — mes chiffres, mes blocages, mes décisions à faire arbitrer.</li>
+        <li><strong>Deux victoires rapides et visibles</strong>, ex. : relance formalisée des 20 plus gros débiteurs avec échéanciers signés ; opération anti-fraude ciblée sur un quartier à fortes pertes, résultats communiqués en interne.</li>
+        <li>Tableaux de bord par direction v1 (commercial, production, finance).</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Jours 60–90 · Corriger et ancrer</div>
+      <h4>Revue à mi-parcours + préparation du cycle annuel</h4>
+      <ul>
+        <li>Revue formelle des plans 90 jours : ce qui est fait, ce qui ne l'est pas, pourquoi, et qui fait quoi pour corriger.</li>
+        <li>Alignement du budget de l'année suivante sur les 4 objectifs — le budget devient l'expression chiffrée du plan, pas un exercice séparé.</li>
+        <li>Communication interne des premiers résultats à l'ensemble du personnel : le redressement doit se voir.</li>
+        <li>Décision sur l'automatisation des tableaux de bord (niveau 2, page 2).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">5.</span>Le séminaire de direction — 2 jours</h2>
+  <p>C'est l'événement fondateur du dispositif. Hors site si possible, téléphones à l'entrée, chiffres préparés à l'avance par chaque directeur.</p>
+  <table>
+    <tr><th style="width:18%;">Moment</th><th style="width:32%;">Séquence</th><th>Ce qui en sort</th></tr>
+    <tr><td><strong>Jour 1 matin</strong></td><td>La vérité des chiffres. Chaque directeur présente son diagnostic d'une page. Pas de slides décoratifs, pas de défense de territoire.</td><td>Un constat partagé et sans filtre de l'état réel de l'entreprise.</td></tr>
+    <tr><td><strong>Jour 1 après-midi</strong></td><td>La vision de redressement du DG, puis débat et chiffrage des 4 objectifs d'entreprise.</td><td>4 objectifs validés, chiffrés, avec un responsable chacun.</td></tr>
+    <tr><td><strong>Jour 2 matin</strong></td><td>Travail par direction : déclinaison en 3 à 5 objectifs, indicateurs et cibles. L'équipe d'animation challenge chaque direction.</td><td>Objectifs par direction, max 5, chacun avec KPI et cible.</td></tr>
+    <tr><td><strong>Jour 2 après-midi</strong></td><td>Plans d'action 90 jours : actions, ressources nécessaires, échéances. Chaque directeur présente et s'engage publiquement devant ses pairs.</td><td>Plans 90 jours signés + calendrier des rituels acté.</td></tr>
+  </table>
+  <div class="box green">
+    <p style="margin:0;"><strong>Règle d'or du séminaire :</strong> on ne sort pas de la salle sans que chaque objectif ait un nom, un chiffre et une date. Tout ce qui n'a pas les trois n'existe pas.</p>
+  </div>
+
+  <h2><span class="num">6.</span>Les rituels — le moteur du dispositif</h2>
+  <p>Le séminaire donne le cap ; les rituels font avancer. Sans eux, tout retombe en trois semaines.</p>
+  <table>
+    <tr><th>Rituel</th><th>Fréquence</th><th>Durée</th><th>Participants</th><th>Support</th><th>Sortie obligatoire</th></tr>
+    <tr><td><strong>Point cash</strong></td><td>Quotidien</td><td>15 min</td><td>DG, DAF, Dir. commercial</td><td>Tableau A (cash)</td><td>Décisions de relance / paiement</td></tr>
+    <tr><td><strong>Comité de pilotage</strong></td><td>Hebdomadaire</td><td>45 min</td><td>Comité de direction</td><td>Tableau B (DG)</td><td>Blocages levés, arbitrages rendus</td></tr>
+    <tr><td><strong>Revue de direction</strong></td><td>Mensuel</td><td>1h30 / direction</td><td>DG + directeur concerné</td><td>Tableau de la direction</td><td>Plan d'action mis à jour</td></tr>
+    <tr><td><strong>Revue trimestrielle</strong></td><td>Trimestriel</td><td>½ journée</td><td>Comité élargi</td><td>Tous les tableaux</td><td>Réallocation des moyens, cibles ajustées</td></tr>
+  </table>
+  <div class="rule">Une réunion qui ne produit pas de décision est supprimée. Un indicateur que personne ne regarde est supprimé. Un rituel annulé deux fois de suite est un signal d'alerte pour le DG.</div>
+
+  <h2><span class="num">7.</span>Ce qui fait échouer ce genre de dispositif — et la parade</h2>
+  <table>
+    <tr><th style="width:40%;">Piège classique</th><th>Parade intégrée au dispositif</th></tr>
+    <tr><td>Trop d'objectifs : 15 priorités = aucune priorité.</td><td>4 objectifs d'entreprise, 5 maximum par direction. Le DG dit non au reste.</td></tr>
+    <tr><td>Des indicateurs sans responsable.</td><td>Un nom par KPI, affiché sur le tableau de bord.</td></tr>
+    <tr><td>Des chiffres contestés en réunion (« mes chiffres ne disent pas ça »).</td><td>Une seule source de vérité, produite par l'analyste de gestion du DG. On débat des actions, jamais des chiffres.</td></tr>
+    <tr><td>Des plans sans ressources : engagements intenables.</td><td>Chaque plan 90 jours chiffre les moyens (hommes, budget) au séminaire.</td></tr>
+    <tr><td>Attendre le système informatique parfait pour piloter.</td><td>Tableaux de bord manuels (Excel) dès la semaine 2. L'automatisation vient après, pas avant.</td></tr>
+    <tr><td>Le soufflé retombe après le séminaire.</td><td>Les rituels commencent la semaine suivante et ne s'arrêtent jamais. C'est le calendrier qui protège la dynamique.</td></tr>
+  </table>
+
+  <h2><span class="num">8.</span>Après 90 jours : le cycle annuel</h2>
+  <p>Le dispositif des 90 jours s'installe ensuite en régime permanent : un <strong>séminaire annuel de direction</strong> chaque année en amont du budget (vision → 4 objectifs de l'année → déclinaison par direction → plans et ressources), des <strong>revues trimestrielles</strong> pour corriger, les <strong>rituels hebdomadaires et mensuels</strong> qui continuent, et des <strong>tableaux de bord automatisés</strong> qui remplacent progressivement l'Excel. Au bout d'un an, la CEET dispose d'un vrai système de gestion — et le redressement cesse de dépendre d'une personne pour devenir une mécanique d'entreprise.</p>
+
+  <footer>Document de travail — Axxum Thinking pour la Direction Générale de la CEET · Juillet 2026 · Tous les chiffres marqués « illustratifs » sont à remplacer par les données réelles de l'entreprise.</footer>
+</div>
+
+<!-- ==================== PAGE 1 EN ==================== -->
+<div class="page l-en" id="page1en">
+
+  <p class="lead" style="margin-top:8px;">CEET today has no shared plan, no objectives per department, and no dashboards. The result: everyone manages their own emergency, top management has no grip on the company, and the State fills the gaps. This document proposes a simple system so that, within 90 days, every director knows what they must deliver, with which numbers, and at what rhythm they account for it.</p>
+
+  <h2><span class="num">1.</span>The starting point</h2>
+  <div class="kpi-row">
+    <div class="kpi"><div class="v">~16 %</div><div class="l">technical and commercial losses, i.e. ~30 bn FCFA of lost revenue per year</div></div>
+    <div class="kpi"><div class="v">56 bn FCFA</div><div class="l">mobilised by the State between 2020 and 2025 (fuel, energy import debts)</div></div>
+    <div class="kpi"><div class="v">0.21 $/kWh</div><div class="l">real cost of delivered electricity (purchases 0.15 + losses 0.02 + opex 0.04) — among the highest in the region</div></div>
+    <div class="kpi"><div class="v">June 3, 2026</div><div class="l">the new CEO took office — the window for action is now</div></div>
+  </div>
+  <div class="box warn">
+    <p style="margin:0;"><strong>The real problem is not a lack of technical solutions.</strong> It is the absence of a management system: nobody can say today how much CEET collected yesterday, which departments are meeting their commitments, or where the turnaround stands — because those commitments and those numbers do not exist in usable form.</p>
+  </div>
+
+  <h2><span class="num">2.</span>The principle: a course, names, a rhythm, numbers</h2>
+  <p>You do not turn a company around with a 200-page report. You turn it around with four things:</p>
+  <table>
+    <tr><th style="width:22%;">Element</th><th>Concretely</th></tr>
+    <tr><td><strong>A course</strong></td><td>4 company objectives for the next 12 months. Not 15. Four, quantified, known to all.</td></tr>
+    <tr><td><strong>Names</strong></td><td>Every objective, every indicator, every action has ONE owner. A person, not a department.</td></tr>
+    <tr><td><strong>A rhythm</strong></td><td>Short, non-negotiable rituals: daily cash meeting, weekly steering committee, monthly review per department.</td></tr>
+    <tr><td><strong>Numbers</strong></td><td>Shared dashboards, a single source of truth, updated even manually at first. See page 2.</td></tr>
+  </table>
+  <p>The deployment logic is a cascade: <strong>one overall goal → 4 company objectives → 3 to 5 objectives per department → 90-day action plans with resources and deadlines</strong>. The leadership seminar (section 5) produces this cascade — not a consulting firm, not a memo. What directors build themselves, they execute.</p>
+
+  <h2><span class="num">3.</span>The overall goal and the 4 objectives</h2>
+  <p>Everything starts from a single overall goal: one sentence every CEET employee can remember, stating where the company must be in a few years. It is the North Star of the turnaround — everything else attaches to it.</p>
+  <div class="box" style="border-left:4px solid var(--green); background:var(--green-l); text-align:center; padding:26px 30px;">
+    <div class="sans" style="font-size:12px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Overall goal — to be validated at the seminar</div>
+    <p style="font-size:22px; color:var(--navy); margin:0;">« Deliver the cheapest electricity on the continent. »</p>
+  </div>
+  <p>Today, each delivered kWh costs <strong>0.21 USD</strong> (energy purchases 0.15 + losses 0.02 + opex 0.04) — among the highest in the region. This goal gives the whole company a single decision criterion: every contract, every investment, every point of losses is judged by its effect on the cost of the delivered kWh. It is aligned with the National Energy Compact (tab 4): universal access by 2030 requires affordable electricity. An ambitious goal cascades into realistic milestones: 0.21 → 0.15 $/kWh within 3 years, then the continental front pack.</p>
+  <p>The 4 company objectives below are the four levers that get there. A starting proposal, to be amended and quantified at the seminar — targets are illustrative. The fill-in version for the team is in tab 3.</p>
+  <div class="obj-grid">
+    <div class="obj">
+      <div class="t">Objective 1 — Cash</div>
+      <h4>Secure cash and collections</h4>
+      <p>Without cash, nothing else is possible. Daily visibility on collections, a recovery plan for receivables (State, institutions, large clients), billing discipline.</p>
+      <div class="cible"><strong>Example targets:</strong> collection rate ≥ 95 % · receivables &gt; 90 days down 30 % · cash position known every morning</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objective 2 — Losses</div>
+      <h4>Reduce technical and commercial losses</h4>
+      <p>Each point of losses is worth ~2 bn FCFA/year. Targeted anti-fraud programme, meter reliability, priority on the most degraded feeders.</p>
+      <div class="cible"><strong>Targets:</strong> losses 16 % → 12 % by 2030 (Compact commitment), 14 % milestone at 12 months · 100 % of large clients audited · prepaid meters scaled up</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objective 3 — Costs &amp; generation</div>
+      <h4>Control the cost per kWh and secure supply</h4>
+      <p>The most expensive contract (CGT, 0.20 $/kWh, 25 % of the mix) gets renegotiated; solar, already the cheapest source in the mix (0.09 $), gets scaled. Flagship project: <strong>launch the most aggressive solar PPA in the region</strong> (competitive tender, target ≤ 0.05 $/kWh), backed by the Compact pipeline (569 MWp of solar by 2030).</p>
+      <div class="cible"><strong>Targets:</strong> real cost of delivered kWh 0.21 → 0.15 $ in 3 years · solar PPA signed at ≤ 0.05 $/kWh · plant availability ≥ 90 % · generation plan approved before year-end</div>
+    </div>
+    <div class="obj">
+      <div class="t">Objective 4 — Management &amp; service</div>
+      <h4>Install the management system and restore service</h4>
+      <p>Steering rituals in place, living dashboards, accountable directors — and visible results for customers: fewer outages, faster connections.</p>
+      <div class="cible"><strong>Targets:</strong> 100 % of rituals held · SAIDI 52 h → 18 h (Compact 2030 target), −30 % milestone at 12 months · connection lead time −50 %</div>
+    </div>
+  </div>
+
+  <h2><span class="num">4.</span>The 90 days</h2>
+  <div class="timeline">
+    <div class="tstep">
+      <div class="when">Days 1–15 · Take control</div>
+      <h4>Cash room + flash diagnostic</h4>
+      <ul>
+        <li><strong>Daily cash meeting from day 1</strong>: yesterday's collections, cash position, upcoming disbursements. 15 minutes, CEO + CFO + Commercial director. This is the first dashboard (page 2, board A).</li>
+        <li><strong>Flash diagnostic per department</strong>: each director hands in one page — their 5 key numbers, 3 major problems, 3 priority actions. One page, not a report.</li>
+        <li><strong>The CEO settles the 4 objectives</strong> (provisional version) and appoints a management analyst reporting to him to produce the dashboards.</li>
+        <li>Seminar convened — date locked, attendance mandatory.</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Days 15–30 · Align</div>
+      <h4>Leadership seminar (2 days) — see section 5</h4>
+      <ul>
+        <li>Seminar output: 4 quantified, validated objectives, 3 to 5 objectives per department, 90-day action plans with named owners and deadlines.</li>
+        <li>Commitment sheet signed by each director — one page per department.</li>
+        <li>CEO dashboard v1 in Excel, produced every week starting the following week.</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Days 30–60 · Execute and make it visible</div>
+      <h4>Rituals + first wins</h4>
+      <ul>
+        <li><strong>Weekly steering committee</strong> (45 min, on the dashboard): each director in 3 minutes — my numbers, my blockers, the decisions I need arbitrated.</li>
+        <li><strong>Two fast, visible wins</strong>, e.g.: formal follow-up of the 20 largest debtors with signed payment schedules; targeted anti-fraud operation in a high-loss district, results communicated internally.</li>
+        <li>Department dashboards v1 (commercial, generation, finance).</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="when">Days 60–90 · Correct and anchor</div>
+      <h4>Mid-point review + preparing the annual cycle</h4>
+      <ul>
+        <li>Formal review of the 90-day plans: what is done, what is not, why, and who does what to fix it.</li>
+        <li>Next year's budget aligned with the 4 objectives — the budget becomes the numeric expression of the plan, not a separate exercise.</li>
+        <li>Internal communication of first results to all staff: the turnaround must be seen.</li>
+        <li>Decision on dashboard automation (level 2, page 2).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">5.</span>The leadership seminar — 2 days</h2>
+  <p>This is the founding event of the system. Off-site if possible, phones at the door, numbers prepared in advance by each director.</p>
+  <table>
+    <tr><th style="width:18%;">Moment</th><th style="width:32%;">Sequence</th><th>What comes out</th></tr>
+    <tr><td><strong>Day 1 morning</strong></td><td>The truth of the numbers. Each director presents their one-page diagnostic. No decorative slides, no turf defence.</td><td>A shared, unfiltered view of the company's real state.</td></tr>
+    <tr><td><strong>Day 1 afternoon</strong></td><td>The CEO's turnaround vision, then debate and quantification of the overall goal and the 4 company objectives.</td><td>4 validated, quantified objectives, each with an owner.</td></tr>
+    <tr><td><strong>Day 2 morning</strong></td><td>Work by department: cascade into 3 to 5 objectives, indicators and targets. The facilitation team challenges each department.</td><td>Objectives per department, max 5, each with KPI and target.</td></tr>
+    <tr><td><strong>Day 2 afternoon</strong></td><td>90-day action plans: actions, required resources, deadlines. Each director presents and commits publicly in front of peers.</td><td>Signed 90-day plans + rituals calendar agreed.</td></tr>
+  </table>
+  <div class="box green">
+    <p style="margin:0;"><strong>Golden rule of the seminar:</strong> nobody leaves the room until every objective has a name, a number and a date. Anything missing one of the three does not exist.</p>
+  </div>
+
+  <h2><span class="num">6.</span>The rituals — the engine of the system</h2>
+  <p>The seminar sets the course; the rituals move things forward. Without them, everything collapses within three weeks.</p>
+  <table>
+    <tr><th>Ritual</th><th>Frequency</th><th>Duration</th><th>Participants</th><th>Support</th><th>Mandatory output</th></tr>
+    <tr><td><strong>Cash meeting</strong></td><td>Daily</td><td>15 min</td><td>CEO, CFO, Commercial dir.</td><td>Board A (cash)</td><td>Collection / payment decisions</td></tr>
+    <tr><td><strong>Steering committee</strong></td><td>Weekly</td><td>45 min</td><td>Executive committee</td><td>Board B (CEO)</td><td>Blockers removed, arbitrations made</td></tr>
+    <tr><td><strong>Department review</strong></td><td>Monthly</td><td>1h30 / department</td><td>CEO + department director</td><td>Department board</td><td>Updated action plan</td></tr>
+    <tr><td><strong>Quarterly review</strong></td><td>Quarterly</td><td>½ day</td><td>Extended committee</td><td>All boards</td><td>Resources reallocated, targets adjusted</td></tr>
+  </table>
+  <div class="rule">A meeting that produces no decision is cancelled. An indicator nobody looks at is deleted. A ritual cancelled twice in a row is a warning signal for the CEO.</div>
+
+  <h2><span class="num">7.</span>What makes this kind of system fail — and the countermeasure</h2>
+  <table>
+    <tr><th style="width:40%;">Classic trap</th><th>Countermeasure built into the system</th></tr>
+    <tr><td>Too many objectives: 15 priorities = no priority.</td><td>4 company objectives, 5 maximum per department. The CEO says no to the rest.</td></tr>
+    <tr><td>Indicators without an owner.</td><td>One name per KPI, displayed on the dashboard.</td></tr>
+    <tr><td>Numbers contested in meetings ("my figures say otherwise").</td><td>A single source of truth, produced by the CEO's management analyst. We debate actions, never numbers.</td></tr>
+    <tr><td>Plans without resources: untenable commitments.</td><td>Every 90-day plan quantifies its means (people, budget) at the seminar.</td></tr>
+    <tr><td>Waiting for the perfect IT system before steering.</td><td>Manual dashboards (Excel) from week 2. Automation comes after, not before.</td></tr>
+    <tr><td>The soufflé collapses after the seminar.</td><td>The rituals start the following week and never stop. The calendar protects the momentum.</td></tr>
+  </table>
+
+  <h2><span class="num">8.</span>After 90 days: the annual cycle</h2>
+  <p>The 90-day system then settles into a permanent regime: an <strong>annual leadership seminar</strong> each year ahead of the budget (overall goal → 4 objectives for the year → cascade per department → plans and resources), <strong>quarterly reviews</strong> to correct course, the <strong>weekly and monthly rituals</strong> that keep running, and <strong>automated dashboards</strong> that progressively replace Excel. After a year, CEET has a real management system — and the turnaround stops depending on one person and becomes company machinery.</p>
+
+  <footer>Working document — Axxum Thinking for the CEET General Management · July 2026 · All figures marked "illustrative" are to be replaced with the company's real data.</footer>
+</div>
+
+<!-- ==================== PAGE 2 FR ==================== -->
+<div class="page l-fr" id="page2">
+  <p class="lead" style="margin-top:8px;">Quatre tableaux de bord suffisent pour piloter le redressement. Ils démarrent en <strong>niveau 1 — Excel, alimenté à la main par un analyste de gestion, disponible en deux semaines</strong> — puis passent en <strong>niveau 2 — connectés aux systèmes (facturation, comptabilité, production), en 3 à 6 mois</strong>. Les maquettes ci-dessous montrent à quoi ils ressemblent, avec des chiffres fictifs mais réalistes.</p>
+
+  <div class="box green">
+    <p style="margin:0;"><strong>La règle du chiffre unique :</strong> chaque indicateur a une définition écrite, une source désignée et un responsable de production. C'est l'analyste de gestion rattaché au DG qui consolide. En réunion, on ne conteste pas les chiffres — on décide des actions.</p>
+  </div>
+
+  <h2><span class="num">A.</span>Tableau de bord Cash — quotidien</h2>
+  <p>Le premier à mettre en place, dès la semaine 1. Support du point cash de 15 minutes chaque matin.</p>
+  <div class="dash">
+    <div class="dhead"><h4>CASH — Point quotidien</h4><div class="meta">Jeudi 2 juillet 2026 · produit par l'Analyste de gestion DG · chiffres illustratifs</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Encaissé hier</div><div class="cv o">412 M</div><div class="ct">FCFA · objectif jour : 450 M</div></div>
+      <div class="card"><div class="cl">Encaissé cumul mois</div><div class="cv o">8,1 Mds</div><div class="ct">objectif à date : 9,4 Mds (86 %)</div></div>
+      <div class="card"><div class="cl">Position de trésorerie</div><div class="cv r">2,3 Mds</div><div class="ct">= 9 jours de charges</div></div>
+      <div class="card"><div class="cl">Décaissements 7 jours</div><div class="cv n">3,1 Mds</div><div class="ct">dont achat énergie 2,2 Mds</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Créances clients par segment (FCFA)</h3>
+    <div class="bar-row"><div class="bl">État &amp; administrations</div><div class="btrack"><div class="bfill r" style="width:95%;"></div></div><div class="bv">38,2 Mds · 62 %</div></div>
+    <div class="bar-row"><div class="bl">Institutions &amp; parapublic</div><div class="btrack"><div class="bfill o" style="width:30%;"></div></div><div class="bv">12,4 Mds · 20 %</div></div>
+    <div class="bar-row"><div class="bl">Entreprises privées</div><div class="btrack"><div class="bfill" style="width:17%;"></div></div><div class="bv">6,8 Mds · 11 %</div></div>
+    <div class="bar-row"><div class="bl">Ménages (post-payé)</div><div class="btrack"><div class="bfill" style="width:11%;"></div></div><div class="bv">4,3 Mds · 7 %</div></div>
+    <h3>Top débiteurs — suivi des relances</h3>
+    <table>
+      <tr><th>Débiteur</th><th>Montant dû</th><th>Ancienneté</th><th>Action en cours</th><th>Responsable</th><th>Échéance</th></tr>
+      <tr><td>Ministère A</td><td>6,4 Mds</td><td>&gt; 180 j</td><td>Échéancier proposé, en attente signature</td><td>DAF</td><td>10 juil.</td></tr>
+      <tr><td>Société parapublique B</td><td>3,1 Mds</td><td>&gt; 90 j</td><td>Mise en demeure envoyée</td><td>Dir. commercial</td><td>15 juil.</td></tr>
+      <tr><td>Hôpital C</td><td>1,8 Mds</td><td>&gt; 180 j</td><td>Réunion de conciliation programmée</td><td>DAF</td><td>08 juil.</td></tr>
+      <tr><td>Industriel D</td><td>0,9 Md</td><td>60–90 j</td><td>Préavis de coupure notifié</td><td>Dir. commercial</td><td>06 juil.</td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicateur</th><th>Définition</th><th>Source niv. 1 (manuel)</th><th>Source niv. 2 (auto)</th><th>Fréquence</th><th>Responsable</th></tr>
+    <tr><td>Encaissements</td><td>Total encaissé J-1, tous canaux (agences, prépaiement, mobile money, virements)</td><td>Relevés bancaires + états agences</td><td>Interface bancaire + système de facturation</td><td>Quotidien</td><td>DAF</td></tr>
+    <tr><td>Position de trésorerie</td><td>Soldes bancaires consolidés − chèques émis non débités</td><td>Relevés bancaires du matin</td><td>Agrégateur bancaire</td><td>Quotidien</td><td>DAF</td></tr>
+    <tr><td>Créances par segment</td><td>Encours facturé non payé, ventilé par type de client et ancienneté</td><td>Extraction facturation, hebdo</td><td>Système de facturation</td><td>Hebdo puis quotidien</td><td>Dir. commercial</td></tr>
+    <tr><td>Top débiteurs</td><td>20 plus gros encours avec action, nom et date</td><td>Tenu à la main par la DAF</td><td>CRM recouvrement</td><td>Quotidien</td><td>DAF</td></tr>
+  </table>
+
+  <h2><span class="num">B.</span>Tableau de bord Direction Générale — hebdomadaire</h2>
+  <p>Support du comité de pilotage de 45 minutes. Une page : les 4 objectifs, la chaîne énergie→cash, les décisions.</p>
+  <div class="dash">
+    <div class="dhead"><h4>DG — Semaine 27</h4><div class="meta">29 juin – 5 juillet 2026 · chiffres illustratifs</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">O1 · Taux de recouvrement</div><div class="cv r">87 %</div><div class="ct">cible 95 % · <span class="tag r">Retard</span></div></div>
+      <div class="card"><div class="cl">O2 · Pertes globales</div><div class="cv o">16,2 %</div><div class="ct">cible 14 % à 12 mois · <span class="tag o">À suivre</span></div></div>
+      <div class="card"><div class="cl">O3 · Coût réel du kWh livré</div><div class="cv r">0,21 $</div><div class="ct">cible 0,15 $ · <span class="tag r">Retard</span></div></div>
+      <div class="card"><div class="cl">O4 · Rituels tenus</div><div class="cv g">100 %</div><div class="ct">5/5 cette semaine · <span class="tag g">Tenu</span></div></div>
+    </div>
+    <h3 style="margin-top:6px;">La chaîne énergie → cash (mois en cours, GWh puis FCFA)</h3>
+    <div class="bar-row"><div class="bl">Énergie disponible (prod. + imports)</div><div class="btrack"><div class="bfill" style="width:100%;"></div></div><div class="bv">165 GWh</div></div>
+    <div class="bar-row"><div class="bl">Énergie livrée au réseau de distribution</div><div class="btrack"><div class="bfill" style="width:88%;"></div></div><div class="bv">145 GWh · −12 %</div></div>
+    <div class="bar-row"><div class="bl">Énergie facturée</div><div class="btrack"><div class="bfill o" style="width:84%;"></div></div><div class="bv">138 GWh · −5 %</div></div>
+    <div class="bar-row"><div class="bl">Facturation émise</div><div class="btrack"><div class="bfill o" style="width:84%;"></div></div><div class="bv">14,2 Mds FCFA</div></div>
+    <div class="bar-row"><div class="bl">Encaissé</div><div class="btrack"><div class="bfill r" style="width:73%;"></div></div><div class="bv">12,4 Mds · 87 %</div></div>
+    <p class="note" style="margin-bottom:12px;">Chaque écart entre deux barres est une fuite de valeur : pertes techniques, pertes commerciales, défaut de recouvrement. C'est LA vue qui résume le redressement.</p>
+    <h3>Décisions et blocages de la semaine</h3>
+    <table>
+      <tr><th>Sujet remonté</th><th>Porté par</th><th>Décision du DG</th><th>Qui / quand</th></tr>
+      <tr><td>Échéancier Ministère A bloqué au niveau du cabinet</td><td>DAF</td><td>Courrier DG au ministre + saisine tutelle</td><td>DG · 08 juil.</td></tr>
+      <tr><td>Équipe anti-fraude sans véhicules 3 j/semaine</td><td>Dir. distribution</td><td>Réaffectation de 2 véhicules du pool</td><td>DRH-Moyens · 06 juil.</td></tr>
+      <tr><td>Rupture de stock compteurs prépayés sous 6 semaines</td><td>Dir. commercial</td><td>Commande anticipée validée</td><td>Achats · 10 juil.</td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicateur</th><th>Définition</th><th>Source niv. 1</th><th>Source niv. 2</th><th>Fréquence</th><th>Responsable</th></tr>
+    <tr><td>4 objectifs (statut)</td><td>KPI de tête de chaque objectif d'entreprise vs cible, statut vert/orange/rouge</td><td>Consolidation Excel des 4 responsables</td><td>Tableaux directions</td><td>Hebdo</td><td>Analyste de gestion DG</td></tr>
+    <tr><td>Chaîne énergie→cash</td><td>GWh disponibles → livrés → facturés → FCFA encaissés</td><td>Dispatching + facturation + DAF</td><td>SCADA/compteurs + facturation</td><td>Hebdo (mensuel au début)</td><td>Analyste de gestion DG</td></tr>
+    <tr><td>Décisions &amp; blocages</td><td>Registre des arbitrages : sujet, décision, responsable, échéance, statut</td><td>Tenu en séance</td><td>Idem</td><td>Hebdo</td><td>Analyste de gestion DG</td></tr>
+  </table>
+
+  <h2><span class="num">C.</span>Tableau de bord Commercial &amp; recouvrement — hebdomadaire</h2>
+  <p>Pour le Directeur commercial et la revue mensuelle avec le DG. Décline l'objectif 1 (cash) et la moitié commerciale de l'objectif 2 (pertes).</p>
+  <div class="dash">
+    <div class="dhead"><h4>COMMERCIAL — Semaine 27</h4><div class="meta">chiffres illustratifs</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Facturation du mois</div><div class="cv n">14,2 Mds</div><div class="ct">FCFA · +3 % vs M-1</div></div>
+      <div class="card"><div class="cl">Taux de recouvrement</div><div class="cv r">87 %</div><div class="ct">cible 95 %</div></div>
+      <div class="card"><div class="cl">Fraudes détectées</div><div class="cv g">186</div><div class="ct">sur 1 240 contrôles (15 %)</div></div>
+      <div class="card"><div class="cl">Compteurs prépayés posés</div><div class="cv g">4 520</div><div class="ct">mois · objectif 4 000</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Taux de recouvrement par agence</h3>
+    <table>
+      <tr><th>Agence</th><th>Facturé (M FCFA)</th><th>Encaissé (M FCFA)</th><th>Taux</th><th>Statut</th><th>Action</th></tr>
+      <tr><td>Lomé Centre</td><td>3 840</td><td>3 570</td><td>93 %</td><td><span class="tag g">OK</span></td><td>—</td></tr>
+      <tr><td>Lomé Port / zone ind.</td><td>4 210</td><td>3 240</td><td>77 %</td><td><span class="tag r">Alerte</span></td><td>Plan de relance gros clients, revue vendredi</td></tr>
+      <tr><td>Kara</td><td>1 130</td><td>1 010</td><td>89 %</td><td><span class="tag o">À suivre</span></td><td>Renfort équipe coupure</td></tr>
+      <tr><td>Sokodé</td><td>860</td><td>790</td><td>92 %</td><td><span class="tag g">OK</span></td><td>—</td></tr>
+      <tr><td>Kpalimé</td><td>640</td><td>545</td><td>85 %</td><td><span class="tag o">À suivre</span></td><td>Campagne prépaiement</td></tr>
+    </table>
+    <h3>Programme anti-fraude — cumul depuis lancement</h3>
+    <div class="bar-row"><div class="bl">Contrôles réalisés</div><div class="btrack"><div class="bfill" style="width:62%;"></div></div><div class="bv">6 180 / 10 000</div></div>
+    <div class="bar-row"><div class="bl">Énergie récupérée refacturée</div><div class="btrack"><div class="bfill g" style="width:54%;"></div></div><div class="bv">1,08 / 2,0 Mds</div></div>
+  </div>
+  <table>
+    <tr><th>Indicateur</th><th>Définition</th><th>Source niv. 1</th><th>Source niv. 2</th><th>Fréquence</th><th>Responsable</th></tr>
+    <tr><td>Facturation / encaissement par agence</td><td>Montants émis et encaissés par agence, taux = encaissé ÷ facturé</td><td>États d'agences consolidés en Excel</td><td>Système de facturation</td><td>Hebdo</td><td>Dir. commercial</td></tr>
+    <tr><td>Fraudes</td><td>Contrôles, fraudes constatées, énergie estimée récupérée et refacturée</td><td>Rapports des équipes terrain</td><td>Appli mobile contrôle</td><td>Hebdo</td><td>Resp. anti-fraude</td></tr>
+    <tr><td>Prépaiement</td><td>Compteurs posés / parc total, taux de migration des mauvais payeurs</td><td>Rapports de pose</td><td>Plateforme prépaiement</td><td>Hebdo</td><td>Dir. commercial</td></tr>
+  </table>
+
+  <h2><span class="num">D.</span>Tableau de bord Production &amp; réseau — hebdomadaire</h2>
+  <p>Pour le Directeur production/transport et la revue mensuelle. Décline l'objectif 3 (coûts, offre, plan de génération) et la moitié technique de l'objectif 2.</p>
+  <div class="dash">
+    <div class="dhead"><h4>PRODUCTION &amp; RÉSEAU — Semaine 27</h4><div class="meta">chiffres illustratifs</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Pointe de la semaine</div><div class="cv n">312 MW</div><div class="ct">capacité mobilisable 340 MW</div></div>
+      <div class="card"><div class="cl">Coût réel du kWh livré</div><div class="cv r">0,21 $</div><div class="ct">cible 0,15 $ · achats seuls : 0,15 $</div></div>
+      <div class="card"><div class="cl">Heures de délestage</div><div class="cv r">14 h</div><div class="ct">semaine · cible &lt; 4 h</div></div>
+      <div class="card"><div class="cl">Pertes techniques</div><div class="cv o">11,8 %</div><div class="ct">cible 10,5 %</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Coût réel par source (données du calcul de coût de l'électricité livrée)</h3>
+    <table>
+      <tr><th>Source</th><th>Part du mix</th><th>Tarif ($/kWh)</th><th>Tarif pertes incluses</th><th>Statut</th></tr>
+      <tr><td>CGT — ContourGlobal (gaz)</td><td>25 %</td><td>0,20</td><td>0,24</td><td><span class="tag r">La plus chère — à renégocier</span></td></tr>
+      <tr><td>VRA — imports Ghana</td><td>24 %</td><td>0,12</td><td>0,14</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>Calabar — imports Nigeria</td><td>22 %</td><td>0,12</td><td>0,14</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>Kékéli (gaz)</td><td>14 %</td><td>0,17</td><td>0,19</td><td><span class="tag o">À optimiser</span></td></tr>
+      <tr><td>Paras</td><td>8 %</td><td>0,10</td><td>0,11</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>AMEA (solaire Blitta)</td><td>5 %</td><td>0,09</td><td>0,11</td><td><span class="tag g">La moins chère du mix</span></td></tr>
+      <tr><td>Autres</td><td>3 %</td><td>0,21</td><td>0,24</td><td><span class="tag r">À revoir</span></td></tr>
+      <tr><td><strong>Total pondéré</strong></td><td><strong>100 %</strong></td><td><strong>0,15</strong></td><td><strong>0,17</strong></td><td><strong>+ 0,04 opex = 0,21 $/kWh réel</strong></td></tr>
+    </table>
+    <p class="note" style="margin-bottom:12px;">Le solaire est déjà la source la moins chère du mix (0,09 $). Un PPA solaire négocié sous 0,05 $/kWh — le plus agressif de la région — tire mécaniquement la moyenne vers le bas. C'est le projet phare de l'objectif 3.</p>
+    <h3>Incidents réseau et délestages</h3>
+    <div class="bar-row"><div class="bl">Coupures &gt; 1 h (nb, semaine)</div><div class="btrack"><div class="bfill r" style="width:70%;"></div></div><div class="bv">28 · cible &lt; 10</div></div>
+    <div class="bar-row"><div class="bl">Délai moyen de rétablissement</div><div class="btrack"><div class="bfill o" style="width:55%;"></div></div><div class="bv">3 h 40 · cible 2 h</div></div>
+    <div class="bar-row"><div class="bl">Feeders prioritaires assainis (prog. pertes)</div><div class="btrack"><div class="bfill g" style="width:33%;"></div></div><div class="bv">4 / 12</div></div>
+    <h3>Plan de génération — jalons</h3>
+    <table>
+      <tr><th>Jalon</th><th>Échéance</th><th>Responsable</th><th>Statut</th></tr>
+      <tr><td>Prévision demande 5 ans validée</td><td>Août 2026</td><td>Dir. études</td><td><span class="tag o">En cours</span></td></tr>
+      <tr><td>Scénarios de mix + coûts comparés</td><td>Sept. 2026</td><td>Dir. production</td><td><span class="tag o">En cours</span></td></tr>
+      <tr><td>Appel d'offres PPA solaire le plus agressif de la région (cible ≤ 0,05 $/kWh)</td><td>T1 2027</td><td>DG + tutelle</td><td><span class="tag o">À structurer</span></td></tr>
+      <tr><td>Plan approuvé (DG + tutelle)</td><td>Déc. 2026</td><td>DG</td><td><span class="tag g">Planifié</span></td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicateur</th><th>Définition</th><th>Source niv. 1</th><th>Source niv. 2</th><th>Fréquence</th><th>Responsable</th></tr>
+    <tr><td>Disponibilité par source</td><td>Heures disponibles ÷ heures de la période, par centrale et interconnexion</td><td>Rapports du dispatching</td><td>SCADA</td><td>Hebdo</td><td>Dir. production</td></tr>
+    <tr><td>Coût du kWh par source</td><td>Coût complet (combustible, contrat, O&amp;M) ÷ kWh livrés</td><td>Factures fournisseurs + compta, mensuel</td><td>Compta analytique</td><td>Mensuel</td><td>DAF + Dir. production</td></tr>
+    <tr><td>Délestages / incidents</td><td>Heures de délestage, coupures &gt; 1 h, délai moyen de rétablissement</td><td>Journal du dispatching</td><td>SCADA / OMS</td><td>Hebdo</td><td>Dir. réseau</td></tr>
+    <tr><td>Jalons plan de génération</td><td>Avancement des livrables du plan à 5 ans</td><td>Suivi de projet</td><td>Idem</td><td>Mensuel</td><td>Dir. études</td></tr>
+  </table>
+
+  <h2><span class="num">E.</span>Comment démarrer — la semaine prochaine</h2>
+  <div class="box">
+    <p><strong>1. Nommer un analyste de gestion</strong> rattaché directement au DG. Profil : à l'aise avec Excel et les chiffres, crédible auprès des directions. C'est lui qui produit les quatre tableaux — pas les directions elles-mêmes (elles fournissent les données, il consolide).</p>
+    <p><strong>2. Semaine 1 :</strong> définir par écrit les ~15 indicateurs du tableau DG et du tableau cash (définition, source, responsable). Lancer le point cash quotidien même avec des chiffres incomplets.</p>
+    <p><strong>3. Semaine 2 :</strong> première version Excel des tableaux A et B, imprimée, affichée dans le bureau du DG et distribuée au comité de direction. Imparfaite, mais existante.</p>
+    <p style="margin-bottom:0;"><strong>4. Mois 2-3 :</strong> tableaux C et D par direction, puis étude courte (4 semaines) pour le passage au niveau 2 : connexion au système de facturation et à la comptabilité, écran partagé. L'outil peut être simple (Excel partagé, puis Power BI ou équivalent) — c'est la discipline qui compte, pas la technologie.</p>
+  </div>
+
+  <footer>Document de travail — Axxum Thinking pour la Direction Générale de la CEET · Juillet 2026 · Toutes les données des maquettes sont fictives et illustratives.</footer>
+</div>
+
+<!-- ==================== PAGE 2 EN ==================== -->
+<div class="page l-en" id="page2en">
+  <p class="lead" style="margin-top:8px;">Four dashboards are enough to steer the turnaround. They start at <strong>level 1 — Excel, fed by hand by a management analyst, available within two weeks</strong> — then move to <strong>level 2 — connected to the systems (billing, accounting, generation), within 3 to 6 months</strong>. The mockups below show what they look like, with fictitious but realistic numbers.</p>
+
+  <div class="box green">
+    <p style="margin:0;"><strong>The single-number rule:</strong> every indicator has a written definition, a designated source and an owner responsible for producing it. The CEO's management analyst consolidates. In meetings, numbers are not contested — actions are decided.</p>
+  </div>
+
+  <h2><span class="num">A.</span>Cash dashboard — daily</h2>
+  <p>The first one to set up, from week 1. Support for the 15-minute cash meeting every morning.</p>
+  <div class="dash">
+    <div class="dhead"><h4>CASH — Daily meeting</h4><div class="meta">Thursday, July 2, 2026 · produced by the CEO's management analyst · illustrative figures</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Collected yesterday</div><div class="cv o">412 M</div><div class="ct">FCFA · daily target: 450 M</div></div>
+      <div class="card"><div class="cl">Collected month-to-date</div><div class="cv o">8.1 bn</div><div class="ct">target to date: 9.4 bn (86 %)</div></div>
+      <div class="card"><div class="cl">Cash position</div><div class="cv r">2.3 bn</div><div class="ct">= 9 days of expenses</div></div>
+      <div class="card"><div class="cl">Disbursements next 7 days</div><div class="cv n">3.1 bn</div><div class="ct">incl. energy purchases 2.2 bn</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Receivables by customer segment (FCFA)</h3>
+    <div class="bar-row"><div class="bl">State &amp; administrations</div><div class="btrack"><div class="bfill r" style="width:95%;"></div></div><div class="bv">38.2 bn · 62 %</div></div>
+    <div class="bar-row"><div class="bl">Institutions &amp; parastatals</div><div class="btrack"><div class="bfill o" style="width:30%;"></div></div><div class="bv">12.4 bn · 20 %</div></div>
+    <div class="bar-row"><div class="bl">Private companies</div><div class="btrack"><div class="bfill" style="width:17%;"></div></div><div class="bv">6.8 bn · 11 %</div></div>
+    <div class="bar-row"><div class="bl">Households (post-paid)</div><div class="btrack"><div class="bfill" style="width:11%;"></div></div><div class="bv">4.3 bn · 7 %</div></div>
+    <h3>Top debtors — follow-up tracking</h3>
+    <table>
+      <tr><th>Debtor</th><th>Amount due</th><th>Age</th><th>Ongoing action</th><th>Owner</th><th>Deadline</th></tr>
+      <tr><td>Ministry A</td><td>6.4 bn</td><td>&gt; 180 d</td><td>Payment schedule proposed, awaiting signature</td><td>CFO</td><td>Jul 10</td></tr>
+      <tr><td>Parastatal B</td><td>3.1 bn</td><td>&gt; 90 d</td><td>Formal notice sent</td><td>Commercial dir.</td><td>Jul 15</td></tr>
+      <tr><td>Hospital C</td><td>1.8 bn</td><td>&gt; 180 d</td><td>Conciliation meeting scheduled</td><td>CFO</td><td>Jul 8</td></tr>
+      <tr><td>Industrial D</td><td>0.9 bn</td><td>60–90 d</td><td>Disconnection notice served</td><td>Commercial dir.</td><td>Jul 6</td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicator</th><th>Definition</th><th>Level 1 source (manual)</th><th>Level 2 source (auto)</th><th>Frequency</th><th>Owner</th></tr>
+    <tr><td>Collections</td><td>Total collected D-1, all channels (agencies, prepayment, mobile money, transfers)</td><td>Bank statements + agency reports</td><td>Bank interface + billing system</td><td>Daily</td><td>CFO</td></tr>
+    <tr><td>Cash position</td><td>Consolidated bank balances − issued cheques not yet debited</td><td>Morning bank statements</td><td>Bank aggregator</td><td>Daily</td><td>CFO</td></tr>
+    <tr><td>Receivables by segment</td><td>Billed unpaid balance, split by customer type and age</td><td>Billing extract, weekly</td><td>Billing system</td><td>Weekly then daily</td><td>Commercial dir.</td></tr>
+    <tr><td>Top debtors</td><td>20 largest balances with action, name and date</td><td>Maintained by the CFO's team</td><td>Collections CRM</td><td>Daily</td><td>CFO</td></tr>
+  </table>
+
+  <h2><span class="num">B.</span>CEO dashboard — weekly</h2>
+  <p>Support for the 45-minute steering committee. One page: the 4 objectives, the energy→cash chain, the decisions.</p>
+  <div class="dash">
+    <div class="dhead"><h4>CEO — Week 27</h4><div class="meta">June 29 – July 5, 2026 · illustrative figures</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">O1 · Collection rate</div><div class="cv r">87 %</div><div class="ct">target 95 % · <span class="tag r">Behind</span></div></div>
+      <div class="card"><div class="cl">O2 · Total losses</div><div class="cv o">16.2 %</div><div class="ct">target 14 % in 12 mo · <span class="tag o">Watch</span></div></div>
+      <div class="card"><div class="cl">O3 · Real cost of delivered kWh</div><div class="cv r">0.21 $</div><div class="ct">target 0.15 $ · <span class="tag r">Behind</span></div></div>
+      <div class="card"><div class="cl">O4 · Rituals held</div><div class="cv g">100 %</div><div class="ct">5/5 this week · <span class="tag g">On track</span></div></div>
+    </div>
+    <h3 style="margin-top:6px;">The energy → cash chain (current month, GWh then FCFA)</h3>
+    <div class="bar-row"><div class="bl">Energy available (gen. + imports)</div><div class="btrack"><div class="bfill" style="width:100%;"></div></div><div class="bv">165 GWh</div></div>
+    <div class="bar-row"><div class="bl">Energy delivered to distribution grid</div><div class="btrack"><div class="bfill" style="width:88%;"></div></div><div class="bv">145 GWh · −12 %</div></div>
+    <div class="bar-row"><div class="bl">Energy billed</div><div class="btrack"><div class="bfill o" style="width:84%;"></div></div><div class="bv">138 GWh · −5 %</div></div>
+    <div class="bar-row"><div class="bl">Invoices issued</div><div class="btrack"><div class="bfill o" style="width:84%;"></div></div><div class="bv">14.2 bn FCFA</div></div>
+    <div class="bar-row"><div class="bl">Collected</div><div class="btrack"><div class="bfill r" style="width:73%;"></div></div><div class="bv">12.4 bn · 87 %</div></div>
+    <p class="note" style="margin-bottom:12px;">Every gap between two bars is a value leak: technical losses, commercial losses, collection shortfall. This is THE view that sums up the turnaround.</p>
+    <h3>Decisions and blockers of the week</h3>
+    <table>
+      <tr><th>Issue raised</th><th>Raised by</th><th>CEO decision</th><th>Who / when</th></tr>
+      <tr><td>Ministry A payment schedule stuck at cabinet level</td><td>CFO</td><td>CEO letter to the minister + escalation to the ministry of oversight</td><td>CEO · Jul 8</td></tr>
+      <tr><td>Anti-fraud team without vehicles 3 days/week</td><td>Distribution dir.</td><td>Reassignment of 2 pool vehicles</td><td>HR-Facilities · Jul 6</td></tr>
+      <tr><td>Prepaid meter stock-out within 6 weeks</td><td>Commercial dir.</td><td>Early order approved</td><td>Procurement · Jul 10</td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicator</th><th>Definition</th><th>Level 1 source</th><th>Level 2 source</th><th>Frequency</th><th>Owner</th></tr>
+    <tr><td>4 objectives (status)</td><td>Headline KPI of each company objective vs target, green/amber/red status</td><td>Excel consolidation from the 4 owners</td><td>Department boards</td><td>Weekly</td><td>CEO's management analyst</td></tr>
+    <tr><td>Energy→cash chain</td><td>GWh available → delivered → billed → FCFA collected</td><td>Dispatch + billing + CFO</td><td>SCADA/meters + billing</td><td>Weekly (monthly at first)</td><td>CEO's management analyst</td></tr>
+    <tr><td>Decisions &amp; blockers</td><td>Arbitration log: issue, decision, owner, deadline, status</td><td>Kept in session</td><td>Same</td><td>Weekly</td><td>CEO's management analyst</td></tr>
+  </table>
+
+  <h2><span class="num">C.</span>Commercial &amp; collections dashboard — weekly</h2>
+  <p>For the Commercial director and the monthly review with the CEO. Cascades objective 1 (cash) and the commercial half of objective 2 (losses).</p>
+  <div class="dash">
+    <div class="dhead"><h4>COMMERCIAL — Week 27</h4><div class="meta">illustrative figures</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Billing this month</div><div class="cv n">14.2 bn</div><div class="ct">FCFA · +3 % vs M-1</div></div>
+      <div class="card"><div class="cl">Collection rate</div><div class="cv r">87 %</div><div class="ct">target 95 %</div></div>
+      <div class="card"><div class="cl">Fraud cases detected</div><div class="cv g">186</div><div class="ct">out of 1,240 inspections (15 %)</div></div>
+      <div class="card"><div class="cl">Prepaid meters installed</div><div class="cv g">4,520</div><div class="ct">month · target 4,000</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Collection rate by agency</h3>
+    <table>
+      <tr><th>Agency</th><th>Billed (M FCFA)</th><th>Collected (M FCFA)</th><th>Rate</th><th>Status</th><th>Action</th></tr>
+      <tr><td>Lomé Centre</td><td>3,840</td><td>3,570</td><td>93 %</td><td><span class="tag g">OK</span></td><td>—</td></tr>
+      <tr><td>Lomé Port / ind. zone</td><td>4,210</td><td>3,240</td><td>77 %</td><td><span class="tag r">Alert</span></td><td>Large-client recovery plan, review Friday</td></tr>
+      <tr><td>Kara</td><td>1,130</td><td>1,010</td><td>89 %</td><td><span class="tag o">Watch</span></td><td>Disconnection team reinforced</td></tr>
+      <tr><td>Sokodé</td><td>860</td><td>790</td><td>92 %</td><td><span class="tag g">OK</span></td><td>—</td></tr>
+      <tr><td>Kpalimé</td><td>640</td><td>545</td><td>85 %</td><td><span class="tag o">Watch</span></td><td>Prepayment campaign</td></tr>
+    </table>
+    <h3>Anti-fraud programme — cumulative since launch</h3>
+    <div class="bar-row"><div class="bl">Inspections carried out</div><div class="btrack"><div class="bfill" style="width:62%;"></div></div><div class="bv">6,180 / 10,000</div></div>
+    <div class="bar-row"><div class="bl">Recovered energy re-billed</div><div class="btrack"><div class="bfill g" style="width:54%;"></div></div><div class="bv">1.08 / 2.0 bn</div></div>
+  </div>
+  <table>
+    <tr><th>Indicator</th><th>Definition</th><th>Level 1 source</th><th>Level 2 source</th><th>Frequency</th><th>Owner</th></tr>
+    <tr><td>Billing / collection by agency</td><td>Amounts billed and collected per agency, rate = collected ÷ billed</td><td>Agency reports consolidated in Excel</td><td>Billing system</td><td>Weekly</td><td>Commercial dir.</td></tr>
+    <tr><td>Fraud</td><td>Inspections, confirmed fraud cases, estimated energy recovered and re-billed</td><td>Field team reports</td><td>Mobile inspection app</td><td>Weekly</td><td>Anti-fraud lead</td></tr>
+    <tr><td>Prepayment</td><td>Meters installed / total base, migration rate of bad payers</td><td>Installation reports</td><td>Prepayment platform</td><td>Weekly</td><td>Commercial dir.</td></tr>
+  </table>
+
+  <h2><span class="num">D.</span>Generation &amp; grid dashboard — weekly</h2>
+  <p>For the Generation/transmission director and the monthly review. Cascades objective 3 (costs, supply, generation plan) and the technical half of objective 2.</p>
+  <div class="dash">
+    <div class="dhead"><h4>GENERATION &amp; GRID — Week 27</h4><div class="meta">illustrative figures</div></div>
+    <div class="cards">
+      <div class="card"><div class="cl">Peak of the week</div><div class="cv n">312 MW</div><div class="ct">available capacity 340 MW</div></div>
+      <div class="card"><div class="cl">Real cost of delivered kWh</div><div class="cv r">0.21 $</div><div class="ct">target 0.15 $ · purchases alone: 0.15 $</div></div>
+      <div class="card"><div class="cl">Load-shedding hours</div><div class="cv r">14 h</div><div class="ct">week · target &lt; 4 h</div></div>
+      <div class="card"><div class="cl">Technical losses</div><div class="cv o">11.8 %</div><div class="ct">target 10.5 %</div></div>
+    </div>
+    <h3 style="margin-top:6px;">Real cost by source (data from the delivered-electricity cost calculation)</h3>
+    <table>
+      <tr><th>Source</th><th>Mix share</th><th>Rate ($/kWh)</th><th>Rate incl. losses</th><th>Status</th></tr>
+      <tr><td>CGT — ContourGlobal (gas)</td><td>25 %</td><td>0.20</td><td>0.24</td><td><span class="tag r">Most expensive — renegotiate</span></td></tr>
+      <tr><td>VRA — Ghana imports</td><td>24 %</td><td>0.12</td><td>0.14</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>Calabar — Nigeria imports</td><td>22 %</td><td>0.12</td><td>0.14</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>Kékéli (gas)</td><td>14 %</td><td>0.17</td><td>0.19</td><td><span class="tag o">To optimise</span></td></tr>
+      <tr><td>Paras</td><td>8 %</td><td>0.10</td><td>0.11</td><td><span class="tag g">OK</span></td></tr>
+      <tr><td>AMEA (Blitta solar)</td><td>5 %</td><td>0.09</td><td>0.11</td><td><span class="tag g">Cheapest in the mix</span></td></tr>
+      <tr><td>Other</td><td>3 %</td><td>0.21</td><td>0.24</td><td><span class="tag r">To review</span></td></tr>
+      <tr><td><strong>Weighted total</strong></td><td><strong>100 %</strong></td><td><strong>0.15</strong></td><td><strong>0.17</strong></td><td><strong>+ 0.04 opex = 0.21 $/kWh real</strong></td></tr>
+    </table>
+    <p class="note" style="margin-bottom:12px;">Solar is already the cheapest source in the mix (0.09 $). A solar PPA negotiated below 0.05 $/kWh — the most aggressive in the region — mechanically pulls the average down. It is the flagship project of objective 3.</p>
+    <h3>Grid incidents and load shedding</h3>
+    <div class="bar-row"><div class="bl">Outages &gt; 1 h (nb, week)</div><div class="btrack"><div class="bfill r" style="width:70%;"></div></div><div class="bv">28 · target &lt; 10</div></div>
+    <div class="bar-row"><div class="bl">Average restoration time</div><div class="btrack"><div class="bfill o" style="width:55%;"></div></div><div class="bv">3 h 40 · target 2 h</div></div>
+    <div class="bar-row"><div class="bl">Priority feeders cleaned up (loss prog.)</div><div class="btrack"><div class="bfill g" style="width:33%;"></div></div><div class="bv">4 / 12</div></div>
+    <h3>Generation plan — milestones</h3>
+    <table>
+      <tr><th>Milestone</th><th>Deadline</th><th>Owner</th><th>Status</th></tr>
+      <tr><td>5-year demand forecast validated</td><td>Aug 2026</td><td>Planning dir.</td><td><span class="tag o">In progress</span></td></tr>
+      <tr><td>Mix scenarios + compared costs</td><td>Sep 2026</td><td>Generation dir.</td><td><span class="tag o">In progress</span></td></tr>
+      <tr><td>Tender for the most aggressive solar PPA in the region (target ≤ 0.05 $/kWh)</td><td>Q1 2027</td><td>CEO + oversight ministry</td><td><span class="tag o">To structure</span></td></tr>
+      <tr><td>Plan approved (CEO + oversight ministry)</td><td>Dec 2026</td><td>CEO</td><td><span class="tag g">Planned</span></td></tr>
+    </table>
+  </div>
+  <table>
+    <tr><th>Indicator</th><th>Definition</th><th>Level 1 source</th><th>Level 2 source</th><th>Frequency</th><th>Owner</th></tr>
+    <tr><td>Availability by source</td><td>Available hours ÷ period hours, per plant and interconnection</td><td>Dispatch reports</td><td>SCADA</td><td>Weekly</td><td>Generation dir.</td></tr>
+    <tr><td>Cost per kWh by source</td><td>Full cost (fuel, contract, O&amp;M) ÷ kWh delivered</td><td>Supplier invoices + accounting, monthly</td><td>Cost accounting</td><td>Monthly</td><td>CFO + Generation dir.</td></tr>
+    <tr><td>Load shedding / incidents</td><td>Load-shedding hours, outages &gt; 1 h, average restoration time</td><td>Dispatch log</td><td>SCADA / OMS</td><td>Weekly</td><td>Grid dir.</td></tr>
+    <tr><td>Generation plan milestones</td><td>Progress of the 5-year plan deliverables</td><td>Project tracking</td><td>Same</td><td>Monthly</td><td>Planning dir.</td></tr>
+  </table>
+
+  <h2><span class="num">E.</span>How to start — next week</h2>
+  <div class="box">
+    <p><strong>1. Appoint a management analyst</strong> reporting directly to the CEO. Profile: comfortable with Excel and numbers, credible with the departments. He or she produces the four boards — not the departments themselves (they provide the data, the analyst consolidates).</p>
+    <p><strong>2. Week 1:</strong> define in writing the ~15 indicators of the CEO board and the cash board (definition, source, owner). Launch the daily cash meeting even with incomplete numbers.</p>
+    <p><strong>3. Week 2:</strong> first Excel version of boards A and B, printed, displayed in the CEO's office and distributed to the executive committee. Imperfect, but existing.</p>
+    <p style="margin-bottom:0;"><strong>4. Months 2-3:</strong> boards C and D per department, then a short study (4 weeks) for the move to level 2: connection to the billing system and accounting, shared screen. The tool can be simple (shared Excel, then Power BI or equivalent) — discipline is what counts, not technology.</p>
+  </div>
+
+  <footer>Working document — Axxum Thinking for the CEET General Management · July 2026 · All mockup data is fictitious and illustrative.</footer>
+</div>
+
+<!-- ==================== PAGE 3 FR ==================== -->
+<div class="page l-fr" id="page3">
+  <p class="lead" style="margin-top:8px;">Ces fiches se remplissent directement dans la page, en séminaire ou en comité. Ce que vous tapez est sauvegardé automatiquement <strong>dans ce navigateur, sur cet appareil uniquement</strong> : vous pouvez fermer et rouvrir la page sans rien perdre, mais les saisies ne sont ni partagées entre utilisateurs ni envoyées en ligne. Le document de référence de l'équipe est donc le PDF : chaque fiche a son propre bouton d'impression.</p>
+  <div class="toolbar">
+    <button onclick="window.print()">Imprimer / exporter en PDF</button>
+    <button class="ghost" onclick="if(confirm('Effacer toutes les saisies de toutes les fiches ?')){localStorage.removeItem(SAVEKEY);location.reload();}">Effacer toutes les saisies</button>
+  </div>
+
+  <h2><span class="num">1.</span>La cascade d'objectifs <span class="sans" style="font-size:13px; color:var(--grey);">— à remplir en séminaire, jour 1</span></h2>
+  <div class="fiche">
+    <div class="fhead"><h4>Objectif global de la CEET</h4><div class="fwhen">Horizon 2-3 ans · arrêté par le DG après débat</div></div>
+    <div class="fuse">Une phrase, mémorisable par tout agent. Test : un chef d'agence à Kara doit pouvoir la réciter.</div>
+    <div contenteditable="true" class="goalfill" data-k="goal" data-ph="Ex. : Livrer l'électricité la moins chère du continent."></div>
+    <div class="flabel">Les 4 objectifs d'entreprise (12 mois) qui y mènent</div>
+    <table class="tfill">
+      <tr><th style="width:6%;">#</th><th style="width:34%;">Objectif</th><th style="width:22%;">Indicateur de tête</th><th style="width:19%;">Cible à 12 mois</th><th style="width:19%;">Responsable (nom)</th></tr>
+      <tr><td>O1</td><td contenteditable="true" data-k="o1t" data-ph="Ex. : Sécuriser la trésorerie et le recouvrement"></td><td contenteditable="true" data-k="o1k" data-ph="Ex. : taux de recouvrement"></td><td contenteditable="true" data-k="o1c" data-ph="Ex. : ≥ 95 %"></td><td contenteditable="true" data-k="o1r" data-ph="Nom"></td></tr>
+      <tr><td>O2</td><td contenteditable="true" data-k="o2t" data-ph="Ex. : Réduire les pertes techniques et commerciales"></td><td contenteditable="true" data-k="o2k" data-ph="Ex. : pertes globales %"></td><td contenteditable="true" data-k="o2c" data-ph="Ex. : 16 % → 12 % (Pacte 2030)"></td><td contenteditable="true" data-k="o2r" data-ph="Nom"></td></tr>
+      <tr><td>O3</td><td contenteditable="true" data-k="o3t" data-ph="Ex. : Maîtriser le coût du kWh et sécuriser l'offre"></td><td contenteditable="true" data-k="o3k" data-ph="Ex. : coût réel du kWh livré"></td><td contenteditable="true" data-k="o3c" data-ph="Ex. : 0,21 → 0,15 $"></td><td contenteditable="true" data-k="o3r" data-ph="Nom"></td></tr>
+      <tr><td>O4</td><td contenteditable="true" data-k="o4t" data-ph="Ex. : Installer le système de gestion et restaurer le service"></td><td contenteditable="true" data-k="o4k" data-ph="Ex. : SAIDI (h/an)"></td><td contenteditable="true" data-k="o4c" data-ph="Ex. : 52 h → 18 h"></td><td contenteditable="true" data-k="o4r" data-ph="Nom"></td></tr>
+    </table>
+    <div class="rule">Rappel : un objectif sans nom, sans chiffre ou sans date n'existe pas.</div>
+  </div>
+
+  <h2><span class="num">2.</span>Diagnostic éclair d'une direction <span class="sans" style="font-size:13px; color:var(--grey);">— 1 fiche par directeur, avant le séminaire</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">Imprimez cette fiche vierge et remettez-en une à chaque directeur (ou dupliquez le fichier). Une page, pas un rapport. Présentée en 5 minutes le jour 1 du séminaire.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Diagnostic éclair</h4><div class="fwhen">à remettre au DG sous 10 jours</div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><td style="width:20%; background:var(--grey-l);"><strong>Direction</strong></td><td contenteditable="true" data-k="d_dir" data-ph="Ex. : Direction commerciale"></td><td style="width:20%; background:var(--grey-l);"><strong>Directeur</strong></td><td contenteditable="true" data-k="d_nom" data-ph="Nom et prénom"></td></tr>
+    </table>
+    <div class="flabel">Mes 5 chiffres clés (valeur actuelle, et tendance sur 12 mois)</div>
+    <table class="tfill">
+      <tr><th style="width:50%;">Chiffre</th><th style="width:25%;">Valeur actuelle</th><th style="width:25%;">Tendance 12 mois</th></tr>
+      <tr><td contenteditable="true" data-k="d_c1" data-ph="Ex. : taux de recouvrement"></td><td contenteditable="true" data-k="d_v1" data-ph=""></td><td contenteditable="true" data-k="d_t1" data-ph="↑ / → / ↓"></td></tr>
+      <tr><td contenteditable="true" data-k="d_c2" data-ph=""></td><td contenteditable="true" data-k="d_v2" data-ph=""></td><td contenteditable="true" data-k="d_t2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c3" data-ph=""></td><td contenteditable="true" data-k="d_v3" data-ph=""></td><td contenteditable="true" data-k="d_t3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c4" data-ph=""></td><td contenteditable="true" data-k="d_v4" data-ph=""></td><td contenteditable="true" data-k="d_t4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c5" data-ph=""></td><td contenteditable="true" data-k="d_v5" data-ph=""></td><td contenteditable="true" data-k="d_t5" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">Mes 3 problèmes majeurs (sans langue de bois)</div>
+    <table class="tfill">
+      <tr><td style="width:6%;">1</td><td contenteditable="true" data-k="d_p1" data-ph="Le problème, son impact chiffré si possible"></td></tr>
+      <tr><td>2</td><td contenteditable="true" data-k="d_p2" data-ph=""></td></tr>
+      <tr><td>3</td><td contenteditable="true" data-k="d_p3" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">Mes 3 actions prioritaires (ce que je propose de faire dans les 90 jours)</div>
+    <table class="tfill">
+      <tr><td style="width:6%;">1</td><td contenteditable="true" data-k="d_a1" data-ph="Action concrète, avec le résultat attendu"></td></tr>
+      <tr><td>2</td><td contenteditable="true" data-k="d_a2" data-ph=""></td></tr>
+      <tr><td>3</td><td contenteditable="true" data-k="d_a3" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">3.</span>Fiche d'engagement d'une direction <span class="sans" style="font-size:13px; color:var(--grey);">— remplie en séminaire, jour 2, signée</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">C'est le document de sortie du séminaire : une fiche par direction, présentée devant les pairs, signée, affichée. Elle sert ensuite de trame à la revue mensuelle avec le DG.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Engagement de direction — 90 jours</h4><div class="fwhen">Période : <span contenteditable="true" data-k="e_per" data-ph="du __ au __" style="display:inline-block; min-width:140px;"></span></div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><td style="width:20%; background:var(--grey-l);"><strong>Direction</strong></td><td contenteditable="true" data-k="e_dir" data-ph=""></td><td style="width:26%; background:var(--grey-l);"><strong>Contribue aux objectifs</strong></td><td contenteditable="true" data-k="e_obj" data-ph="Ex. : O1, O2"></td></tr>
+    </table>
+    <div class="flabel">Mes objectifs (5 maximum)</div>
+    <table class="tfill">
+      <tr><th style="width:32%;">Objectif</th><th style="width:20%;">Indicateur</th><th style="width:14%;">Valeur actuelle</th><th style="width:14%;">Cible 90 j</th><th style="width:20%;">Responsable (nom)</th></tr>
+      <tr><td contenteditable="true" data-k="e_o1" data-ph=""></td><td contenteditable="true" data-k="e_k1" data-ph=""></td><td contenteditable="true" data-k="e_va1" data-ph=""></td><td contenteditable="true" data-k="e_ci1" data-ph=""></td><td contenteditable="true" data-k="e_r1" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o2" data-ph=""></td><td contenteditable="true" data-k="e_k2" data-ph=""></td><td contenteditable="true" data-k="e_va2" data-ph=""></td><td contenteditable="true" data-k="e_ci2" data-ph=""></td><td contenteditable="true" data-k="e_r2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o3" data-ph=""></td><td contenteditable="true" data-k="e_k3" data-ph=""></td><td contenteditable="true" data-k="e_va3" data-ph=""></td><td contenteditable="true" data-k="e_ci3" data-ph=""></td><td contenteditable="true" data-k="e_r3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o4" data-ph=""></td><td contenteditable="true" data-k="e_k4" data-ph=""></td><td contenteditable="true" data-k="e_va4" data-ph=""></td><td contenteditable="true" data-k="e_ci4" data-ph=""></td><td contenteditable="true" data-k="e_r4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o5" data-ph=""></td><td contenteditable="true" data-k="e_k5" data-ph=""></td><td contenteditable="true" data-k="e_va5" data-ph=""></td><td contenteditable="true" data-k="e_ci5" data-ph=""></td><td contenteditable="true" data-k="e_r5" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">Mes actions des 90 jours</div>
+    <table class="tfill">
+      <tr><th style="width:30%;">Action</th><th style="width:22%;">Livrable concret</th><th style="width:16%;">Responsable</th><th style="width:16%;">Ressources nécessaires</th><th style="width:16%;">Échéance</th></tr>
+      <tr><td contenteditable="true" data-k="e_a1" data-ph=""></td><td contenteditable="true" data-k="e_l1" data-ph=""></td><td contenteditable="true" data-k="e_ar1" data-ph=""></td><td contenteditable="true" data-k="e_re1" data-ph=""></td><td contenteditable="true" data-k="e_ec1" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a2" data-ph=""></td><td contenteditable="true" data-k="e_l2" data-ph=""></td><td contenteditable="true" data-k="e_ar2" data-ph=""></td><td contenteditable="true" data-k="e_re2" data-ph=""></td><td contenteditable="true" data-k="e_ec2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a3" data-ph=""></td><td contenteditable="true" data-k="e_l3" data-ph=""></td><td contenteditable="true" data-k="e_ar3" data-ph=""></td><td contenteditable="true" data-k="e_re3" data-ph=""></td><td contenteditable="true" data-k="e_ec3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a4" data-ph=""></td><td contenteditable="true" data-k="e_l4" data-ph=""></td><td contenteditable="true" data-k="e_ar4" data-ph=""></td><td contenteditable="true" data-k="e_re4" data-ph=""></td><td contenteditable="true" data-k="e_ec4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a5" data-ph=""></td><td contenteditable="true" data-k="e_l5" data-ph=""></td><td contenteditable="true" data-k="e_ar5" data-ph=""></td><td contenteditable="true" data-k="e_re5" data-ph=""></td><td contenteditable="true" data-k="e_ec5" data-ph=""></td></tr>
+    </table>
+    <table class="tfill" style="margin-top:16px;">
+      <tr><td style="width:50%; background:var(--grey-l);"><strong>Signature du directeur</strong> (en séminaire, devant les pairs)</td><td contenteditable="true" data-k="e_sig" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">4.</span>Registre des décisions du comité de pilotage <span class="sans" style="font-size:13px; color:var(--grey);">— tenu en séance, chaque semaine</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">La mémoire du comité hebdomadaire. On l'ouvre en début de séance : chaque décision passée est vérifiée (fait / pas fait) avant d'en prendre de nouvelles.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Registre des décisions</h4><div class="fwhen">Comité de pilotage hebdomadaire</div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><th style="width:10%;">Date</th><th style="width:28%;">Sujet / blocage</th><th style="width:28%;">Décision</th><th style="width:14%;">Responsable</th><th style="width:10%;">Échéance</th><th style="width:10%;">Statut</th></tr>
+      <tr><td contenteditable="true" data-k="r_d1" data-ph=""></td><td contenteditable="true" data-k="r_s1" data-ph=""></td><td contenteditable="true" data-k="r_de1" data-ph=""></td><td contenteditable="true" data-k="r_r1" data-ph=""></td><td contenteditable="true" data-k="r_e1" data-ph=""></td><td contenteditable="true" data-k="r_st1" data-ph="À faire / Fait"></td></tr>
+      <tr><td contenteditable="true" data-k="r_d2" data-ph=""></td><td contenteditable="true" data-k="r_s2" data-ph=""></td><td contenteditable="true" data-k="r_de2" data-ph=""></td><td contenteditable="true" data-k="r_r2" data-ph=""></td><td contenteditable="true" data-k="r_e2" data-ph=""></td><td contenteditable="true" data-k="r_st2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d3" data-ph=""></td><td contenteditable="true" data-k="r_s3" data-ph=""></td><td contenteditable="true" data-k="r_de3" data-ph=""></td><td contenteditable="true" data-k="r_r3" data-ph=""></td><td contenteditable="true" data-k="r_e3" data-ph=""></td><td contenteditable="true" data-k="r_st3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d4" data-ph=""></td><td contenteditable="true" data-k="r_s4" data-ph=""></td><td contenteditable="true" data-k="r_de4" data-ph=""></td><td contenteditable="true" data-k="r_r4" data-ph=""></td><td contenteditable="true" data-k="r_e4" data-ph=""></td><td contenteditable="true" data-k="r_st4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d5" data-ph=""></td><td contenteditable="true" data-k="r_s5" data-ph=""></td><td contenteditable="true" data-k="r_de5" data-ph=""></td><td contenteditable="true" data-k="r_r5" data-ph=""></td><td contenteditable="true" data-k="r_e5" data-ph=""></td><td contenteditable="true" data-k="r_st5" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d6" data-ph=""></td><td contenteditable="true" data-k="r_s6" data-ph=""></td><td contenteditable="true" data-k="r_de6" data-ph=""></td><td contenteditable="true" data-k="r_r6" data-ph=""></td><td contenteditable="true" data-k="r_e6" data-ph=""></td><td contenteditable="true" data-k="r_st6" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d7" data-ph=""></td><td contenteditable="true" data-k="r_s7" data-ph=""></td><td contenteditable="true" data-k="r_de7" data-ph=""></td><td contenteditable="true" data-k="r_r7" data-ph=""></td><td contenteditable="true" data-k="r_e7" data-ph=""></td><td contenteditable="true" data-k="r_st7" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d8" data-ph=""></td><td contenteditable="true" data-k="r_s8" data-ph=""></td><td contenteditable="true" data-k="r_de8" data-ph=""></td><td contenteditable="true" data-k="r_r8" data-ph=""></td><td contenteditable="true" data-k="r_e8" data-ph=""></td><td contenteditable="true" data-k="r_st8" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">5.</span>Checklist des 90 jours <span class="sans" style="font-size:13px; color:var(--grey);">— le DG coche au fur et à mesure</span></h2>
+  <div class="fiche">
+    <div class="fhead"><h4>Avancement du dispositif</h4><div class="fwhen">Les cases cochées sont sauvegardées</div></div>
+    <div class="flabel">Jours 1–15 · Prendre la main</div>
+    <div class="check"><input type="checkbox" data-k="c1" id="c1"><label for="c1">Point cash quotidien lancé (même avec des chiffres incomplets)</label></div>
+    <div class="check"><input type="checkbox" data-k="c2" id="c2"><label for="c2">Analyste de gestion nommé, rattaché au DG</label></div>
+    <div class="check"><input type="checkbox" data-k="c3" id="c3"><label for="c3">Diagnostic éclair demandé à chaque directeur (fiche outil n°2, délai 10 jours)</label></div>
+    <div class="check"><input type="checkbox" data-k="c4" id="c4"><label for="c4">Objectif global et 4 objectifs rédigés en version provisoire par le DG</label></div>
+    <div class="check"><input type="checkbox" data-k="c5" id="c5"><label for="c5">Date du séminaire bloquée, lieu réservé, convocations envoyées</label></div>
+    <div class="flabel">Jours 15–30 · Aligner</div>
+    <div class="check"><input type="checkbox" data-k="c6" id="c6"><label for="c6">Séminaire tenu — objectif global + 4 objectifs validés et chiffrés</label></div>
+    <div class="check"><input type="checkbox" data-k="c7" id="c7"><label for="c7">Fiches d'engagement signées par chaque directeur (outil n°3)</label></div>
+    <div class="check"><input type="checkbox" data-k="c8" id="c8"><label for="c8">Tableau de bord DG v1 produit (Excel) et calendrier des rituels diffusé</label></div>
+    <div class="flabel">Jours 30–60 · Exécuter et rendre visible</div>
+    <div class="check"><input type="checkbox" data-k="c9" id="c9"><label for="c9">Comité de pilotage hebdomadaire tenu 4 semaines de suite, registre des décisions à jour</label></div>
+    <div class="check"><input type="checkbox" data-k="c10" id="c10"><label for="c10">Victoire rapide n°1 réalisée et communiquée (ex. : top 20 débiteurs, échéanciers signés)</label></div>
+    <div class="check"><input type="checkbox" data-k="c11" id="c11"><label for="c11">Victoire rapide n°2 réalisée et communiquée (ex. : opération anti-fraude ciblée)</label></div>
+    <div class="check"><input type="checkbox" data-k="c12" id="c12"><label for="c12">Tableaux de bord commercial et production v1 en service</label></div>
+    <div class="flabel">Jours 60–90 · Corriger et ancrer</div>
+    <div class="check"><input type="checkbox" data-k="c13" id="c13"><label for="c13">Revue à mi-parcours des plans 90 jours faite avec chaque direction</label></div>
+    <div class="check"><input type="checkbox" data-k="c14" id="c14"><label for="c14">Budget de l'année suivante cadré sur l'objectif global et les 4 objectifs</label></div>
+    <div class="check"><input type="checkbox" data-k="c15" id="c15"><label for="c15">Premiers résultats communiqués à l'ensemble du personnel</label></div>
+    <div class="check"><input type="checkbox" data-k="c16" id="c16"><label for="c16">Décision prise sur l'automatisation des tableaux de bord (niveau 2)</label></div>
+  </div>
+
+  <footer>Document de travail — Axxum Thinking pour la Direction Générale de la CEET · Juillet 2026 · Les saisies restent sur cet ordinateur (aucune donnée n'est transmise).</footer>
+</div>
+
+<!-- ==================== PAGE 3 EN ==================== -->
+<div class="page l-en" id="page3en">
+  <p class="lead" style="margin-top:8px;">These worksheets are filled in directly on this page, during the seminar or in committee. What you type is saved automatically <strong>in this browser, on this device only</strong>: you can close and reopen the page without losing anything, but entries are neither shared between users nor sent online. The team's document of record is therefore the PDF: each sheet has its own print button. Entries are shared between the French and English versions.</p>
+  <div class="toolbar">
+    <button onclick="window.print()">Print / export to PDF</button>
+    <button class="ghost" onclick="if(confirm('Clear all entries in all worksheets?')){localStorage.removeItem(SAVEKEY);location.reload();}">Clear all entries</button>
+  </div>
+
+  <h2><span class="num">1.</span>The objective cascade <span class="sans" style="font-size:13px; color:var(--grey);">— filled in at the seminar, day 1</span></h2>
+  <div class="fiche">
+    <div class="fhead"><h4>CEET overall goal</h4><div class="fwhen">2-3 year horizon · settled by the CEO after debate</div></div>
+    <div class="fuse">One sentence, memorable by any employee. Test: an agency manager in Kara must be able to recite it.</div>
+    <div contenteditable="true" class="goalfill" data-k="goal" data-ph="E.g.: Deliver the cheapest electricity on the continent."></div>
+    <div class="flabel">The 4 company objectives (12 months) that get there</div>
+    <table class="tfill">
+      <tr><th style="width:6%;">#</th><th style="width:34%;">Objective</th><th style="width:22%;">Headline indicator</th><th style="width:19%;">12-month target</th><th style="width:19%;">Owner (name)</th></tr>
+      <tr><td>O1</td><td contenteditable="true" data-k="o1t" data-ph="E.g.: Secure cash and collections"></td><td contenteditable="true" data-k="o1k" data-ph="E.g.: collection rate"></td><td contenteditable="true" data-k="o1c" data-ph="E.g.: ≥ 95 %"></td><td contenteditable="true" data-k="o1r" data-ph="Name"></td></tr>
+      <tr><td>O2</td><td contenteditable="true" data-k="o2t" data-ph="E.g.: Reduce technical and commercial losses"></td><td contenteditable="true" data-k="o2k" data-ph="E.g.: total losses %"></td><td contenteditable="true" data-k="o2c" data-ph="E.g.: 16 % → 12 % (Compact 2030)"></td><td contenteditable="true" data-k="o2r" data-ph="Name"></td></tr>
+      <tr><td>O3</td><td contenteditable="true" data-k="o3t" data-ph="E.g.: Control the cost per kWh and secure supply"></td><td contenteditable="true" data-k="o3k" data-ph="E.g.: real cost of delivered kWh"></td><td contenteditable="true" data-k="o3c" data-ph="E.g.: 0.21 → 0.15 $"></td><td contenteditable="true" data-k="o3r" data-ph="Name"></td></tr>
+      <tr><td>O4</td><td contenteditable="true" data-k="o4t" data-ph="E.g.: Install the management system and restore service"></td><td contenteditable="true" data-k="o4k" data-ph="E.g.: SAIDI (h/yr)"></td><td contenteditable="true" data-k="o4c" data-ph="E.g.: 52 h → 18 h"></td><td contenteditable="true" data-k="o4r" data-ph="Name"></td></tr>
+    </table>
+    <div class="rule">Reminder: an objective without a name, a number or a date does not exist.</div>
+  </div>
+
+  <h2><span class="num">2.</span>Department flash diagnostic <span class="sans" style="font-size:13px; color:var(--grey);">— 1 sheet per director, before the seminar</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">Print this blank sheet and hand one to each director (or duplicate the file). One page, not a report. Presented in 5 minutes on day 1 of the seminar.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Flash diagnostic</h4><div class="fwhen">to be returned to the CEO within 10 days</div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><td style="width:20%; background:var(--grey-l);"><strong>Department</strong></td><td contenteditable="true" data-k="d_dir" data-ph="E.g.: Commercial department"></td><td style="width:20%; background:var(--grey-l);"><strong>Director</strong></td><td contenteditable="true" data-k="d_nom" data-ph="Full name"></td></tr>
+    </table>
+    <div class="flabel">My 5 key numbers (current value, and 12-month trend)</div>
+    <table class="tfill">
+      <tr><th style="width:50%;">Number</th><th style="width:25%;">Current value</th><th style="width:25%;">12-month trend</th></tr>
+      <tr><td contenteditable="true" data-k="d_c1" data-ph="E.g.: collection rate"></td><td contenteditable="true" data-k="d_v1" data-ph=""></td><td contenteditable="true" data-k="d_t1" data-ph="↑ / → / ↓"></td></tr>
+      <tr><td contenteditable="true" data-k="d_c2" data-ph=""></td><td contenteditable="true" data-k="d_v2" data-ph=""></td><td contenteditable="true" data-k="d_t2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c3" data-ph=""></td><td contenteditable="true" data-k="d_v3" data-ph=""></td><td contenteditable="true" data-k="d_t3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c4" data-ph=""></td><td contenteditable="true" data-k="d_v4" data-ph=""></td><td contenteditable="true" data-k="d_t4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="d_c5" data-ph=""></td><td contenteditable="true" data-k="d_v5" data-ph=""></td><td contenteditable="true" data-k="d_t5" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">My 3 major problems (no corporate speak)</div>
+    <table class="tfill">
+      <tr><td style="width:6%;">1</td><td contenteditable="true" data-k="d_p1" data-ph="The problem, with its quantified impact if possible"></td></tr>
+      <tr><td>2</td><td contenteditable="true" data-k="d_p2" data-ph=""></td></tr>
+      <tr><td>3</td><td contenteditable="true" data-k="d_p3" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">My 3 priority actions (what I propose to do within 90 days)</div>
+    <table class="tfill">
+      <tr><td style="width:6%;">1</td><td contenteditable="true" data-k="d_a1" data-ph="Concrete action, with the expected result"></td></tr>
+      <tr><td>2</td><td contenteditable="true" data-k="d_a2" data-ph=""></td></tr>
+      <tr><td>3</td><td contenteditable="true" data-k="d_a3" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">3.</span>Department commitment sheet <span class="sans" style="font-size:13px; color:var(--grey);">— filled at the seminar, day 2, signed</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">This is the seminar's output document: one sheet per department, presented in front of peers, signed, displayed. It then serves as the agenda for the monthly review with the CEO.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Department commitment — 90 days</h4><div class="fwhen">Period: <span contenteditable="true" data-k="e_per" data-ph="from __ to __" style="display:inline-block; min-width:140px;"></span></div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><td style="width:20%; background:var(--grey-l);"><strong>Department</strong></td><td contenteditable="true" data-k="e_dir" data-ph=""></td><td style="width:26%; background:var(--grey-l);"><strong>Contributes to objectives</strong></td><td contenteditable="true" data-k="e_obj" data-ph="E.g.: O1, O2"></td></tr>
+    </table>
+    <div class="flabel">My objectives (5 maximum)</div>
+    <table class="tfill">
+      <tr><th style="width:32%;">Objective</th><th style="width:20%;">Indicator</th><th style="width:14%;">Current value</th><th style="width:14%;">90-day target</th><th style="width:20%;">Owner (name)</th></tr>
+      <tr><td contenteditable="true" data-k="e_o1" data-ph=""></td><td contenteditable="true" data-k="e_k1" data-ph=""></td><td contenteditable="true" data-k="e_va1" data-ph=""></td><td contenteditable="true" data-k="e_ci1" data-ph=""></td><td contenteditable="true" data-k="e_r1" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o2" data-ph=""></td><td contenteditable="true" data-k="e_k2" data-ph=""></td><td contenteditable="true" data-k="e_va2" data-ph=""></td><td contenteditable="true" data-k="e_ci2" data-ph=""></td><td contenteditable="true" data-k="e_r2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o3" data-ph=""></td><td contenteditable="true" data-k="e_k3" data-ph=""></td><td contenteditable="true" data-k="e_va3" data-ph=""></td><td contenteditable="true" data-k="e_ci3" data-ph=""></td><td contenteditable="true" data-k="e_r3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o4" data-ph=""></td><td contenteditable="true" data-k="e_k4" data-ph=""></td><td contenteditable="true" data-k="e_va4" data-ph=""></td><td contenteditable="true" data-k="e_ci4" data-ph=""></td><td contenteditable="true" data-k="e_r4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_o5" data-ph=""></td><td contenteditable="true" data-k="e_k5" data-ph=""></td><td contenteditable="true" data-k="e_va5" data-ph=""></td><td contenteditable="true" data-k="e_ci5" data-ph=""></td><td contenteditable="true" data-k="e_r5" data-ph=""></td></tr>
+    </table>
+    <div class="flabel">My 90-day actions</div>
+    <table class="tfill">
+      <tr><th style="width:30%;">Action</th><th style="width:22%;">Concrete deliverable</th><th style="width:16%;">Owner</th><th style="width:16%;">Required resources</th><th style="width:16%;">Deadline</th></tr>
+      <tr><td contenteditable="true" data-k="e_a1" data-ph=""></td><td contenteditable="true" data-k="e_l1" data-ph=""></td><td contenteditable="true" data-k="e_ar1" data-ph=""></td><td contenteditable="true" data-k="e_re1" data-ph=""></td><td contenteditable="true" data-k="e_ec1" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a2" data-ph=""></td><td contenteditable="true" data-k="e_l2" data-ph=""></td><td contenteditable="true" data-k="e_ar2" data-ph=""></td><td contenteditable="true" data-k="e_re2" data-ph=""></td><td contenteditable="true" data-k="e_ec2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a3" data-ph=""></td><td contenteditable="true" data-k="e_l3" data-ph=""></td><td contenteditable="true" data-k="e_ar3" data-ph=""></td><td contenteditable="true" data-k="e_re3" data-ph=""></td><td contenteditable="true" data-k="e_ec3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a4" data-ph=""></td><td contenteditable="true" data-k="e_l4" data-ph=""></td><td contenteditable="true" data-k="e_ar4" data-ph=""></td><td contenteditable="true" data-k="e_re4" data-ph=""></td><td contenteditable="true" data-k="e_ec4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="e_a5" data-ph=""></td><td contenteditable="true" data-k="e_l5" data-ph=""></td><td contenteditable="true" data-k="e_ar5" data-ph=""></td><td contenteditable="true" data-k="e_re5" data-ph=""></td><td contenteditable="true" data-k="e_ec5" data-ph=""></td></tr>
+    </table>
+    <table class="tfill" style="margin-top:16px;">
+      <tr><td style="width:50%; background:var(--grey-l);"><strong>Director's signature</strong> (at the seminar, in front of peers)</td><td contenteditable="true" data-k="e_sig" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">4.</span>Steering committee decision log <span class="sans" style="font-size:13px; color:var(--grey);">— kept in session, every week</span></h2>
+  <p class="sans" style="font-size:13px; color:var(--grey);">The memory of the weekly committee. Opened at the start of each session: every past decision is checked (done / not done) before new ones are taken.</p>
+  <div class="fiche">
+    <div class="fhead"><h4>Decision log</h4><div class="fwhen">Weekly steering committee</div></div>
+    <table class="tfill" style="margin-top:4px;">
+      <tr><th style="width:10%;">Date</th><th style="width:28%;">Issue / blocker</th><th style="width:28%;">Decision</th><th style="width:14%;">Owner</th><th style="width:10%;">Deadline</th><th style="width:10%;">Status</th></tr>
+      <tr><td contenteditable="true" data-k="r_d1" data-ph=""></td><td contenteditable="true" data-k="r_s1" data-ph=""></td><td contenteditable="true" data-k="r_de1" data-ph=""></td><td contenteditable="true" data-k="r_r1" data-ph=""></td><td contenteditable="true" data-k="r_e1" data-ph=""></td><td contenteditable="true" data-k="r_st1" data-ph="To do / Done"></td></tr>
+      <tr><td contenteditable="true" data-k="r_d2" data-ph=""></td><td contenteditable="true" data-k="r_s2" data-ph=""></td><td contenteditable="true" data-k="r_de2" data-ph=""></td><td contenteditable="true" data-k="r_r2" data-ph=""></td><td contenteditable="true" data-k="r_e2" data-ph=""></td><td contenteditable="true" data-k="r_st2" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d3" data-ph=""></td><td contenteditable="true" data-k="r_s3" data-ph=""></td><td contenteditable="true" data-k="r_de3" data-ph=""></td><td contenteditable="true" data-k="r_r3" data-ph=""></td><td contenteditable="true" data-k="r_e3" data-ph=""></td><td contenteditable="true" data-k="r_st3" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d4" data-ph=""></td><td contenteditable="true" data-k="r_s4" data-ph=""></td><td contenteditable="true" data-k="r_de4" data-ph=""></td><td contenteditable="true" data-k="r_r4" data-ph=""></td><td contenteditable="true" data-k="r_e4" data-ph=""></td><td contenteditable="true" data-k="r_st4" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d5" data-ph=""></td><td contenteditable="true" data-k="r_s5" data-ph=""></td><td contenteditable="true" data-k="r_de5" data-ph=""></td><td contenteditable="true" data-k="r_r5" data-ph=""></td><td contenteditable="true" data-k="r_e5" data-ph=""></td><td contenteditable="true" data-k="r_st5" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d6" data-ph=""></td><td contenteditable="true" data-k="r_s6" data-ph=""></td><td contenteditable="true" data-k="r_de6" data-ph=""></td><td contenteditable="true" data-k="r_r6" data-ph=""></td><td contenteditable="true" data-k="r_e6" data-ph=""></td><td contenteditable="true" data-k="r_st6" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d7" data-ph=""></td><td contenteditable="true" data-k="r_s7" data-ph=""></td><td contenteditable="true" data-k="r_de7" data-ph=""></td><td contenteditable="true" data-k="r_r7" data-ph=""></td><td contenteditable="true" data-k="r_e7" data-ph=""></td><td contenteditable="true" data-k="r_st7" data-ph=""></td></tr>
+      <tr><td contenteditable="true" data-k="r_d8" data-ph=""></td><td contenteditable="true" data-k="r_s8" data-ph=""></td><td contenteditable="true" data-k="r_de8" data-ph=""></td><td contenteditable="true" data-k="r_r8" data-ph=""></td><td contenteditable="true" data-k="r_e8" data-ph=""></td><td contenteditable="true" data-k="r_st8" data-ph=""></td></tr>
+    </table>
+  </div>
+
+  <h2><span class="num">5.</span>90-day checklist <span class="sans" style="font-size:13px; color:var(--grey);">— the CEO ticks as things get done</span></h2>
+  <div class="fiche">
+    <div class="fhead"><h4>System progress</h4><div class="fwhen">Ticked boxes are saved</div></div>
+    <div class="flabel">Days 1–15 · Take control</div>
+    <div class="check"><input type="checkbox" data-k="c1" id="ce1"><label for="ce1">Daily cash meeting launched (even with incomplete numbers)</label></div>
+    <div class="check"><input type="checkbox" data-k="c2" id="ce2"><label for="ce2">Management analyst appointed, reporting to the CEO</label></div>
+    <div class="check"><input type="checkbox" data-k="c3" id="ce3"><label for="ce3">Flash diagnostic requested from every director (tool #2, 10-day deadline)</label></div>
+    <div class="check"><input type="checkbox" data-k="c4" id="ce4"><label for="ce4">Overall goal and 4 objectives drafted (provisional) by the CEO</label></div>
+    <div class="check"><input type="checkbox" data-k="c5" id="ce5"><label for="ce5">Seminar date locked, venue booked, invitations sent</label></div>
+    <div class="flabel">Days 15–30 · Align</div>
+    <div class="check"><input type="checkbox" data-k="c6" id="ce6"><label for="ce6">Seminar held — overall goal + 4 objectives validated and quantified</label></div>
+    <div class="check"><input type="checkbox" data-k="c7" id="ce7"><label for="ce7">Commitment sheets signed by every director (tool #3)</label></div>
+    <div class="check"><input type="checkbox" data-k="c8" id="ce8"><label for="ce8">CEO dashboard v1 produced (Excel) and rituals calendar circulated</label></div>
+    <div class="flabel">Days 30–60 · Execute and make it visible</div>
+    <div class="check"><input type="checkbox" data-k="c9" id="ce9"><label for="ce9">Weekly steering committee held 4 weeks in a row, decision log up to date</label></div>
+    <div class="check"><input type="checkbox" data-k="c10" id="ce10"><label for="ce10">Quick win #1 delivered and communicated (e.g.: top 20 debtors, signed schedules)</label></div>
+    <div class="check"><input type="checkbox" data-k="c11" id="ce11"><label for="ce11">Quick win #2 delivered and communicated (e.g.: targeted anti-fraud operation)</label></div>
+    <div class="check"><input type="checkbox" data-k="c12" id="ce12"><label for="ce12">Commercial and generation dashboards v1 in service</label></div>
+    <div class="flabel">Days 60–90 · Correct and anchor</div>
+    <div class="check"><input type="checkbox" data-k="c13" id="ce13"><label for="ce13">Mid-point review of the 90-day plans done with each department</label></div>
+    <div class="check"><input type="checkbox" data-k="c14" id="ce14"><label for="ce14">Next year's budget framed on the overall goal and the 4 objectives</label></div>
+    <div class="check"><input type="checkbox" data-k="c15" id="ce15"><label for="ce15">First results communicated to all staff</label></div>
+    <div class="check"><input type="checkbox" data-k="c16" id="ce16"><label for="ce16">Decision taken on dashboard automation (level 2)</label></div>
+  </div>
+
+  <footer>Working document — Axxum Thinking for the CEET General Management · July 2026 · Entries stay on this computer (no data is transmitted).</footer>
+</div>
+
+<!-- ==================== PAGE 4 FR ==================== -->
+<div class="page l-fr" id="page4">
+  <p class="lead" style="margin-top:8px;">Le <strong>Pacte National Énergie</strong> (septembre 2025) est l'engagement du Togo dans l'initiative <strong>Mission 300</strong> de la Banque mondiale et de la BAD — raccorder 300 millions d'Africains d'ici 2030. C'est le cadre national dans lequel s'inscrit le redressement de la CEET : les objectifs du dispositif (onglet 1) sont la contribution directe de l'entreprise au Pacte.</p>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="v">100 %</div><div class="l">d'accès à l'électricité en 2030 (70 % en 2024, soit 3,87 millions de personnes à raccorder)</div></div>
+    <div class="kpi"><div class="v">3 Mds USD</div><div class="l">d'investissements 2025-2030, dont 1,68 Md attendu du secteur privé</div></div>
+    <div class="kpi"><div class="v">1 154,5 MW</div><div class="l">de capacité installée visée en 2030 (267,5 MW fin 2024)</div></div>
+    <div class="kpi"><div class="v">≥ 63 %</div><div class="l">de capacité renouvelable en 2030 (solaire 569 MWc + hydro 57 MW)</div></div>
+  </div>
+
+  <h2><span class="num">1.</span>Les cinq piliers du Pacte</h2>
+  <table>
+    <tr><th style="width:24%;">Pilier</th><th>Contenu</th></tr>
+    <tr><td><strong>I. Infrastructures à coûts compétitifs</strong></td><td>Réhabiliter et étendre production, transport et distribution. Nouveau plan directeur fin 2025, appels d'offres compétitifs pour les IPP, +1 447 km de lignes HT et +3 761 km MT/BT.</td></tr>
+    <tr><td><strong>II. Intégration régionale</strong></td><td>Dorsales WAPP (Nord 330 kV, Médiane, Côtière), marché régional « day ahead » (2026), transformation de la CEB en gestionnaire de réseau de transport (T3 2026).</td></tr>
+    <tr><td><strong>III. Énergies décentralisées et cuisson propre</strong></td><td>Mini-réseaux et kits solaires pour le dernier kilomètre (133 000 kits d'ici 2030), 80 % de cuisson propre, Fonds Tinga renforcé à 100 M USD (1,3 million de branchements).</td></tr>
+    <tr><td><strong>IV. Mobilisation du secteur privé</strong></td><td>1,68 Md USD à mobiliser : réformes, exonérations EnR (douanes, TVA), procédures de passation simplifiées (réforme 2026), assistance technique aux transactions IPP/BESS.</td></tr>
+    <tr><td><strong>V. Viabilité financière du secteur</strong></td><td>Réorganisation de la CEET, nouvelle grille tarifaire (mai 2025), restructuration de la CEB, révision de la loi de 2000 et renforcement du régulateur ARSE (T1 2027).</td></tr>
+  </table>
+
+  <h2><span class="num">2.</span>Les objectifs chiffrés 2030</h2>
+  <table>
+    <tr><th>Objectif</th><th>Référence 2024</th><th>Cible 2030</th></tr>
+    <tr><td>Taux d'accès à l'électricité</td><td>70 % (5,44 M d'habitants)</td><td>100 % (9,6 M d'habitants)</td></tr>
+    <tr><td>Capacité installée</td><td>267,5 MW</td><td>≥ 1 154,5 MW</td></tr>
+    <tr><td>Production renouvelable</td><td>~139 GWh (12,5 % de la production)</td><td>1 398 GWh (41 % de la production, ×10)</td></tr>
+    <tr><td>Stockage batteries (BESS)</td><td>4 MWh (Blitta)</td><td>≥ 156 MWh (études : ~400 MWh)</td></tr>
+    <tr><td>Pertes réseau</td><td>16 %</td><td>≤ 12 %</td></tr>
+    <tr><td>SAIDI / SAIFI</td><td>52 h/an · 23 interruptions/an</td><td>SAIDI ≤ 18 · SAIFI &lt; 18</td></tr>
+    <tr><td>Cuisson propre</td><td>14 %</td><td>≥ 80 % des ménages</td></tr>
+    <tr><td>Capitaux privés</td><td>517,5 M USD (2011-2024)</td><td>1,68 Md USD (2025-2030)</td></tr>
+  </table>
+
+  <h2><span class="num">3.</span>Le pipeline de production — où s'insère le PPA solaire</h2>
+  <table>
+    <tr><th style="width:14%;">Horizon</th><th>Projet</th><th style="width:22%;">Capacité</th></tr>
+    <tr><td>2026</td><td>Centrales solaires d'Agoè-Nyivé, Sokodé, Kara, Dapaong (+ BESS 50 MWh Dapaong/Blitta)</td><td>8 + 64 + 42 + 25 MWc</td></tr>
+    <tr><td>2026</td><td>Extension de la centrale solaire de Blitta (AMEA)</td><td>70 → 100 MWc</td></tr>
+    <tr><td>2029</td><td>Terminal GNL de stockage et regazéification</td><td>80 000 m³</td></tr>
+    <tr><td>2030</td><td>Aménagement hydroélectrique de Tetetou</td><td>57 MW</td></tr>
+    <tr><td>2030</td><td>Solaire additionnel, dont Kpalimé 100 MWc + stockage STEP</td><td>+400 MWc</td></tr>
+  </table>
+  <div class="box green">
+    <p style="margin:0;"><strong>L'opportunité :</strong> 569 MWc de solaire sont à contracter d'ici 2030, avec appels d'offres compétitifs, exonérations fiscales EnR et assistance technique IPP prévues par le Pacte. C'est exactement la fenêtre pour lancer <strong>le PPA solaire le plus agressif de la région</strong> (cible ≤ 0,05 $/kWh) : volume, concurrence et cadre sont réunis. Chaque MWc contracté bon marché rapproche la CEET de l'objectif global — l'électricité la moins chère du continent.</p>
+  </div>
+
+  <h2><span class="num">4.</span>Ce que le Pacte exige de la CEET</h2>
+  <table>
+    <tr><th style="width:30%;">Engagement</th><th style="width:18%;">Échéance</th><th>Lien avec le dispositif de pilotage</th></tr>
+    <tr><td>Réorganisation de la CEET (coûts, RH, pertes non techniques)</td><td>T3 2026</td><td>C'est maintenant. Le dispositif 90 jours (onglet 1) en est l'ossature de gestion.</td></tr>
+    <tr><td>Pertes réseau 16 % → 12 %</td><td>2030</td><td>Objectif 2 du dispositif ; suivi hebdo dashboards B et C.</td></tr>
+    <tr><td>Recouvrement de 100 % des coûts d'exploitation</td><td>2027</td><td>Objectifs 1 et 3 : cash + coût du kWh. Dashboards A et D.</td></tr>
+    <tr><td>Plan annuel de branchements présenté par la CEET</td><td>Chaque année</td><td>À intégrer aux objectifs de la Direction commerciale (fiche d'engagement, onglet 3).</td></tr>
+    <tr><td>SAIDI ≤ 18 h · qualité de service</td><td>2030</td><td>Objectif 4 ; suivi dashboard D.</td></tr>
+    <tr><td>Système d'information sectoriel intégré + plateforme digitale de suivi</td><td>2026</td><td>Les dashboards niveau 2 (onglet 2) sont la brique CEET de ce système.</td></tr>
+    <tr><td>Restructuration + révision du cadre tarifaire</td><td>2027-T4 2028</td><td>La discipline de gestion installée d'ici là détermine la crédibilité de la CEET dans ces négociations.</td></tr>
+  </table>
+
+  <h2><span class="num">5.</span>Gouvernance et calendrier du Pacte</h2>
+  <p>Le pilotage repose sur un <strong>Secrétariat Permanent Énergie</strong> (SPE, créé fin 2025, sous l'autorité du ministère chargé de l'énergie) et un <strong>Comité interministériel de pilotage</strong>. Le reporting est hebdomadaire au SPE, mensuel dans les cellules techniques (dont la CEET), semestriel au comité interministériel — le rythme du dispositif CEET (onglet 1) s'y emboîte naturellement. Quatre phases : <strong>lancement</strong> (2025), <strong>accélération ciblée</strong> (2026-2027, démarrage des projets prioritaires), <strong>massification</strong> (2028-2029), <strong>consolidation</strong> (2030, évaluation finale).</p>
+  <div class="box">
+    <p style="margin:0;"><strong>Lecture stratégique pour le DG :</strong> le Pacte apporte le cadre, les financements et la pression politique. La CEET doit arriver au rendez-vous avec un système de gestion qui fonctionne (onglet 1), des chiffres fiables (onglet 2) et des engagements tenus (onglet 3). Une CEET pilotée est la condition de crédibilité de tout le Pacte — et le PPA solaire agressif en est la démonstration la plus visible.</p>
+  </div>
+
+  <footer>Source : Pacte National Énergie pour la République Togolaise, septembre 2025 (Mission 300) · Synthèse Axxum Thinking · Juillet 2026</footer>
+</div>
+
+<!-- ==================== PAGE 4 EN ==================== -->
+<div class="page l-en" id="page4en">
+  <p class="lead" style="margin-top:8px;">The <strong>National Energy Compact</strong> (September 2025) is Togo's commitment under the World Bank / AfDB <strong>Mission 300</strong> initiative — connecting 300 million Africans by 2030. It is the national framework in which the CEET turnaround sits: the objectives of the management system (tab 1) are the company's direct contribution to the Compact.</p>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="v">100 %</div><div class="l">electricity access by 2030 (70 % in 2024, i.e. 3.87 million people to connect)</div></div>
+    <div class="kpi"><div class="v">3 bn USD</div><div class="l">of investment 2025-2030, of which 1.68 bn expected from the private sector</div></div>
+    <div class="kpi"><div class="v">1,154.5 MW</div><div class="l">installed capacity targeted for 2030 (267.5 MW at end 2024)</div></div>
+    <div class="kpi"><div class="v">≥ 63 %</div><div class="l">renewable capacity by 2030 (569 MWp solar + 57 MW hydro)</div></div>
+  </div>
+
+  <h2><span class="num">1.</span>The Compact's five pillars</h2>
+  <table>
+    <tr><th style="width:24%;">Pillar</th><th>Content</th></tr>
+    <tr><td><strong>I. Competitive-cost infrastructure</strong></td><td>Rehabilitate and expand generation, transmission and distribution. New master plan end 2025, competitive IPP tenders, +1,447 km of HV lines and +3,761 km MV/LV.</td></tr>
+    <tr><td><strong>II. Regional integration</strong></td><td>WAPP backbones (330 kV North, Median, Coastal), regional day-ahead market (2026), transformation of CEB into a transmission system operator (Q3 2026).</td></tr>
+    <tr><td><strong>III. Decentralised energy and clean cooking</strong></td><td>Mini-grids and solar kits for the last mile (133,000 kits by 2030), 80 % clean cooking, Tinga Fund topped up to 100 M USD (1.3 million connections).</td></tr>
+    <tr><td><strong>IV. Private sector mobilisation</strong></td><td>1.68 bn USD to mobilise: reforms, RE tax exemptions (customs, VAT), simplified procurement (2026 reform), technical assistance for IPP/BESS transactions.</td></tr>
+    <tr><td><strong>V. Financial viability of the sector</strong></td><td>Reorganisation of CEET, new tariff schedule (May 2025), restructuring of CEB, revision of the 2000 electricity law and strengthening of the regulator ARSE (Q1 2027).</td></tr>
+  </table>
+
+  <h2><span class="num">2.</span>The 2030 quantified targets</h2>
+  <table>
+    <tr><th>Target</th><th>2024 baseline</th><th>2030 target</th></tr>
+    <tr><td>Electricity access rate</td><td>70 % (5.44 M people)</td><td>100 % (9.6 M people)</td></tr>
+    <tr><td>Installed capacity</td><td>267.5 MW</td><td>≥ 1,154.5 MW</td></tr>
+    <tr><td>Renewable generation</td><td>~139 GWh (12.5 % of generation)</td><td>1,398 GWh (41 % of generation, ×10)</td></tr>
+    <tr><td>Battery storage (BESS)</td><td>4 MWh (Blitta)</td><td>≥ 156 MWh (studies: ~400 MWh)</td></tr>
+    <tr><td>Grid losses</td><td>16 %</td><td>≤ 12 %</td></tr>
+    <tr><td>SAIDI / SAIFI</td><td>52 h/yr · 23 interruptions/yr</td><td>SAIDI ≤ 18 · SAIFI &lt; 18</td></tr>
+    <tr><td>Clean cooking</td><td>14 %</td><td>≥ 80 % of households</td></tr>
+    <tr><td>Private capital</td><td>517.5 M USD (2011-2024)</td><td>1.68 bn USD (2025-2030)</td></tr>
+  </table>
+
+  <h2><span class="num">3.</span>The generation pipeline — where the solar PPA fits</h2>
+  <table>
+    <tr><th style="width:14%;">Horizon</th><th>Project</th><th style="width:22%;">Capacity</th></tr>
+    <tr><td>2026</td><td>Agoè-Nyivé, Sokodé, Kara, Dapaong solar plants (+ 50 MWh BESS at Dapaong/Blitta)</td><td>8 + 64 + 42 + 25 MWp</td></tr>
+    <tr><td>2026</td><td>Extension of the Blitta solar plant (AMEA)</td><td>70 → 100 MWp</td></tr>
+    <tr><td>2029</td><td>LNG storage and regasification terminal</td><td>80,000 m³</td></tr>
+    <tr><td>2030</td><td>Tetetou hydropower scheme</td><td>57 MW</td></tr>
+    <tr><td>2030</td><td>Additional solar, incl. Kpalimé 100 MWp + pumped storage</td><td>+400 MWp</td></tr>
+  </table>
+  <div class="box green">
+    <p style="margin:0;"><strong>The opportunity:</strong> 569 MWp of solar must be contracted by 2030, with competitive tenders, RE tax exemptions and IPP technical assistance provided by the Compact. That is exactly the window to launch <strong>the most aggressive solar PPA in the region</strong> (target ≤ 0.05 $/kWh): volume, competition and framework are all in place. Every cheaply contracted MWp brings CEET closer to the overall goal — the cheapest electricity on the continent.</p>
+  </div>
+
+  <h2><span class="num">4.</span>What the Compact requires from CEET</h2>
+  <table>
+    <tr><th style="width:30%;">Commitment</th><th style="width:18%;">Deadline</th><th>Link to the management system</th></tr>
+    <tr><td>Reorganisation of CEET (costs, HR, non-technical losses)</td><td>Q3 2026</td><td>That is now. The 90-day system (tab 1) is its management backbone.</td></tr>
+    <tr><td>Grid losses 16 % → 12 %</td><td>2030</td><td>Objective 2 of the system; weekly tracking on boards B and C.</td></tr>
+    <tr><td>100 % recovery of operating costs</td><td>2027</td><td>Objectives 1 and 3: cash + cost per kWh. Boards A and D.</td></tr>
+    <tr><td>Annual connection plan presented by CEET</td><td>Every year</td><td>To be built into the Commercial department's objectives (commitment sheet, tab 3).</td></tr>
+    <tr><td>SAIDI ≤ 18 h · service quality</td><td>2030</td><td>Objective 4; tracked on board D.</td></tr>
+    <tr><td>Integrated sector information system + digital monitoring platform</td><td>2026</td><td>The level-2 dashboards (tab 2) are CEET's building block of that system.</td></tr>
+    <tr><td>Restructuring + tariff framework revision</td><td>2027-Q4 2028</td><td>The management discipline installed by then determines CEET's credibility in those negotiations.</td></tr>
+  </table>
+
+  <h2><span class="num">5.</span>Compact governance and calendar</h2>
+  <p>Steering rests on a <strong>Permanent Energy Secretariat</strong> (SPE, created end 2025, under the energy ministry) and an <strong>Interministerial Steering Committee</strong>. Reporting is weekly to the SPE, monthly in the technical cells (including CEET), half-yearly to the interministerial committee — the CEET rhythm (tab 1) slots into it naturally. Four phases: <strong>launch</strong> (2025), <strong>targeted acceleration</strong> (2026-2027, priority projects start), <strong>scale-up</strong> (2028-2029), <strong>consolidation</strong> (2030, final evaluation).</p>
+  <div class="box">
+    <p style="margin:0;"><strong>Strategic reading for the CEO:</strong> the Compact brings the framework, the funding and the political pressure. CEET must show up with a management system that works (tab 1), reliable numbers (tab 2) and commitments kept (tab 3). A well-run CEET is the credibility condition of the whole Compact — and the aggressive solar PPA is its most visible demonstration.</p>
+  </div>
+
+  <footer>Source: National Energy Compact for the Republic of Togo, September 2025 (Mission 300) · Summary by Axxum Thinking · July 2026</footer>
+</div>
+
+</main>
+
+<script>
+var LTXT={
+  fr:{
+    title:'CEET — Dispositif de pilotage du redressement',
+    sub:'Les 90 premiers jours, puis le rythme annuel &nbsp;·&nbsp; Document de travail préparé pour le Directeur Général &nbsp;·&nbsp; Juillet 2026',
+    conf:'Confidentiel — chiffres illustratifs à remplacer par les données réelles',
+    t1:'1 · Le dispositif — méthode et 90 jours', t2:'2 · Les tableaux de bord', t3:'3 · Outils à remplir avec l’équipe', t4:'4 · Le Pacte Énergie (Mission 300)'
+  },
+  en:{
+    title:'CEET — Turnaround Management System',
+    sub:'The first 90 days, then the annual rhythm &nbsp;·&nbsp; Working document prepared for the CEO &nbsp;·&nbsp; July 2026',
+    conf:'Confidential — illustrative figures to be replaced with real data',
+    t1:'1 · The system — method and 90 days', t2:'2 · The dashboards', t3:'3 · Tools to fill in with the team', t4:'4 · The Energy Compact (Mission 300)'
+  }
+};
+var lang='fr', cur=1;
+function render(){
+  for(var i=1;i<=4;i++){
+    document.getElementById('page'+i).classList.toggle('visible', lang==='fr'&&cur===i);
+    document.getElementById('page'+i+'en').classList.toggle('visible', lang==='en'&&cur===i);
+    document.getElementById('tab'+i).classList.toggle('active', cur===i);
+    document.getElementById('tab'+i).innerHTML=LTXT[lang]['t'+i];
+  }
+  document.body.classList.toggle('en', lang==='en');
+  document.getElementById('htitle').innerHTML=LTXT[lang].title;
+  document.getElementById('hsub').innerHTML=LTXT[lang].sub;
+  document.getElementById('hconf').innerHTML=LTXT[lang].conf;
+  document.getElementById('lfr').classList.toggle('active', lang==='fr');
+  document.getElementById('len').classList.toggle('active', lang==='en');
+  document.documentElement.lang=lang;
+}
+function show(n){ cur=n; render(); window.scrollTo(0,0); }
+function setLang(l){ lang=l; try{localStorage.setItem('ceet-lang',l);}catch(e){} render(); }
+var SAVEKEY='ceet-pilotage-v1';
+function saveAll(){
+  var d={};
+  document.querySelectorAll('[data-k]').forEach(function(e){
+    var v=(e.type==='checkbox') ? e.checked : (e.isContentEditable ? e.innerHTML : e.value);
+    if(e.type==='checkbox' ? v : (v&&String(v).trim()!=='')) d[e.dataset.k]=v;
+    else if(d[e.dataset.k]===undefined) d[e.dataset.k]=v;
+  });
+  try{ localStorage.setItem(SAVEKEY, JSON.stringify(d)); }catch(err){}
+}
+function syncTwins(el){
+  if(!el.dataset||!el.dataset.k) return;
+  document.querySelectorAll('[data-k="'+el.dataset.k+'"]').forEach(function(o){
+    if(o===el) return;
+    if(o.type==='checkbox'){ o.checked=el.checked; styleCheck(o); }
+    else if(o.isContentEditable){ o.innerHTML=el.innerHTML; }
+    else{ o.value=el.value; }
+  });
+}
+function loadAll(){
+  var d={};
+  try{ d=JSON.parse(localStorage.getItem(SAVEKEY)||'{}'); }catch(err){}
+  document.querySelectorAll('[data-k]').forEach(function(e){
+    if(d[e.dataset.k]!==undefined){
+      if(e.type==='checkbox'){ e.checked=d[e.dataset.k]; }
+      else if(e.isContentEditable){ e.innerHTML=d[e.dataset.k]; }
+      else{ e.value=d[e.dataset.k]; }
+    }
+  });
+  document.querySelectorAll('.check input').forEach(styleCheck);
+}
+function styleCheck(cb){ cb.closest('.check').classList.toggle('done', cb.checked); }
+document.addEventListener('input', function(ev){ syncTwins(ev.target); saveAll(); });
+document.addEventListener('change', function(ev){
+  syncTwins(ev.target); saveAll();
+  if(ev.target.matches('.check input')) styleCheck(ev.target);
+});
+try{ lang=localStorage.getItem('ceet-lang')||'fr'; }catch(e){}
+loadAll(); render();
+
+/* ---- impression par fiche / per-sheet printing ---- */
+function printFiche(btn){
+  var f=btn.closest('.fiche'), pg=btn.closest('.page');
+  document.body.classList.add('pfiche'); f.classList.add('ptarget'); pg.classList.add('pwrap');
+  window.print();
+  setTimeout(function(){
+    document.body.classList.remove('pfiche'); f.classList.remove('ptarget'); pg.classList.remove('pwrap');
+  }, 500);
+}
+document.querySelectorAll('.fiche .fhead').forEach(function(h){
+  var b=document.createElement('button');
+  b.className='fprint'; b.type='button';
+  b.textContent = h.closest('.l-en') ? 'Print this sheet' : 'Imprimer cette fiche';
+  b.onclick=function(){ printFiche(b); };
+  h.appendChild(b);
+});
+
+/* ---- password gate ---- */
+var PWHASH='59534a99b68a90fbc02e7a9bb936176a785f50a809787a54688cf13b7205c715';
+function shaHex(s){
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function(b){
+    return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');
+  });
+}
+function checkPw(){
+  var v=document.getElementById('pw').value;
+  shaHex(v).then(function(h){
+    if(h===PWHASH){
+      try{ sessionStorage.setItem('ceet-ok','1'); }catch(e){}
+      var g=document.getElementById('gate'); if(g) g.remove();
+    }else{
+      document.getElementById('pwerr').textContent='Mot de passe incorrect / Wrong password';
+      document.getElementById('pw').value=''; document.getElementById('pw').focus();
+    }
+  });
+}
+(function(){
+  var ok=false;
+  try{ ok = sessionStorage.getItem('ceet-ok')==='1'; }catch(e){}
+  if(ok){ var g=document.getElementById('gate'); if(g) g.remove(); }
+  var pw=document.getElementById('pw');
+  if(pw){ pw.addEventListener('keydown', function(e){ if(e.key==='Enter') checkPw(); }); }
+})();
+</script>
+</body>
+</html>
