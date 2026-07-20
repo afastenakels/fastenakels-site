@@ -21,11 +21,11 @@
   h1{font-family:'Newsreader',serif;font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin:8px 0 4px;line-height:1.2;}
   h1 em{font-style:italic;}
   #header p{font-size:.76rem;color:var(--stone);margin:4px 0 0;line-height:1.45;}
-  #legend{bottom:26px;left:16px;font-size:.74rem;max-width:280px;}
-  #legend h2{font-family:'Newsreader',serif;font-weight:500;font-size:.95rem;margin:0 0 8px;}
-  .lrow{display:flex;align-items:center;gap:8px;margin:4px 0;}
-  .swatch{width:13px;height:13px;border:1px solid rgba(22,20,15,.25);flex:none;}
-  .dot{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);flex:none;}
+  #legend{bottom:26px;left:16px;font-size:.68rem;max-width:238px;padding:10px 14px;line-height:1.25;}
+  #legend h2{font-family:'Newsreader',serif;font-weight:500;font-size:.85rem;margin:0 0 5px;}
+  .lrow{display:flex;align-items:center;gap:7px;margin:2px 0;}
+  .swatch{width:11px;height:11px;border:1px solid rgba(22,20,15,.25);flex:none;}
+  .dot{width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);flex:none;}
   .count{margin-left:auto;color:var(--stone);}
   #side{top:16px;right:16px;width:302px;max-height:calc(100% - 60px);display:flex;flex-direction:column;padding:0;}
   #side .head{padding:14px 18px 10px;border-bottom:1px solid var(--hairline);}
@@ -239,7 +239,7 @@ fetch(ARC).then(r=>r.json()).then(gj=>{
     style:f=>{
       const code=(f.properties.main_zone_code||'').trim();
       const s=ZONE_STYLE[code]||zoneDefault;
-      zonesSeen.set(code||'other', s);
+      zonesSeen.set(s.n, s);
       return {color:'#FBF9F4', weight:.6, opacity:.7, fillColor:s.c, fillOpacity:.38};
     },
     onEachFeature:(f,l)=>{
@@ -256,7 +256,7 @@ fetch(ARC).then(r=>r.json()).then(gj=>{
     pl.bindPopup('<span class="popname">'+h.note+'</span><br><span class="poptag">UPI '+upi+'</span>');
   });
   const zr=document.getElementById('zonerows');
-  [...zonesSeen.entries()].sort().forEach(([k,s])=>{
+  [...zonesSeen.entries()].sort((a,b)=>(a[0].startsWith('R1A')?-1:b[0].startsWith('R1A')?1:a[0]<b[0]?-1:1)).forEach(([k,s])=>{
     zr.insertAdjacentHTML('beforeend','<div class="lrow"><span class="swatch" style="background:'+s.c+'"></span>'+s.n+'</div>');
   });
 }).catch(()=>{
