@@ -54,6 +54,35 @@
   .ringlabel{background:transparent;border:none;box-shadow:none;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.9);font-size:.62rem;letter-spacing:.1em;}
   .nummarker{border-radius:50%;color:#fff;font-size:.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);}
   .nummarker.hl{transform:scale(1.45);z-index:9999 !important;}
+  #legendBtn{display:none;}
+  #sideHandle{display:none;}
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 768px){
+    .panel{padding:10px 14px;}
+    /* compact header */
+    #header{top:10px;left:10px;right:10px;max-width:none;}
+    #header h1{font-size:1.02rem;margin:6px 0 0;}
+    #header p:not(.eyebrow){display:none;}
+    .eyebrow{font-size:.6rem;}
+    /* side list becomes a bottom sheet */
+    #side{top:auto;bottom:0;left:0;right:0;width:auto;max-height:42vh;border-left:none;border-right:none;border-bottom:none;transition:max-height .25s ease;}
+    #side.collapsed{max-height:86px;overflow:hidden;}
+    #side .head{padding:8px 16px 8px;}
+    #side .big{font-size:1.35rem;display:inline;}
+    #side .lbl{display:inline;margin-left:8px;}
+    #side .sub{display:none;}
+    #sideHandle{display:block;width:36px;height:4px;background:var(--hairline);border-radius:2px;margin:6px auto 0;}
+    #bizlist{-webkit-overflow-scrolling:touch;}
+    .bizrow{padding:8px 16px;font-size:.82rem;}
+    /* legend hidden behind a button */
+    #legend{display:none;bottom:96px;left:10px;right:10px;max-width:none;max-height:45vh;overflow-y:auto;z-index:1100;}
+    #legend.open{display:block;}
+    #legendBtn{display:block;position:absolute;z-index:1150;bottom:96px;left:10px;background:var(--paper);border:1px solid var(--hairline);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;cursor:pointer;}
+    #legend.open + #legendBtn, body.legend-open #legendBtn{bottom:auto;}
+    #credits{display:none;}
+    .leaflet-control-zoom{display:none;} /* pinch zoom on touch */
+  }
 </style>
 </head>
 <body>
@@ -67,6 +96,7 @@
 
 <div class="panel" id="side">
   <div class="head">
+    <div id="sideHandle"></div>
     <div class="big">14 <span style="font-size:1rem;color:var(--stone)">/ 32 / 45</span></div>
     <div class="lbl">within 100 / 250 / 650 m</div>
     <div class="sub">Hover a row to locate it. Click to zoom.</div>
@@ -85,6 +115,7 @@
   <label class="toggle"><input type="checkbox" id="zoningToggle" checked> Show zoning overlay</label>
 </div>
 
+<button id="legendBtn">Legend</button>
 <div id="credits">Zoning: City of Kigali proposed zoning (Apr 2026) · Businesses: Google Maps, Jul 2026 · Imagery: Esri</div>
 
 <script>
@@ -267,6 +298,19 @@ fetch(ARC).then(r=>r.json()).then(gj=>{
 document.getElementById('zoningToggle').addEventListener('change',e=>{
   if(e.target.checked) map.addLayer(zoningLayer); else map.removeLayer(zoningLayer);
 });
+
+/* ---------- Mobile behaviour ---------- */
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+if(isMobile){
+  const side=document.getElementById('side');
+  side.classList.add('collapsed');
+  side.querySelector('.head').addEventListener('click',()=>side.classList.toggle('collapsed'));
+  // collapse the sheet after picking a business so the map is visible
+  document.querySelectorAll('.bizrow').forEach(r=>r.addEventListener('click',()=>side.classList.add('collapsed')));
+  const legend=document.getElementById('legend');
+  document.getElementById('legendBtn').addEventListener('click',()=>legend.classList.toggle('open'));
+  map.setView([-1.94720, 30.0790], 17);
+}
 </script>
 </body>
 </html>
