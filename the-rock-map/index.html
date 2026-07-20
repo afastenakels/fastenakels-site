@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rock — Plot 213 Zoning &amp; Business Context</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16140F; --basalt:#211D17; --limestone:#F4F0E8; --paper:#FBF9F4;
+    --terracotta:#AE5A3E; --brass:#A8855A; --stone:#8A8272; --hairline:#D9D2C4;
+  }
+  html,body{margin:0;padding:0;height:100%;font-family:'Hanken Grotesk',sans-serif;color:var(--ink);}
+  #map{position:absolute;inset:0;background:var(--limestone);}
+  .panel{position:absolute;z-index:1000;background:var(--paper);border:1px solid var(--hairline);padding:14px 18px;}
+  #header{top:16px;left:16px;max-width:330px;}
+  .eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--stone);margin:0 0 6px;}
+  .eyebrow::after{content:"";display:block;width:28px;height:1px;background:var(--brass);margin-top:6px;}
+  h1{font-family:'Newsreader',serif;font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin:8px 0 4px;line-height:1.2;}
+  h1 em{font-style:italic;}
+  #header p{font-size:.76rem;color:var(--stone);margin:4px 0 0;line-height:1.45;}
+  #legend{bottom:26px;left:16px;font-size:.74rem;max-width:280px;}
+  #legend h2{font-family:'Newsreader',serif;font-weight:500;font-size:.95rem;margin:0 0 8px;}
+  .lrow{display:flex;align-items:center;gap:8px;margin:4px 0;}
+  .swatch{width:13px;height:13px;border:1px solid rgba(22,20,15,.25);flex:none;}
+  .dot{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);flex:none;}
+  .count{margin-left:auto;color:var(--stone);}
+  #side{top:16px;right:16px;width:302px;max-height:calc(100% - 60px);display:flex;flex-direction:column;padding:0;}
+  #side .head{padding:14px 18px 10px;border-bottom:1px solid var(--hairline);}
+  #side .big{font-family:'Newsreader',serif;font-size:1.9rem;font-weight:400;line-height:1;}
+  #side .lbl{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone);margin-top:4px;}
+  #side .sub{font-size:.7rem;color:var(--stone);margin-top:5px;}
+  #bizlist{overflow-y:auto;padding:6px 0;}
+  .bizrow{display:flex;align-items:center;gap:10px;padding:5px 16px;cursor:pointer;font-size:.76rem;line-height:1.25;}
+  .bizrow:hover{background:var(--limestone);}
+  .bizrow .num{width:20px;height:20px;border-radius:50%;color:#fff;font-size:.64rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.2);}
+  .bizrow .nm{flex:1;}
+  .bizrow .di{color:var(--stone);font-size:.7rem;flex:none;}
+  .grouphead{padding:8px 16px 2px;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);}
+  #credits{position:absolute;z-index:1000;bottom:2px;left:50%;transform:translateX(-50%);font-size:.62rem;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.8);white-space:nowrap;}
+  .leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border-radius:2px;border:1px solid var(--hairline);box-shadow:none;font-family:'Hanken Grotesk',sans-serif;}
+  .leaflet-popup-content{margin:10px 14px;font-size:.78rem;line-height:1.4;}
+  .popname{font-family:'Newsreader',serif;font-size:.95rem;}
+  .poptag{color:var(--brass);text-transform:uppercase;font-size:.62rem;letter-spacing:.15em;}
+  label.toggle{display:flex;gap:6px;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid var(--hairline);cursor:pointer;}
+  .plotlabel{background:var(--terracotta);color:var(--limestone);border:none;border-radius:0;font-family:'Hanken Grotesk',sans-serif;font-size:.58rem;letter-spacing:.14em;padding:2px 6px;box-shadow:none;}
+  .plotlabel::before{border-top-color:var(--terracotta);}
+  .plotlabel.brass{background:var(--brass);}
+  .plotlabel.brass::before{border-top-color:var(--brass);}
+  .plotlabel.dark{background:var(--basalt);}
+  .plotlabel.dark::before{border-top-color:var(--basalt);}
+  .ringlabel{background:transparent;border:none;box-shadow:none;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.9);font-size:.62rem;letter-spacing:.1em;}
+  .nummarker{border-radius:50%;color:#fff;font-size:.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);}
+  .nummarker.hl{transform:scale(1.45);z-index:9999 !important;}
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="panel" id="header">
+  <p class="eyebrow">The Rock Property Group — Plot 213</p>
+  <h1>Kimihurura: business activity is <em>already at the doorstep</em></h1>
+  <p>UPI 1/02/08/02/213 (1,597 m², zoned R1A) with businesses listed on Google Maps, July 2026. Numbers rank them by distance from the plot. 14 businesses operate or are opening within 100 m, including a new restaurant on the directly adjacent Plot 228. Neighbouring Plot 1563 already holds a G+8 permit inside the same G+2 zone.</p>
+</div>
+
+<div class="panel" id="side">
+  <div class="head">
+    <div class="big">14 <span style="font-size:1rem;color:var(--stone)">/ 32 / 45</span></div>
+    <div class="lbl">within 100 / 250 / 650 m</div>
+    <div class="sub">Hover a row to locate it. Click to zoom.</div>
+  </div>
+  <div id="bizlist"></div>
+</div>
+
+<div class="panel" id="legend">
+  <h2>Legend</h2>
+  <div id="zonerows"></div>
+  <div id="bizrows" style="margin-top:8px;"></div>
+  <div class="lrow" style="margin-top:8px;"><span class="swatch" style="border:2px solid var(--terracotta);background:transparent;"></span>Plot 213 — The Rock</div>
+  <div class="lrow"><span class="swatch" style="border:2px dashed var(--brass);background:transparent;"></span>Plot 212 — proposed Phase 2</div>
+  <div class="lrow"><span class="swatch" style="border:2px dashed var(--basalt);background:transparent;"></span>Plot 1563 — G+8 permitted in G+2 zone</div>
+  <div class="lrow" style="margin-top:6px;"><span style="width:14px;border-top:2px dashed var(--ink);flex:none;"></span>50 / 100 / 250 m from plot</div>
+  <label class="toggle"><input type="checkbox" id="zoningToggle" checked> Show zoning overlay</label>
+</div>
+
+<div id="credits">Zoning: City of Kigali proposed zoning (Apr 2026) · Businesses: Google Maps, Jul 2026 · Imagery: Esri</div>
+
+<script>
+const PLOT_UPI = "1/02/08/02/213";
+const CENTER = [-1.94695, 30.07901];
+
+const map = L.map('map').setView([-1.94745, 30.0790], 17);
+map.zoomControl.setPosition('bottomleft');
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:20, attribution:'Esri'}).addTo(map);
+
+[[50,'50 m'],[100,'100 m'],[250,'250 m']].forEach(([r,t])=>{
+  L.circle(CENTER,{radius:r,fill:false,color:'#FBF9F4',weight:1.5,dashArray:'6 6',opacity:.95}).addTo(map);
+  L.marker([CENTER[0]-r/110574, CENTER[1]],{icon:L.divIcon({className:'ringlabel',html:t,iconSize:[40,14],iconAnchor:[20,7]}),interactive:false}).addTo(map);
+});
+
+/* ---- Businesses (Google Maps, collected 20 Jul 2026), sorted by distance ---- */
+const BIZ = [
+{"name":"New restaurant, opening 2026 (Plot 228, adjacent)","cat":"dining","lat":-1.9472211,"lon":30.0789447,"dist":31},
+{"name":"Yego Arts","cat":"shop","lat":-1.9466709,"lon":30.0788392,"dist":36},
+{"name":"New Kimi's Lounge","cat":"dining","lat":-1.9467615,"lon":30.0795864,"dist":67},
+{"name":"FitiniCAFE.com","cat":"dining","lat":-1.9465918,"lon":30.078518,"dist":68},
+{"name":"OMX Hotel Kimi","cat":"hotel","lat":-1.9465918,"lon":30.078518,"dist":68},
+{"name":"ALSM Accounting & Advisory","cat":"office","lat":-1.946688,"lon":30.079563,"dist":68},
+{"name":"Billiards Club Kigali","cat":"dining","lat":-1.9467736,"lon":30.0796315,"dist":72},
+{"name":"Lemon Kigali","cat":"dining","lat":-1.9467599,"lon":30.0796536,"dist":75},
+{"name":"Fitnesspoint","cat":"service","lat":-1.9465236,"lon":30.0795622,"dist":77},
+{"name":"La Noche","cat":"dining","lat":-1.9467919,"lon":30.0796929,"dist":78},
+{"name":"Focus Physio + Massage","cat":"service","lat":-1.946719,"lon":30.0796821,"dist":79},
+{"name":"Dontez Restaurant","cat":"dining","lat":-1.9462267,"lon":30.0790167,"dist":80},
+{"name":"Cozy Safari","cat":"hotel","lat":-1.9470036,"lon":30.0781422,"dist":97},
+{"name":"Soy Asian Table","cat":"dining","lat":-1.9474753,"lon":30.0783093,"dist":97},
+{"name":"Boho Restaurant","cat":"dining","lat":-1.9478887,"lon":30.0787663,"dist":107},
+{"name":"Boho Café, Pâtisserie & Sandwich","cat":"dining","lat":-1.9478938,"lon":30.0787547,"dist":108},
+{"name":"O'bella Collection","cat":"shop","lat":-1.9478633,"lon":30.0785524,"dist":113},
+{"name":"Dzetshal Rwanda","cat":"shop","lat":-1.9479727,"lon":30.0788434,"dist":115},
+{"name":"Zuri Rwanda","cat":"service","lat":-1.9480131,"lon":30.0788308,"dist":119},
+{"name":"K-Crea Manufacturing","cat":"institution","lat":-1.9471656,"lon":30.0800571,"dist":119},
+{"name":"Laini","cat":"shop","lat":-1.9467401,"lon":30.0800672,"dist":120},
+{"name":"Abiliz Gelato Italiano","cat":"dining","lat":-1.9480237,"lon":30.0788188,"dist":121},
+{"name":"14th Avenue Wine Bar and Restaurant","cat":"dining","lat":-1.9478944,"lon":30.0784425,"dist":122},
+{"name":"Women Foundation Ministries","cat":"institution","lat":-1.946537,"lon":30.0779934,"dist":122},
+{"name":"Isla Tiki Bar","cat":"dining","lat":-1.9481434,"lon":30.0787139,"dist":136},
+{"name":"Glitz Nails and Beauty","cat":"service","lat":-1.9481694,"lon":30.0787598,"dist":138},
+{"name":"n'Intoki","cat":"shop","lat":-1.9473592,"lon":30.0777972,"dist":142},
+{"name":"Institut de Formation Apostolique","cat":"institution","lat":-1.9483018,"lon":30.0793937,"dist":155},
+{"name":"Pharmacie Unique","cat":"service","lat":-1.9469681,"lon":30.0775105,"dist":167},
+{"name":"Kivu Noir","cat":"dining","lat":-1.9487724,"lon":30.0786991,"dist":204},
+{"name":"Flair du Bois","cat":"office","lat":-1.948756,"lon":30.0795809,"dist":210},
+{"name":"Pâtisserie Royale","cat":"dining","lat":-1.9490848,"lon":30.0795654,"dist":244},
+{"name":"Kigali Sport Bar","cat":"dining","lat":-1.9446549,"lon":30.0792531,"dist":255},
+{"name":"High 5","cat":"dining","lat":-1.9492635,"lon":30.0792453,"dist":257},
+{"name":"Fire & Stone Pizza Company","cat":"dining","lat":-1.9498048,"lon":30.079533,"dist":321},
+{"name":"Eboshi Guesthouse","cat":"hotel","lat":-1.9498418,"lon":30.0779849,"dist":339},
+{"name":"Patel supermarket","cat":"shop","lat":-1.9493436,"lon":30.0809868,"dist":344},
+{"name":"Essence Bar & Grill","cat":"dining","lat":-1.9497639,"lon":30.0812826,"dist":401},
+{"name":"The Imizi Residency","cat":"hotel","lat":-1.9501894,"lon":30.0806766,"dist":403},
+{"name":"DeliBox","cat":"shop","lat":-1.9500359,"lon":30.0817071,"dist":454},
+{"name":"NjordFrey Head Office","cat":"office","lat":-1.9499351,"lon":30.0827681,"dist":533},
+{"name":"Judith's Hostel","cat":"hotel","lat":-1.9506448,"lon":30.0824372,"dist":559},
+{"name":"Fika Café","cat":"dining","lat":-1.9507219,"lon":30.0824336,"dist":565},
+{"name":"ARCOS Head Office Kigali","cat":"office","lat":-1.9505011,"lon":30.082919,"dist":586},
+{"name":"Jibu Rwanda Head Office","cat":"office","lat":-1.9503765,"lon":30.0833815,"dist":617}
+];
+
+const CATS = {
+  dining:{c:'#A8855A', n:'Dining, cafés & nightlife'},
+  hotel:{c:'#AE5A3E', n:'Hotels & guesthouses'},
+  shop:{c:'#16140F', n:'Shops, retail & galleries'},
+  service:{c:'#5C554A', n:'Services & wellness'},
+  office:{c:'#7A7161', n:'Offices'},
+  institution:{c:'#8C8368', n:'Institutions & industry'},
+};
+
+/* Fan out markers that sit within ~14 m of an already placed marker */
+function spread(items){
+  const placed=[];
+  const M2LAT=1/110574, M2LON=1/(111320*Math.cos(CENTER[0]*Math.PI/180));
+  return items.map(b=>{
+    let lat=b.lat, lon=b.lon, tries=0;
+    const clash=()=>placed.some(p=>Math.hypot((p.lat-lat)/M2LAT,(p.lon-lon)/M2LON)<14);
+    while(clash() && tries<12){
+      const ang=tries*(Math.PI/3), rad=14+4*Math.floor(tries/6);
+      lat=b.lat+Math.sin(ang)*rad*M2LAT; lon=b.lon+Math.cos(ang)*rad*M2LON; tries++;
+    }
+    placed.push({lat,lon});
+    return {...b, plat:lat, plon:lon};
+  });
+}
+
+const zoningLayer=L.layerGroup().addTo(map);
+const bizLayer=L.layerGroup().addTo(map);
+const markers=[];
+const counts={};
+const listEl=document.getElementById('bizlist');
+let lastGroup=null;
+
+spread(BIZ).forEach((b,i)=>{
+  counts[b.cat]=(counts[b.cat]||0)+1;
+  const n=i+1, col=CATS[b.cat].c;
+  const mk=L.marker([b.plat,b.plon],{icon:L.divIcon({className:'nummarker',html:n,iconSize:[21,21],iconAnchor:[10,10],popupAnchor:[0,-8]})})
+    .bindPopup('<span class="poptag">'+CATS[b.cat].n+' · '+b.dist+' m</span><br><span class="popname">'+n+'. '+b.name+'</span>')
+    .addTo(bizLayer);
+  mk.getElement && setTimeout(()=>{const el=mk.getElement(); if(el) el.style.background=col;},0);
+  mk.on('add',()=>{const el=mk.getElement(); if(el) el.style.background=col;});
+  markers.push(mk);
+
+  const group = b.dist<=100?'Within 100 m':(b.dist<=250?'100–250 m':'250–650 m');
+  if(group!==lastGroup){ listEl.insertAdjacentHTML('beforeend','<div class="grouphead">'+group+'</div>'); lastGroup=group; }
+  const row=document.createElement('div');
+  row.className='bizrow';
+  row.innerHTML='<span class="num" style="background:'+col+'">'+n+'</span><span class="nm">'+b.name+'</span><span class="di">'+b.dist+' m</span>';
+  row.addEventListener('mouseenter',()=>{const el=mk.getElement(); if(el) el.classList.add('hl');});
+  row.addEventListener('mouseleave',()=>{const el=mk.getElement(); if(el) el.classList.remove('hl');});
+  row.addEventListener('click',()=>{map.setView([b.plat,b.plon],18); mk.openPopup();});
+  listEl.appendChild(row);
+});
+
+const br=document.getElementById('bizrows');
+for(const k in CATS){
+  br.insertAdjacentHTML('beforeend','<div class="lrow"><span class="dot" style="background:'+CATS[k].c+'"></span>'+CATS[k].n+'<span class="count">'+(counts[k]||0)+'</span></div>');
+}
+
+/* ---- Zoning parcels (live from City of Kigali server; map still works without it) ---- */
+const ZONE_STYLE = {
+  'R1A':{c:'#E7DFD1',n:'R1A — Low density residential (densif.)'},
+  'R1' :{c:'#F1EBDF',n:'R1 — Low density residential'},
+  'R2' :{c:'#DCD2BE',n:'R2 — Medium density residential'},
+  'C1' :{c:'#C4795A',n:'C1 — Mixed use'},
+  'C2' :{c:'#B96A4A',n:'C2 — Commercial'},
+  'C3' :{c:'#8A4630',n:'C3 — City commercial'},
+  'P1' :{c:'#9BA183',n:'P1 — Parks & open space'},
+  'P2' :{c:'#B3B694',n:'P2 — Sport & eco-tourism'},
+};
+const zoneDefault = {c:'#CFC6B4',n:'Other zones'};
+const zonesSeen = new Map();
+let plotDrawn=false;
+
+const HIGHLIGHTS = {
+  '1/02/08/02/213':{color:'#AE5A3E', fill:.28, label:'THE ROCK', cls:'plotlabel', note:'The Rock — Plot 213'},
+  '1/02/08/02/212':{color:'#A8855A', fill:.20, label:'PHASE 2', cls:'plotlabel brass', note:'Proposed Phase 2 plot — The Rock Property Group'},
+  '1/02/08/02/1563':{color:'#211D17', fill:.15, label:'G+8 PERMITTED', cls:'plotlabel dark', note:'G+8 construction permitted here despite the G+2 (R1A) zone — precedent'}
+};
+
+const ARC='https://masterplan.kigalicity.gov.rw/server/rest/services/Hosted/KigaliParcels_withZoning/FeatureServer/0/query?'+new URLSearchParams({
+  geometry:'30.0745,-1.9520,30.0840,-1.9420', geometryType:'esriGeometryEnvelope', inSR:'4326',
+  spatialRel:'esriSpatialRelIntersects', outFields:'upi,main_zoning,main_zone_code,size', outSR:'4326', f:'geojson'});
+
+fetch(ARC).then(r=>r.json()).then(gj=>{
+  const hlFeatures={};
+  L.geoJSON(gj,{
+    style:f=>{
+      const code=(f.properties.main_zone_code||'').trim();
+      const s=ZONE_STYLE[code]||zoneDefault;
+      zonesSeen.set(code||'other', s);
+      return {color:'#FBF9F4', weight:.6, opacity:.7, fillColor:s.c, fillOpacity:.38};
+    },
+    onEachFeature:(f,l)=>{
+      if(HIGHLIGHTS[f.properties.upi]) hlFeatures[f.properties.upi]=f;
+      const note=HIGHLIGHTS[f.properties.upi]?'<br><b>'+HIGHLIGHTS[f.properties.upi].note+'</b>':'';
+      l.bindPopup('<span class="poptag">'+(f.properties.main_zone_code||'?')+'</span><br><span class="popname">UPI '+f.properties.upi+'</span><br>'+(f.properties.main_zoning||'')+'<br>'+Math.round(f.properties.size||0).toLocaleString()+' m²'+note);
+    }
+  }).addTo(zoningLayer);
+  Object.entries(HIGHLIGHTS).forEach(([upi,h])=>{
+    const f=hlFeatures[upi]; if(!f) return;
+    if(upi===PLOT_UPI) plotDrawn=true;
+    const pl=L.geoJSON(f,{style:{color:h.color,weight:upi===PLOT_UPI?3.5:2.5,opacity:1,fillColor:h.color,fillOpacity:h.fill,dashArray:upi===PLOT_UPI?null:'5 4'}}).addTo(map);
+    pl.bindTooltip(h.label,{permanent:true,direction:'top',className:h.cls});
+    pl.bindPopup('<span class="popname">'+h.note+'</span><br><span class="poptag">UPI '+upi+'</span>');
+  });
+  const zr=document.getElementById('zonerows');
+  [...zonesSeen.entries()].sort().forEach(([k,s])=>{
+    zr.insertAdjacentHTML('beforeend','<div class="lrow"><span class="swatch" style="background:'+s.c+'"></span>'+s.n+'</div>');
+  });
+}).catch(()=>{
+  if(!plotDrawn) L.circleMarker(CENTER,{radius:9,color:'#AE5A3E',weight:3,fillColor:'#AE5A3E',fillOpacity:.4}).addTo(map).bindTooltip('THE ROCK',{permanent:true,direction:'top',className:'plotlabel'});
+  document.getElementById('zonerows').innerHTML='<div class="lrow" style="color:var(--stone)">Zoning overlay unavailable offline</div>';
+});
+
+document.getElementById('zoningToggle').addEventListener('change',e=>{
+  if(e.target.checked) map.addLayer(zoningLayer); else map.removeLayer(zoningLayer);
+});
+</script>
+</body>
+</html>
