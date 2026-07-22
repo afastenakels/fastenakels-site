@@ -75,6 +75,18 @@
   .g3 p{font-size:.88rem;line-height:1.6;color:var(--basalt);margin:0;}
   .dark .g3 p{color:#CDC5B4;}
 
+  a.maplink{color:var(--terracotta);text-decoration:none;border-bottom:1px solid var(--brass);font-size:.88rem;font-weight:600;}
+  #mapcta{position:relative;z-index:30;background:var(--limestone);padding:14vh 8vw;text-align:center;}
+  #mapcta .eyebrow{display:inline-block;text-align:left;}
+  #mapcta h2{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:0 auto 16px;max-width:26ch;}
+  #mapcta p.lead{max-width:56ch;margin:0 auto;font-size:1rem;line-height:1.7;color:var(--basalt);}
+  .ctacard{display:block;max-width:860px;margin:44px auto 0;background:var(--paper);border:1px solid var(--hairline);text-decoration:none;color:var(--ink);transition:box-shadow .25s,transform .25s;}
+  .ctacard:hover{box-shadow:0 14px 44px rgba(22,20,15,.16);transform:translateY(-3px);}
+  .ctacard img{width:100%;display:block;border-bottom:1px solid var(--hairline);}
+  .ctacard .row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;flex-wrap:wrap;}
+  .ctacard .facts{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);text-align:left;}
+  .ctacard .go{font-family:'Newsreader',serif;font-size:1.15rem;color:var(--terracotta);white-space:nowrap;}
+  .ctacard .go::after{content:" →";color:var(--brass);}
   footer{position:relative;z-index:30;background:var(--ink);color:var(--limestone);padding:10vh 8vw;}
   footer .eyebrow{color:#9A9282;}
   footer h2{font-size:clamp(1.5rem,3vw,2.2rem);color:var(--limestone);max-width:26ch;}
@@ -138,6 +150,7 @@
         <div class="statlbl">commerces dans un rayon de 100 / 250 / 650 m</div>
         <p>Sur les 7 parcelles de notre rue, <b>une seule</b> est encore purement résidentielle. Autour du site : restaurants et lounges, hôtel et guesthouses, bureaux, salle de sport, spas, galeries et commerces — de Lemon Kigali et OMX Hotel à l'angle jusqu'au bloc Boho, Soy Asian Table, Glimpse Hotel, Kōzo et ruä.</p>
         <p>Chaque point est un commerce référencé sur Google Maps, juillet 2026.</p>
+        <p><a class="maplink" href="https://fastenakels.com/the-rock-map" target="_blank">Explorer chaque commerce sur la carte interactive →</a></p>
       </div>
     </div>
 
@@ -245,6 +258,19 @@
     </div>
   </div>
 </div>
+
+<section id="mapcta">
+  <p class="eyebrow">Aller plus loin</p>
+  <h2>Ne nous croyez pas sur parole. <em>Parcourez la rue vous-même.</em></h2>
+  <p class="lead">Chaque affirmation de cette page est un point, une parcelle ou une distance sur notre carte interactive : plus de 50 commerces avec noms et distances, les parcelles de zonage officielles issues directement des serveurs de la Ville de Kigali, et les trois parcelles qui décident de cette histoire.</p>
+  <a class="ctacard" href="https://fastenakels.com/the-rock-map" target="_blank">
+    <img src="/the-rock-story/map-preview.jpg" alt="Aperçu de la carte interactive" onerror="this.style.display='none'">
+    <span class="row">
+      <span class="facts">52 commerces cartographiés · zonage officiel · rayons 50 / 100 / 250 m · parcelles 213 · 212 · 1563</span>
+      <span class="go">Ouvrir la carte interactive</span>
+    </span>
+  </a>
+</section>
 
 <footer>
   <p class="eyebrow">Une approche conditionnelle, propre au projet</p>
