@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minexx Supply Chain Platform — Mock-up</title>
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  .viz-root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6; /* blue — Tin */
+    --series-2: #eb6834; /* orange — Tantalum */
+    --series-3: #1baf7a; /* aqua — Tungsten */
+    --series-4: #eda100; /* yellow — Gold */
+    --seq-250: #86b6ef;
+    --seq-350: #5598e7;
+    --seq-450: #2a78d6;
+    --seq-550: #1c5cab;
+    --seq-600: #184f95;
+    --status-good: #0ca30c;
+    --status-warning: #fab219;
+    --status-serious: #ec835a;
+    --status-critical: #d03b3b;
+    --delta-good: #006300;
+    --accent-wash: rgba(42,120,214,0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --seq-250: #86b6ef;
+      --seq-350: #5598e7;
+      --seq-450: #2a78d6;
+      --seq-550: #1c5cab;
+      --seq-600: #184f95;
+      --delta-good: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.16);
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --page: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --delta-good: #0ca30c;
+    --accent-wash: rgba(57,135,229,0.16);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--page); }
+  .viz-root {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+  .header-top {
+    display: flex; align-items: center; gap: 12px;
+    max-width: 1200px; margin: 0 auto; padding: 16px 0 8px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 18px; letter-spacing: 0.2px;
+  }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--series-1);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; font-weight: 700;
+  }
+  .logo span.sub { font-weight: 400; color: var(--text-secondary); font-size: 14px; }
+  .mock-badge {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.6px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px 10px;
+    background: var(--page);
+  }
+  .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .theme-toggle {
+    border: 1px solid var(--border); background: var(--page);
+    color: var(--text-secondary); border-radius: 8px;
+    padding: 6px 12px; font-size: 13px; cursor: pointer;
+    font-family: inherit;
+  }
+  .theme-toggle:hover { background: var(--accent-wash); }
+
+  nav.tabs {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; gap: 4px; overflow-x: auto;
+  }
+  .tab {
+    border: none; background: none; font-family: inherit;
+    font-size: 14px; color: var(--text-secondary);
+    padding: 10px 14px; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text-primary); background: var(--accent-wash); border-radius: 8px 8px 0 0; }
+  .tab[aria-selected="true"] {
+    color: var(--text-primary); font-weight: 600;
+    border-bottom-color: var(--series-1);
+  }
+
+  /* ---------- layout ---------- */
+  main { max-width: 1200px; margin: 0 auto; padding: 20px 24px 60px; }
+  .filters {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filters label { font-size: 13px; color: var(--text-secondary); }
+  .filters select, .filters .preset-group button {
+    font-family: inherit; font-size: 13px;
+    background: var(--surface-1); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer;
+  }
+  .preset-group { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .preset-group button { border: none; border-radius: 0; border-right: 1px solid var(--border); }
+  .preset-group button:last-child { border-right: none; }
+  .preset-group button[aria-pressed="true"] {
+    background: var(--accent-wash); font-weight: 600; color: var(--text-primary);
+  }
+  .filters .note { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+
+  .grid { display: grid; gap: 16px; }
+  .grid.tiles { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-bottom: 16px; }
+  .grid.two { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 860px) { .grid.two { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .card .subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+
+  /* stat tiles */
+  .tile .label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+  .tile .value { font-size: 30px; font-weight: 600; line-height: 1.1; }
+  .tile .delta { font-size: 12px; margin-top: 6px; color: var(--text-secondary); }
+  .tile .delta .up { color: var(--delta-good); font-weight: 600; }
+
+  /* legend */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+  .legend .key { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+  .legend .swatch { width: 12px; height: 12px; border-radius: 3px; }
+  .legend .linekey { width: 14px; height: 2px; border-radius: 1px; }
+
+  svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .axis-label { font-size: 11px; fill: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .baseline-ln { stroke: var(--baseline); stroke-width: 1; }
+
+  /* tooltip */
+  .tooltip {
+    position: fixed; z-index: 50; pointer-events: none;
+    background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+    font-size: 12px; display: none; min-width: 130px;
+  }
+  .tooltip .tt-title { color: var(--text-muted); font-size: 11px; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .tooltip .tt-key { width: 10px; height: 2px; border-radius: 1px; flex: none; }
+  .tooltip .tt-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tooltip .tt-name { color: var(--text-secondary); }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--grid); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--grid); color: var(--text-primary); }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  th.num { text-align: right; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: var(--accent-wash); }
+  tr.selected td { background: var(--accent-wash); }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 999px; padding: 2px 9px;
+    border: 1px solid var(--border); color: var(--text-primary);
+  }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* custody timeline */
+  .timeline { list-style: none; margin-top: 10px; }
+  .timeline li { display: flex; gap: 12px; padding: 0 0 18px; position: relative; }
+  .timeline li::before {
+    content: ""; position: absolute; left: 9px; top: 22px; bottom: 0;
+    width: 2px; background: var(--grid);
+  }
+  .timeline li:last-child::before { display: none; }
+  .timeline .node {
+    width: 20px; height: 20px; border-radius: 50%; flex: none;
+    background: var(--series-1); border: 4px solid var(--surface-1);
+    box-shadow: 0 0 0 1px var(--border); margin-top: 1px;
+  }
+  .timeline .ev-title { font-size: 13px; font-weight: 600; }
+  .timeline .ev-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .timeline .hash { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); }
+
+  /* tooling plan */
+  .stage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .stage-card .stage-no {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    color: var(--text-muted); text-transform: uppercase;
+  }
+  .stage-card h4 { font-size: 15px; margin: 4px 0 10px; }
+  .tool-list { list-style: none; }
+  .tool-list li { padding: 7px 0; border-top: 1px solid var(--grid); font-size: 13px; }
+  .tool-list li strong { display: block; font-size: 13px; }
+  .tool-list li span { color: var(--text-secondary); font-size: 12px; }
+  .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+  .roadmap .phase { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--page); }
+  .roadmap .phase .ph { font-size: 11px; font-weight: 700; color: var(--seq-550); text-transform: uppercase; letter-spacing: 0.6px; }
+  .roadmap .phase p { font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+  footer { max-width: 1200px; margin: 0 auto; padding: 0 24px 32px; font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="viz-root" id="app">
+  <header>
+    <div class="header-top">
+      <div class="logo"><span class="logo-mark">M</span>Minexx <span class="sub">Supply Chain Platform</span></div>
+      <span class="mock-badge">MOCK-UP · SAMPLE DATA</span>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" type="button">Toggle theme</button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-panel="overview">Overview</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="traceability">Traceability</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="payments">Payments</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="compliance">Compliance</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="plan">Tooling Plan</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- filters -->
+    <div class="filters" id="filters">
+      <div class="preset-group" role="group" aria-label="Date range">
+        <button type="button" data-range="30" aria-pressed="false">30 days</button>
+        <button type="button" data-range="90" aria-pressed="false">90 days</button>
+        <button type="button" data-range="ytd" aria-pressed="true">Year to date</button>
+      </div>
+      <label for="countrySel">Country</label>
+      <select id="countrySel">
+        <option value="all">All countries</option>
+        <option value="DRC">DRC</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Burkina Faso">Burkina Faso</option>
+      </select>
+      <span class="note">Demo mock-up — all figures are illustrative</span>
+    </div>
+
+    <!-- ================= OVERVIEW ================= -->
+    <section class="panel active" id="panel-overview">
+      <div class="grid tiles" id="tiles"></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Monthly export volume — 3T minerals</h3>
+          <div class="subtitle">Kilograms shipped per month, 2026 year to date</div>
+          <div id="volChart"></div>
+          <div class="legend" id="volLegend"></div>
+        </div>
+        <div class="card">
+          <h3>Lots by custody stage</h3>
+          <div class="subtitle">Active lots at each stage of the chain right now</div>
+          <div id="funnelChart"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h3>Recent shipments</h3>
+        <div class="subtitle">Latest export shipments across all sites</div>
+        <table id="shipTable">
+          <thead><tr>
+            <th>Shipment</th><th>Mineral</th><th>Origin</th><th class="num">Weight (kg)</th><th>Status</th><th>Docs</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= TRACEABILITY ================= -->
+    <section class="panel" id="panel-traceability">
+      <div class="grid two">
+        <div class="card">
+          <h3>Tagged lots</h3>
+          <div class="subtitle">Select a lot to view its chain of custody</div>
+          <table id="lotTable">
+            <thead><tr><th>Lot</th><th>Mineral</th><th>Mine site</th><th class="num">Kg</th><th>Stage</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3 id="custodyTitle">Chain of custody</h3>
+          <div class="subtitle" id="custodySub">Every transfer is recorded and hash-anchored to a public blockchain</div>
+          <ul class="timeline" id="custodyTimeline"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAYMENTS ================= -->
+    <section class="panel" id="panel-payments">
+      <div class="grid tiles" id="payTiles"></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Payment cycle time</h3>
+          <div class="subtitle">Average days from mine-site delivery to miner payment</div>
+          <div id="cycleChart"></div>
+        </div>
+        <div class="card">
+          <h3>Recent digital payments</h3>
+          <div class="subtitle">Certified payments to cooperatives via mobile money</div>
+          <table id="payTable">
+            <thead><tr><th>Ref</th><th>Cooperative</th><th>Lot</th><th class="num">USD</th><th>Rail</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COMPLIANCE ================= -->
+    <section class="panel" id="panel-compliance">
+      <div class="grid tiles" id="compTiles"></div>
+      <div class="card">
+        <h3>Open due-diligence flags</h3>
+        <div class="subtitle">OECD Annex II risk monitoring across active sites</div>
+        <table id="flagTable">
+          <thead><tr><th>Flag</th><th>Site</th><th>Category</th><th>Severity</th><th>Raised</th><th>Owner</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= TOOLING PLAN ================= -->
+    <section class="panel" id="panel-plan">
+      <div class="card" style="margin-bottom:16px;">
+        <h3>End-to-end tooling plan</h3>
+        <div class="subtitle">The digital tools required to run the Minexx supply chain, mine site to buyer</div>
+        <div class="stage-grid" id="stageGrid"></div>
+      </div>
+      <div class="card">
+        <h3>Phased roadmap</h3>
+        <div class="subtitle">Twelve months, four phases, pilot-first</div>
+        <div class="roadmap">
+          <div class="phase"><div class="ph">Phase 1 · 0–3 mo</div><p>Field Capture App, Digital ID &amp; Registry, basic chain-of-custody ledger. One pilot site.</p></div>
+          <div class="phase"><div class="ph">Phase 2 · 3–6 mo</div><p>Depot &amp; warehouse module, assay capture, digital payments engine on mobile money.</p></div>
+          <div class="phase"><div class="ph">Phase 3 · 6–9 mo</div><p>Transport tracker, export documentation hub, government &amp; ICGLR interfaces.</p></div>
+          <div class="phase"><div class="ph">Phase 4 · 9–12 mo</div><p>Buyer portal, compliance reporting suite, impact dashboard, trade finance.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Mock-up prepared for planning purposes — all data is illustrative. Minexx connects responsible ASM mining in DRC, Rwanda and Burkina Faso to global buyers with blockchain-backed traceability and certified digital payments.</footer>
+  <div class="tooltip" id="tooltip"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------------- theme toggle ---------------- */
+  $("#themeToggle").addEventListener("click", function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    var next;
+    if (cur === "dark") next = "light";
+    else if (cur === "light") next = "dark";
+    else next = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    drawAll();
+  });
+
+  /* ---------------- tabs ---------------- */
+  $$(".tab").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      $$(".tab").forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+      tab.setAttribute("aria-selected", "true");
+      $$(".panel").forEach(function (p) { p.classList.remove("active"); });
+      $("#panel-" + tab.dataset.panel).classList.add("active");
+    });
+  });
+
+  /* ---------------- mock data ---------------- */
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+  var SERIES = [
+    { name: "Tin (cassiterite)", varName: "--series-1", data: [8200, 9100, 8800, 10400, 11250, 10900, 12300] },
+    { name: "Tantalum (coltan)", varName: "--series-2", data: [3100, 2900, 3400, 3800, 3600, 4100, 4450] },
+    { name: "Tungsten (wolframite)", varName: "--series-3", data: [1900, 2200, 2050, 2400, 2600, 2350, 2800] }
+  ];
+  var FUNNEL = [
+    { stage: "Registered at pit", lots: 342 },
+    { stage: "At depot", lots: 261 },
+    { stage: "Processed & assayed", lots: 198 },
+    { stage: "Export cleared", lots: 154 },
+    { stage: "Shipped", lots: 131 }
+  ];
+  var SHIPMENTS = [
+    { id: "SHP-2026-0141", mineral: "Tin", origin: "Bisie North, DRC", country: "DRC", kg: 24800, status: "In transit", docs: "12/12" },
+    { id: "SHP-2026-0140", mineral: "Tantalum", origin: "Gakenke, Rwanda", country: "Rwanda", kg: 9600, status: "Delivered", docs: "12/12" },
+    { id: "SHP-2026-0139", mineral: "Gold", origin: "Gaoua, Burkina Faso", country: "Burkina Faso", kg: 2.4, status: "In transit", docs: "10/12" },
+    { id: "SHP-2026-0138", mineral: "Tungsten", origin: "Rutongo, Rwanda", country: "Rwanda", kg: 5200, status: "Export clearance", docs: "9/12" },
+    { id: "SHP-2026-0137", mineral: "Tin", origin: "Manono, DRC", country: "DRC", kg: 18750, status: "Delivered", docs: "12/12" },
+    { id: "SHP-2026-0136", mineral: "Tantalum", origin: "Masisi, DRC", country: "DRC", kg: 7300, status: "Delivered", docs: "12/12" }
+  ];
+  var LOTS = [
+    { id: "LOT-8841", mineral: "Tin", site: "Bisie North, DRC", country: "DRC", kg: 1240, stage: "Shipped" },
+    { id: "LOT-8853", mineral: "Tantalum", site: "Gakenke, Rwanda", country: "Rwanda", kg: 480, stage: "Export cleared" },
+    { id: "LOT-8867", mineral: "Gold", site: "Gaoua, Burkina Faso", country: "Burkina Faso", kg: 1.2, stage: "At depot" },
+    { id: "LOT-8872", mineral: "Tungsten", site: "Rutongo, Rwanda", country: "Rwanda", kg: 620, stage: "Processed" },
+    { id: "LOT-8880", mineral: "Tin", site: "Manono, DRC", country: "DRC", kg: 990, stage: "At depot" }
+  ];
+  var CUSTODY = {
+    "LOT-8841": [
+      { t: "12 Jun 2026 · 08:14", title: "Registered at pit — Bag T-4471 tagged (QR + NFC)", meta: "Coopérative CMB · GPS -1.4021, 28.0456 · 1,240 kg gross", hash: "0x8f31…a2c9" },
+      { t: "13 Jun 2026 · 15:02", title: "Received at Walikale depot", meta: "Weighbridge 1,236 kg · moisture 2.1% · seal S-99120", hash: "0x71bd…04e7" },
+      { t: "19 Jun 2026 · 10:45", title: "Processed & assayed", meta: "Sn 71.4% (XRF) · lot merged from 3 parent bags", hash: "0xc2a8…9d13" },
+      { t: "27 Jun 2026 · 09:30", title: "Export cleared — ICGLR certificate issued", meta: "Cert ICGLR-DRC-26-0975 · customs ref KIN-4471", hash: "0x5e09…77f2" },
+      { t: "03 Jul 2026 · 16:20", title: "Shipped — container MSKU 481022-7", meta: "Via Dar es Salaam · buyer: EU smelter #12", hash: "0x94cc…31b8" }
+    ],
+    "LOT-8853": [
+      { t: "24 Jun 2026 · 07:50", title: "Registered at pit — Bag R-2210 tagged", meta: "COPIMAR cooperative · 480 kg gross", hash: "0x3d17…c554" },
+      { t: "25 Jun 2026 · 13:41", title: "Received at Gakenke depot", meta: "Weighbridge 478 kg · seal S-99184", hash: "0xa90f…621d" },
+      { t: "01 Jul 2026 · 11:05", title: "Processed & assayed", meta: "Ta₂O₅ 28.9% · single-parent lot", hash: "0x66eb…f0a3" },
+      { t: "08 Jul 2026 · 09:12", title: "Export cleared — Rwanda RMB certificate", meta: "Cert RMB-26-2210 · awaiting vessel booking", hash: "0xdc48…8b90" }
+    ],
+    "LOT-8867": [
+      { t: "18 Jul 2026 · 06:58", title: "Registered at pit — doré bar tagged", meta: "Gaoua ASM group · 1.2 kg · photo + GPS evidence", hash: "0x27a4…e1c6" },
+      { t: "19 Jul 2026 · 14:33", title: "Received at secure depot", meta: "Assay scheduled · vault ref BF-118", hash: "0xb3f2…40aa" }
+    ],
+    "LOT-8872": [
+      { t: "05 Jul 2026 · 08:20", title: "Registered at pit — Bag W-8834 tagged", meta: "Rutongo cooperative · 620 kg gross", hash: "0x99d1…7c35" },
+      { t: "06 Jul 2026 · 12:10", title: "Received at Rutongo depot", meta: "Weighbridge 617 kg · seal S-99231", hash: "0x40be…d982" },
+      { t: "14 Jul 2026 · 10:55", title: "Processed & assayed", meta: "WO₃ 65.2% (lab) · ready for export pack", hash: "0xef77…2a41" }
+    ],
+    "LOT-8880": [
+      { t: "21 Jul 2026 · 07:44", title: "Registered at pit — Bag T-4508 tagged", meta: "Manono cooperative · 990 kg gross", hash: "0x1c2e…b7f4" },
+      { t: "23 Jul 2026 · 16:05", title: "Received at Manono depot", meta: "Weighbridge 986 kg · moisture 2.6%", hash: "0x85aa…09cd" }
+    ]
+  };
+  var PAYMENTS = [
+    { ref: "PAY-7741", coop: "Coopérative CMB", lot: "LOT-8841", usd: 41800, rail: "Mobile money", country: "DRC" },
+    { ref: "PAY-7738", coop: "COPIMAR", lot: "LOT-8853", usd: 30240, rail: "Mobile money", country: "Rwanda" },
+    { ref: "PAY-7735", coop: "Rutongo Co-op", lot: "LOT-8872", usd: 18600, rail: "Bank transfer", country: "Rwanda" },
+    { ref: "PAY-7731", coop: "Gaoua ASM Group", lot: "LOT-8867", usd: 68400, rail: "Mobile money", country: "Burkina Faso" },
+    { ref: "PAY-7728", coop: "Manono Co-op", lot: "LOT-8880", usd: 27500, rail: "Mobile money", country: "DRC" }
+  ];
+  var CYCLE = [14.2, 13.1, 12.4, 11.0, 9.8, 9.1, 8.3]; // days, Jan–Jul
+  var FLAGS = [
+    { flag: "FLG-224", site: "Masisi, DRC", cat: "Transport route deviation", sev: "warning", raised: "28 Jul", owner: "Field team" },
+    { flag: "FLG-221", site: "Gaoua, Burkina Faso", cat: "Missing assay documentation", sev: "serious", raised: "24 Jul", owner: "Compliance" },
+    { flag: "FLG-219", site: "Bisie North, DRC", cat: "PPE audit overdue", sev: "warning", raised: "19 Jul", owner: "Site manager" },
+    { flag: "FLG-215", site: "Rutongo, Rwanda", cat: "Resolved — tag mismatch reconciled", sev: "good", raised: "11 Jul", owner: "Closed" }
+  ];
+  var SEV_ICON = { good: "✓", warning: "▲", serious: "◆", critical: "✖" };
+  var SEV_LABEL = { good: "Resolved", warning: "Warning", serious: "Serious", critical: "Critical" };
+
+  var state = { country: "all", range: "ytd", selectedLot: "LOT-8841" };
+
+  function cssVar(name) {
+    return getComputedStyle($("#app")).getPropertyValue(name).trim();
+  }
+  function fmt(n) {
+    return n.toLocaleString("en-US");
+  }
+  function monthsInRange() {
+    if (state.range === "30") return 1;
+    if (state.range === "90") return 3;
+    return MONTHS.length;
+  }
+
+  /* ---------------- tooltip ---------------- */
+  var tt = $("#tooltip");
+  function showTooltip(x, y, title, rows) {
+    while (tt.firstChild) tt.removeChild(tt.firstChild);
+    var t = document.createElement("div");
+    t.className = "tt-title";
+    t.textContent = title;
+    tt.appendChild(t);
+    rows.forEach(function (r) {
+      var row = document.createElement("div");
+      row.className = "tt-row";
+      var key = document.createElement("span");
+      key.className = "tt-key";
+      key.style.background = r.color;
+      var val = document.createElement("span");
+      val.className = "tt-val";
+      val.textContent = r.value;
+      var name = document.createElement("span");
+      name.className = "tt-name";
+      name.textContent = r.name;
+      row.appendChild(key); row.appendChild(val); row.appendChild(name);
+      tt.appendChild(row);
+    });
+    tt.style.display = "block";
+    var w = tt.offsetWidth, h = tt.offsetHeight;
+    var px = x + 14, py = y - h - 10;
+    if (px + w > window.innerWidth - 8) px = x - w - 14;
+    if (py < 8) py = y + 14;
+    tt.style.left = px + "px";
+    tt.style.top = py + "px";
+  }
+  function hideTooltip() { tt.style.display = "none"; }
+
+  /* ---------------- svg helpers ---------------- */
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  /* ---------------- stacked bar chart: volumes ---------------- */
+  function drawVolumeChart() {
+    var host = $("#volChart");
+    host.innerHTML = "";
+    var nM = monthsInRange();
+    var months = MONTHS.slice(-nM);
+    var W = host.clientWidth || 520, H = 260;
+    var padL = 46, padR = 12, padT = 12, padB = 26;
+    var svg = el("svg", { width: "100%", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Stacked bar chart of monthly 3T export volumes" });
+
+    var totals = months.map(function (m, i) {
+      var idx = MONTHS.length - nM + i;
+      return SERIES.reduce(function (s, sr) { return s + sr.data[idx]; }, 0);
+    });
+    var maxV = Math.max.apply(null, totals);
+    var yMax = Math.ceil(maxV / 5000) * 5000;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+
+    // gridlines + y labels
+    for (var g = 0; g <= 4; g++) {
+      var val = yMax * g / 4;
+      var y = padT + plotH - (val / yMax) * plotH;
+      if (g > 0) svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, "class": "gridline" }));
+      var lab = el("text", { x: padL - 8, y: y + 4, "text-anchor": "end", "class": "axis-label" });
+      lab.textContent = val >= 1000 ? (val / 1000) + "k" : val;
+      svg.appendChild(lab);
+    }
+    svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, "class": "baseline-ln" }));
+
+    var band = plotW / months.length;
+    var barW = Math.min(24, band * 0.5);
+    months.forEach(function (m, i) {
+      var idx = MONTHS.length - nM + i;
+      var x = padL + band * i + (band - barW) / 2;
+      var yCursor = padT + plotH;
+      var group = el("g", { "class": "bar-group", tabindex: "0" });
+      SERIES.forEach(function (sr, si) {
+        var v = sr.data[idx];
+        var hpx = (v / yMax) * plotH;
+        var gap = si > 0 ? 2 : 0;
+        yCursor -= hpx;
+        var isTop = si === SERIES.length - 1;
+        var r = isTop ? 4 : 0;
+        var rect = el("path", {
+          d: roundedTopRect(x, yCursor + gap, barW, Math.max(hpx - gap, 0), r),
+          fill: cssVar(sr.varName)
+        });
+        group.appendChild(rect);
+      });
+      // invisible hit area
+      var hit = el("rect", { x: padL + band * i, y: padT, width: band, height: plotH, fill: "transparent" });
+      group.appendChild(hit);
+      function onHover(ev) {
+        var rows = SERIES.map(function (sr) {
+          return { color: cssVar(sr.varName), value: fmt(sr.data[idx]) + " kg", name: sr.name };
+        }).reverse();
+        rows.push({ color: "transparent", value: fmt(totals[i]) + " kg", name: "Total" });
+        showTooltip(ev.clientX, ev.clientY, m + " 2026", rows);
+      }
+      group.addEventListener("pointermove", onHover);
+      group.addEventListener("pointerleave", hideTooltip);
+      group.addEventListener("focus", function () {
+        var b = group.getBoundingClientRect();
+        onHover({ clientX: b.left + b.width / 2, clientY: b.top });
+      });
+      group.addEventListener("blur", hideTooltip);
+      svg.appendChild(group);
+
+      var xl = el("text", { x: padL + band * i + band / 2, y: H - 8, "text-anchor": "middle", "class": "axis-label" });
+      xl.textContent = m;
+      svg.appendChild(xl);
+
+      // total on the cap (relief for sub-3:1 light hues)
+      var cap = el("text", { x: padL + band * i + band / 2, y: yCursor - 5, "text-anchor": "middle", "class": "axis-label", "font-weight": "600" });
+      cap.setAttribute("fill", cssVar("--text-secondary"));
+      cap.textContent = Math.round(totals[i] / 1000 * 10) / 10 + "k";
+      svg.appendChild(cap);
+    });
+
+    host.appendChild(svg);
+
+    // legend
+    var leg = $("#volLegend");
+    leg.innerHTML = "";
+    SERIES.forEach(function (sr) {
+      var k = document.createElement("span");
+      k.className = "key";
+      var sw = document.createElement("span");
+      sw.className = "swatch";
+      sw.style.background = cssVar(sr.varName);
+      k.appendChild(sw);
+      k.appendChild(document.createTextNode(sr.name));
+      leg.appendChild(k);
+    });
+  }
+
+  function roundedTopRect(x, y, w, h, r) {
+    if (h <= 0) return "M0 0";
+    r = Math.min(r, w / 2, h);
+    if (r <= 0) return "M" + x + " " + y + " h" + w + " v" + h + " h" + (-w) + " Z";
+    return "M" + x + " " + (y + r) +
+      " a" + r + " " + r + " 0 0 1 " + r + " " + (-r) +
+      " h" + (w - 2 * r) +
+      " a" + r + " " + r + " 0 0 1 " + r + " " + r +
+      " v" + (h - r) + " h" + (-w) + " Z";
+  }
+
+  /* ---------------- funnel: custody stages (ordinal ramp) ---------------- */
+  function drawFunnel() {
+    var host = $("#funnelChart");
+    host.innerHTML = "";
+    var W = host.clientWidth || 520, rowH = 44, padL = 150, padR = 60;
+    var H = FUNNEL.length * rowH + 10;
+    var svg = el("svg", { width: "100%", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Lots by custody stage" });
+    var maxV = FUNNEL[0].lots;
+    var ramp = ["--seq-250", "--seq-350", "--seq-450", "--seq-550", "--seq-600"];
+    FUNNEL.forEach(function (f, i) {
+      var y = 8 + i * rowH;
+      var w = (f.lots / maxV) * (W - padL - padR);
+      var bar = el("path", {
+        d: "M" + padL + " " + y +
+           " h" + Math.max(w - 4, 0) +
+           " a4 4 0 0 1 4 4 v16 a4 4 0 0 1 -4 4" +
+           " h" + (-Math.max(w - 4, 0)) + " Z",
+        fill: cssVar(ramp[i])
+      });
+      var g = el("g", { tabindex: "0" });
+      g.appendChild(bar);
+      var hit = el("rect", { x: 0, y: y - 6, width: W, height: rowH - 4, fill: "transparent" });
+      g.appendChild(hit);
+      g.addEventListener("pointermove", function (ev) {
+        showTooltip(ev.clientX, ev.clientY, f.stage, [
+          { color: cssVar(ramp[i]), value: fmt(f.lots) + " lots", name: Math.round(f.lots / maxV * 100) + "% of registered" }
+        ]);
+      });
+      g.addEventListener("pointerleave", hideTooltip);
+      svg.appendChild(g);
+
+      var lab = el("text", { x: padL - 10, y: y + 16, "text-anchor": "end", "class": "axis-label" });
+      lab.textContent = f.stage;
+      svg.appendChild(lab);
+      var val = el("text", { x: padL + w + 8, y: y + 16, "class": "axis-label", "font-weight": "600" });
+      val.setAttribute("fill", cssVar("--text-primary"));
+      val.textContent = fmt(f.lots);
+      svg.appendChild(val);
+    });
+    host.appendChild(svg);
+  }
+
+  /* ---------------- line chart: payment cycle ---------------- */
+  function drawCycleChart() {
+    var host = $("#cycleChart");
+    if (!host) return;
+    host.innerHTML = "";
+    var nM = monthsInRange();
+    var months = MONTHS.slice(-nM);
+    var data = CYCLE.slice(-nM);
+    var W = host.clientWidth || 520, H = 240;
+    var padL = 38, padR = 46, padT = 14, padB = 26;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var yMax = 16;
+    var svg = el("svg", { width: "100%", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Line chart of average payment cycle days" });
+
+    for (var g = 0; g <= 4; g++) {
+      var val = yMax * g / 4;
+      var y = padT + plotH - (val / yMax) * plotH;
+      if (g > 0) svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, "class": "gridline" }));
+      var lab = el("text", { x: padL - 8, y: y + 4, "text-anchor": "end", "class": "axis-label" });
+      lab.textContent = val;
+      svg.appendChild(lab);
+    }
+    svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, "class": "baseline-ln" }));
+
+    function px(i) { return months.length === 1 ? padL + plotW / 2 : padL + (i / (months.length - 1)) * plotW; }
+    function py(v) { return padT + plotH - (v / yMax) * plotH; }
+
+    // area wash
+    var dPath = "";
+    data.forEach(function (v, i) { dPath += (i === 0 ? "M" : "L") + px(i) + " " + py(v) + " "; });
+    var area = dPath + "L" + px(data.length - 1) + " " + (padT + plotH) + " L" + px(0) + " " + (padT + plotH) + " Z";
+    var washEl = el("path", { d: area, fill: cssVar("--series-1"), opacity: "0.1" });
+    svg.appendChild(washEl);
+    svg.appendChild(el("path", { d: dPath.trim(), fill: "none", stroke: cssVar("--series-1"), "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }));
+
+    // markers with surface ring
+    data.forEach(function (v, i) {
+      svg.appendChild(el("circle", { cx: px(i), cy: py(v), r: 6, fill: cssVar("--surface-1") }));
+      svg.appendChild(el("circle", { cx: px(i), cy: py(v), r: 4, fill: cssVar("--series-1") }));
+    });
+
+    // end label
+    var end = el("text", { x: px(data.length - 1) + 10, y: py(data[data.length - 1]) + 4, "class": "axis-label", "font-weight": "600" });
+    end.setAttribute("fill", cssVar("--text-primary"));
+    end.textContent = data[data.length - 1] + " days";
+    svg.appendChild(end);
+
+    months.forEach(function (m, i) {
+      var xl = el("text", { x: px(i), y: H - 8, "text-anchor": "middle", "class": "axis-label" });
+      xl.textContent = m;
+      svg.appendChild(xl);
+    });
+
+    // crosshair + tooltip
+    var cross = el("line", { y1: padT, y2: padT + plotH, "class": "gridline", "stroke-dasharray": "none", visibility: "hidden" });
+    cross.setAttribute("stroke", cssVar("--baseline"));
+    svg.appendChild(cross);
+    var hit = el("rect", { x: padL, y: padT, width: plotW, height: plotH, fill: "transparent" });
+    hit.addEventListener("pointermove", function (ev) {
+      var box = svg.getBoundingClientRect();
+      var relX = (ev.clientX - box.left) * (W / box.width);
+      var best = 0, bd = Infinity;
+      data.forEach(function (v, i) {
+        var d = Math.abs(px(i) - relX);
+        if (d < bd) { bd = d; best = i; }
+      });
+      cross.setAttribute("x1", px(best));
+      cross.setAttribute("x2", px(best));
+      cross.setAttribute("visibility", "visible");
+      showTooltip(ev.clientX, ev.clientY, months[best] + " 2026", [
+        { color: cssVar("--series-1"), value: data[best] + " days", name: "avg cycle time" }
+      ]);
+    });
+    hit.addEventListener("pointerleave", function () {
+      cross.setAttribute("visibility", "hidden");
+      hideTooltip();
+    });
+    svg.appendChild(hit);
+    host.appendChild(svg);
+  }
+
+  /* ---------------- tiles ---------------- */
+  function tile(label, value, deltaHtmlSafe) {
+    var d = document.createElement("div");
+    d.className = "card tile";
+    var l = document.createElement("div"); l.className = "label"; l.textContent = label;
+    var v = document.createElement("div"); v.className = "value"; v.textContent = value;
+    d.appendChild(l); d.appendChild(v);
+    if (deltaHtmlSafe) {
+      var dd = document.createElement("div"); dd.className = "delta";
+      var up = document.createElement("span"); up.className = "up"; up.textContent = deltaHtmlSafe.d;
+      dd.appendChild(up);
+      dd.appendChild(document.createTextNode(" " + deltaHtmlSafe.rest));
+      d.appendChild(dd);
+    }
+    return d;
+  }
+
+  function factor() {
+    // crude mock scaling for country filter
+    if (state.country === "DRC") return 0.55;
+    if (state.country === "Rwanda") return 0.33;
+    if (state.country === "Burkina Faso") return 0.12;
+    return 1;
+  }
+
+  function drawTiles() {
+    var host = $("#tiles");
+    host.innerHTML = "";
+    var f = factor();
+    var nM = monthsInRange();
+    var vol = 0;
+    SERIES.forEach(function (s) { s.data.slice(-nM).forEach(function (v) { vol += v; }); });
+    host.appendChild(tile("Minerals tracked", fmt(Math.round(vol * f)) + " kg", { d: "▲ 12%", rest: "vs previous period" }));
+    host.appendChild(tile("Active tagged lots", fmt(Math.round(342 * f)), { d: "▲ 28", rest: "new this month" }));
+    host.appendChild(tile("Miners paid digitally", fmt(Math.round(4870 * f)), { d: "▲ 9%", rest: "vs previous period" }));
+    host.appendChild(tile("Gold shipped (YTD)", (2.4 + 3.8).toFixed(1) + " kg", { d: "▲ 1.2 kg", rest: "vs H1 2025" }));
+  }
+
+  function drawPayTiles() {
+    var host = $("#payTiles");
+    host.innerHTML = "";
+    var f = factor();
+    host.appendChild(tile("Paid to cooperatives (YTD)", "$" + fmt(Math.round(2860000 * f)), { d: "▲ 18%", rest: "vs same period 2025" }));
+    host.appendChild(tile("Avg payment cycle", "8.3 days", { d: "▼ 5.9 days", rest: "since January" }));
+    host.appendChild(tile("Mobile money share", "84%", { d: "▲ 6 pts", rest: "vs 2025" }));
+  }
+
+  function drawCompTiles() {
+    var host = $("#compTiles");
+    host.innerHTML = "";
+    host.appendChild(tile("Sites monitored", "23", null));
+    host.appendChild(tile("Open flags", "3", null));
+    host.appendChild(tile("OECD reports filed (YTD)", "14", null));
+    host.appendChild(tile("Audit findings overdue", "0", { d: "✓", rest: "all clear" }));
+  }
+
+  /* ---------------- tables ---------------- */
+  function statusPill(status) {
+    var span = document.createElement("span");
+    span.className = "pill";
+    var dot = document.createElement("span");
+    dot.className = "dot";
+    var map = { "Delivered": "--status-good", "In transit": "--seq-450", "Export clearance": "--status-warning" };
+    dot.style.background = cssVar(map[status] || "--text-muted");
+    span.appendChild(dot);
+    span.appendChild(document.createTextNode(status));
+    return span;
+  }
+
+  function drawShipTable() {
+    var tbody = $("#shipTable tbody");
+    tbody.innerHTML = "";
+    SHIPMENTS.filter(function (s) { return state.country === "all" || s.country === state.country; })
+      .forEach(function (s) {
+        var tr = document.createElement("tr");
+        [s.id, s.mineral, s.origin].forEach(function (txt) {
+          var td = document.createElement("td"); td.textContent = txt; tr.appendChild(td);
+        });
+        var kg = document.createElement("td"); kg.className = "num"; kg.textContent = fmt(s.kg); tr.appendChild(kg);
+        var st = document.createElement("td"); st.appendChild(statusPill(s.status)); tr.appendChild(st);
+        var docs = document.createElement("td"); docs.textContent = s.docs; tr.appendChild(docs);
+        tbody.appendChild(tr);
+      });
+  }
+
+  function drawLotTable() {
+    var tbody = $("#lotTable tbody");
+    tbody.innerHTML = "";
+    LOTS.filter(function (l) { return state.country === "all" || l.country === state.country; })
+      .forEach(function (l) {
+        var tr = document.createElement("tr");
+        tr.className = "clickable" + (l.id === state.selectedLot ? " selected" : "");
+        tr.tabIndex = 0;
+        [l.id, l.mineral, l.site].forEach(function (txt) {
+          var td = document.createElement("td"); td.textContent = txt; tr.appendChild(td);
+        });
+        var kg = document.createElement("td"); kg.className = "num"; kg.textContent = fmt(l.kg); tr.appendChild(kg);
+        var st = document.createElement("td"); st.textContent = l.stage; tr.appendChild(st);
+        function select() {
+          state.selectedLot = l.id;
+          drawLotTable();
+          drawCustody();
+        }
+        tr.addEventListener("click", select);
+        tr.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } });
+        tbody.appendChild(tr);
+      });
+  }
+
+  function drawCustody() {
+    var events = CUSTODY[state.selectedLot] || [];
+    $("#custodyTitle").textContent = "Chain of custody — " + state.selectedLot;
+    var ul = $("#custodyTimeline");
+    ul.innerHTML = "";
+    events.forEach(function (ev) {
+      var li = document.createElement("li");
+      var node = document.createElement("span"); node.className = "node";
+      var body = document.createElement("div");
+      var t1 = document.createElement("div"); t1.className = "ev-title"; t1.textContent = ev.title;
+      var t2 = document.createElement("div"); t2.className = "ev-meta"; t2.textContent = ev.t + " · " + ev.meta;
+      var t3 = document.createElement("div"); t3.className = "hash"; t3.textContent = "anchor " + ev.hash;
+      body.appendChild(t1); body.appendChild(t2); body.appendChild(t3);
+      li.appendChild(node); li.appendChild(body);
+      ul.appendChild(li);
+    });
+  }
+
+  function drawPayTable() {
+    var tbody = $("#payTable tbody");
+    tbody.innerHTML = "";
+    PAYMENTS.filter(function (p) { return state.country === "all" || p.country === state.country; })
+      .forEach(function (p) {
+        var tr = document.createElement("tr");
+        [p.ref, p.coop, p.lot].forEach(function (txt) {
+          var td = document.createElement("td"); td.textContent = txt; tr.appendChild(td);
+        });
+        var usd = document.createElement("td"); usd.className = "num"; usd.textContent = "$" + fmt(p.usd); tr.appendChild(usd);
+        var rail = document.createElement("td"); rail.textContent = p.rail; tr.appendChild(rail);
+        tbody.appendChild(tr);
+      });
+  }
+
+  function drawFlagTable() {
+    var tbody = $("#flagTable tbody");
+    tbody.innerHTML = "";
+    FLAGS.forEach(function (f) {
+      var tr = document.createElement("tr");
+      [f.flag, f.site, f.cat].forEach(function (txt) {
+        var td = document.createElement("td"); td.textContent = txt; tr.appendChild(td);
+      });
+      var sev = document.createElement("td");
+      var pill = document.createElement("span");
+      pill.className = "pill";
+      var ic = document.createElement("span");
+      ic.textContent = SEV_ICON[f.sev];
+      ic.style.color = cssVar("--status-" + f.sev);
+      ic.style.fontSize = "11px";
+      pill.appendChild(ic);
+      pill.appendChild(document.createTextNode(SEV_LABEL[f.sev]));
+      sev.appendChild(pill);
+      tr.appendChild(sev);
+      var raised = document.createElement("td"); raised.textContent = f.raised; tr.appendChild(raised);
+      var owner = document.createElement("td"); owner.textContent = f.owner; tr.appendChild(owner);
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ---------------- tooling plan ---------------- */
+  var STAGES = [
+    { no: "Stage 1", title: "Mine site — production capture", tools: [
+      ["Field Capture App", "Offline-first mobile app: bag tagging (QR/NFC), weights, GPS + photo evidence"],
+      ["Digital ID & Registry", "Miner, cooperative and site registration; permits and licence status"],
+      ["Site Compliance Checklist", "OECD Annex II risk flags, safety checks, incident reporting"]
+    ]},
+    { no: "Stage 2", title: "Aggregation & processing", tools: [
+      ["Chain-of-Custody Ledger", "Blockchain-anchored custody trail for every transfer, pit to exporter"],
+      ["Depot / Warehouse Module", "Lot creation and merging with lineage, weighbridge, moisture & grade sampling"],
+      ["Assay & Grading Tool", "XRF / lab result capture attached to lot records, discrepancy alerts"]
+    ]},
+    { no: "Stage 3", title: "Logistics & export", tools: [
+      ["Transport Tracker", "Trip manifests, sealed-container IDs, GPS milestones, deviation alerts"],
+      ["Export Documentation Hub", "ICGLR certificates, customs docs auto-generated from lot data"],
+      ["Shipment Dashboard", "Status per shipment, ETA, document completeness score"]
+    ]},
+    { no: "Stage 4", title: "Payments & finance", tools: [
+      ["Digital Payments Engine", "Mobile money / bank rails; payments linked to ledger-verified lots; split payments"],
+      ["Trade Finance Module", "Pre-export finance against verified inventory, repayment tracking"],
+      ["Pricing Engine", "LME / Fastmarkets reference feeds, transparent price build-up per lot"]
+    ]},
+    { no: "Stage 5", title: "Buyer & compliance reporting", tools: [
+      ["Buyer Portal", "Lot provenance viewer (mine → shipment), impact metrics, document downloads"],
+      ["Compliance Reporting Suite", "OECD DDG, RMI/RMAP, EU conflict-minerals regulation exports"],
+      ["Impact Dashboard", "Miners paid digitally, price premium vs informal market, SDG-mapped metrics"]
+    ]},
+    { no: "Cross-cutting", title: "Platform services", tools: [
+      ["Identity & Access", "Roles: miner, agent, depot manager, exporter, buyer, regulator"],
+      ["Blockchain Anchoring + Sync", "Public-chain hashes of custody events; store-and-forward for low connectivity"],
+      ["API Gateway & Analytics", "ICGLR / cadastre / buyer-ERP integrations; volumes, yields, lead times"]
+    ]}
+  ];
+
+  function drawStages() {
+    var host = $("#stageGrid");
+    host.innerHTML = "";
+    STAGES.forEach(function (s) {
+      var card = document.createElement("div");
+      card.className = "stage-card";
+      var no = document.createElement("div"); no.className = "stage-no"; no.textContent = s.no;
+      var h = document.createElement("h4"); h.textContent = s.title;
+      card.appendChild(no); card.appendChild(h);
+      var ul = document.createElement("ul"); ul.className = "tool-list";
+      s.tools.forEach(function (t) {
+        var li = document.createElement("li");
+        var st = document.createElement("strong"); st.textContent = t[0];
+        var sp = document.createElement("span"); sp.textContent = t[1];
+        li.appendChild(st); li.appendChild(sp);
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+      host.appendChild(card);
+    });
+  }
+
+  /* ---------------- filters ---------------- */
+  $("#countrySel").addEventListener("change", function (e) {
+    state.country = e.target.value;
+    drawAll();
+  });
+  $$(".preset-group button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      $$(".preset-group button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      b.setAttribute("aria-pressed", "true");
+      state.range = b.dataset.range;
+      drawAll();
+    });
+  });
+
+  /* ---------------- draw all ---------------- */
+  function drawAll() {
+    drawTiles();
+    drawVolumeChart();
+    drawFunnel();
+    drawShipTable();
+    drawLotTable();
+    drawCustody();
+    drawPayTiles();
+    drawCycleChart();
+    drawPayTable();
+    drawCompTiles();
+    drawFlagTable();
+    drawStages();
+  }
+  drawAll();
+  var rT;
+  window.addEventListener("resize", function () {
+    clearTimeout(rT);
+    rT = setTimeout(drawAll, 150);
+  });
+})();
+</script>
+</body>
+</html>
