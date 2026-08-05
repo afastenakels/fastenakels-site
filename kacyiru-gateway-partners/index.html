@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root{
     --deep:#14352B; --deep2:#1B4332; --card:#1F4A38;
@@ -73,6 +74,23 @@
   .svgwrap svg{width:100%;height:auto;display:block}
   .caption{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:.6rem;max-width:42em}
 
+  /* map */
+  .mapwrap{position:relative;max-width:1100px;margin-top:2.4rem;border-radius:18px;overflow:hidden;box-shadow:0 14px 50px rgba(20,53,43,.18)}
+  #map{height:540px;width:100%;background:#0e241d}
+  .mapbtns{position:absolute;top:14px;left:14px;z-index:1000;display:flex;gap:8px;flex-wrap:wrap}
+  .mapbtn{background:rgba(20,53,43,.92);color:#D8E4DD;border:1px solid rgba(201,162,39,.35);font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.06em;padding:.55rem 1rem;border-radius:999px;cursor:pointer;transition:all .2s}
+  .mapbtn:hover{border-color:var(--gold)}
+  .mapbtn.on{background:var(--gold);color:var(--deep);border-color:var(--gold)}
+  .lmk{background:rgba(20,53,43,.92);color:#fff;border:1px solid rgba(201,162,39,.5);border-radius:8px;padding:3px 9px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+  .lmk small{display:block;font-weight:400;color:#BFD3C8;font-size:10px}
+  .site-pulse{width:18px;height:18px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 rgba(201,162,39,.55);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,162,39,.55)}70%{box-shadow:0 0 0 26px rgba(201,162,39,0)}100%{box-shadow:0 0 0 0 rgba(201,162,39,0)}}
+  .leaflet-popup-content-wrapper{background:var(--deep);color:#fff;border-radius:10px;font-family:'Inter',sans-serif}
+  .leaflet-popup-tip{background:var(--deep)}
+  .mapfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.4rem;max-width:1100px}
+  .mapfact{background:#fff;border-radius:12px;padding:1.1rem 1.3rem;box-shadow:0 6px 30px rgba(20,53,43,.07);font-size:.86rem;color:var(--muted)}
+  .mapfact b{display:block;font-family:'Fraunces',serif;font-size:1.25rem;color:var(--deep);font-weight:600;margin-bottom:.15rem}
+
   .invite{background:var(--deep);color:#fff;text-align:center;padding:7rem 8vw}
   .invite h2{color:#fff;max-width:22em;margin:1rem auto 1.6rem;font-family:'Fraunces',serif}
   .invite p{max-width:36em;margin:0 auto 1.2rem;color:var(--mist)}
@@ -109,6 +127,33 @@
     <div class="tile"><div class="num">$43.6m</div><div class="lbl">that income makes the building worth this much</div></div>
     <div class="tile"><div class="num">$4.2m</div><div class="lbl">our share as the team that creates it (base case)</div></div>
   </div>
+</section>
+
+<!-- ================= THE PARCEL ON THE MAP ================= -->
+<section class="light">
+  <div class="chapter-head rv">
+    <div class="kicker">Where it sits</div>
+    <h2>The exact parcel, on the official map</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>This is not an artist's impression. The gold outline below is the <strong>live cadastral boundary of plot UPI 1/02/07/01/847</strong>, pulled from the Kigali land registry and drawn on satellite imagery. Switch on the master plan layer to see the city's official zoning painted around it, or zoom out to see what the plot commands: the road between the CBD, the government district and the Convention Centre.</p>
+  </div>
+  <div class="mapwrap">
+    <div class="mapbtns">
+      <button class="mapbtn on" id="btnParcel">The parcel</button>
+      <button class="mapbtn" id="btnCity">The city</button>
+      <button class="mapbtn" id="btnZoning">Master plan overlay</button>
+    </div>
+    <div id="map"></div>
+  </div>
+  <div class="mapfacts rv">
+    <div class="mapfact"><b>UPI 1/02/07/01/847</b>Rwinzovu, Kamatamu, Kacyiru — 7,852.85 sqm per the land registry</div>
+    <div class="mapfact"><b>~1.4 km</b>to the Kigali Convention Centre district (~5 min)</div>
+    <div class="mapfact"><b>~3.2 km</b>to the CBD and Kigali City Tower (~10 min)</div>
+    <div class="mapfact"><b>~6.4 km</b>to Kigali International Airport (~15 min)</div>
+  </div>
+  <p class="caption rv">Parcel boundary: Kigali land registry (June 2026 cadastre). Zoning overlay: official Kigali Master Plan 2050 map service, City of Kigali. Imagery: Esri World Imagery.</p>
 </section>
 
 <!-- ================= THE NUMBERS STEP BY STEP ================= -->
@@ -231,11 +276,69 @@
   For discussion within our partner group; not an offer of securities or investment advice. Figures are preliminary estimates from a feasibility-stage model; land price, zoning parameters, construction costs and all terms remain subject to confirmation. &copy; 2026 Amaury Fastenakels.
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
   const obs = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
   },{threshold:.15});
   document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+  // ---------- MAP ----------
+  // Cadastral boundary of UPI 1/02/07/01/847 (Kigali land registry, June 2026 cadastre)
+  const ring = [
+    [-1.9430990864074607,30.08830758179468],
+    [-1.9432523501706385,30.088161129117058],
+    [-1.9434294448153329,30.0879708670969],
+    [-1.9428084829021952,30.087420238207795],
+    [-1.94251176001915,30.08718595165007],
+    [-1.942425669692698,30.08712396330353],
+    [-1.9421376305034872,30.0875492603385],
+    [-1.9430990864074607,30.08830758179468]
+  ];
+  const center = [-1.94279, 30.08778];
+  const map = L.map('map', {scrollWheelZoom:false, zoomControl:true}).setView(center, 17);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'Esri World Imagery'}).addTo(map);
+  const labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {maxZoom:19}).addTo(map);
+
+  // Master plan zoning overlay (official CoK map service), toggleable
+  let zoningOn = false;
+  const zoning = L.tileLayer('', {opacity:0});
+  const ZURL = 'https://masterplan.kigalicity.gov.rw/server/rest/services/Hosted/Proposed_Zoning_Plan_22Apr2026/MapServer/export?bbox={bbox}&bboxSR=4326&imageSR=3857&size=800,800&format=png32&transparent=true&f=image';
+  // use an ImageOverlay refreshed on move for the dynamic MapServer
+  let zLayer = null;
+  function refreshZoning(){
+    if(!zoningOn) return;
+    const b = map.getBounds();
+    const bbox = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()].join(',');
+    const url = ZURL.replace('{bbox}', bbox);
+    if(zLayer) map.removeLayer(zLayer);
+    zLayer = L.imageOverlay(url, b, {opacity:.55}).addTo(map);
+    parcel.bringToFront();
+  }
+  map.on('moveend', refreshZoning);
+
+  // Parcel polygon
+  const parcel = L.polygon(ring, {color:'#C9A227', weight:3, fillColor:'#C9A227', fillOpacity:.28}).addTo(map);
+  parcel.bindPopup('<b>UPI 1/02/07/01/847</b><br>7,852.85 sqm — C3 city commercial<br>RN3 frontage, beside the Embassy of Egypt');
+  L.marker(center, {icon: L.divIcon({className:'', html:'<div class="site-pulse"></div>', iconSize:[18,18], iconAnchor:[9,9]})}).addTo(map);
+
+  // Landmarks
+  const lmk = (lat, lon, name, sub) => L.marker([lat,lon], {icon: L.divIcon({className:'', html:`<div class="lmk">${name}<small>${sub}</small></div>`, iconSize:[10,10], iconAnchor:[-8,12]})}).addTo(map);
+  const kcc = [-1.9546,30.0925], cbd = [-1.9465,30.0589], apt = [-1.9686,30.1395];
+  lmk(...kcc, 'Kigali Convention Centre', '~1.4 km · 5 min');
+  lmk(...cbd, 'CBD · Kigali City Tower', '~3.2 km · 10 min');
+  lmk(...apt, 'Kigali Intl. Airport', '~6.4 km · 15 min');
+  [kcc,cbd,apt].forEach(p=>L.polyline([center,p],{color:'#C9A227',weight:2,dashArray:'6 8',opacity:.75}).addTo(map));
+
+  // View buttons
+  const bP=document.getElementById('btnParcel'), bC=document.getElementById('btnCity'), bZ=document.getElementById('btnZoning');
+  function setOn(btn,on){btn.classList.toggle('on',on);}
+  bP.addEventListener('click',()=>{map.flyTo(center,17,{duration:1.2}); setOn(bP,true); setOn(bC,false);});
+  bC.addEventListener('click',()=>{map.flyToBounds(L.latLngBounds([center,kcc,cbd,apt]).pad(.18),{duration:1.4}); setOn(bC,true); setOn(bP,false);});
+  bZ.addEventListener('click',()=>{
+    zoningOn=!zoningOn; setOn(bZ,zoningOn);
+    if(zoningOn){refreshZoning();} else if(zLayer){map.removeLayer(zLayer); zLayer=null;}
+  });
 </script>
 </body>
 </html>
