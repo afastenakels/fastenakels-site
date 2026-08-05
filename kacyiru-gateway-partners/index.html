@@ -303,7 +303,7 @@
   // Master plan zoning overlay (official CoK map service), toggleable
   let zoningOn = false;
   const zoning = L.tileLayer('', {opacity:0});
-  const ZURL = 'https://masterplan.kigalicity.gov.rw/server/rest/services/Hosted/Proposed_Zoning_Plan_22Apr2026/MapServer/export?bbox={bbox}&bboxSR=4326&imageSR=3857&size=800,800&format=png32&transparent=true&f=image';
+  const ZURL = 'https://masterplan.kigalicity.gov.rw/server/rest/services/Hosted/Proposed_Zoning_Plan_22Apr2026/MapServer/export?bbox={bbox}&bboxSR=4326&imageSR=4326&size=900,900&format=png32&transparent=true&f=image';
   // use an ImageOverlay refreshed on move for the dynamic MapServer
   let zLayer = null;
   function refreshZoning(){
