@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kacyiru Gateway — A landmark on Kigali's diplomatic corridor</title>
+<meta name="description" content="The story of Kacyiru Gateway: a mixed-use landmark proposed for RN3, Kacyiru, Kigali.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#14352B; --deep2:#1B4332; --card:#1F4A38;
+    --gold:#C9A227; --gold-soft:#D9B84A;
+    --ivory:#F7F5EF; --paper:#FFFFFF;
+    --ink:#22322A; --muted:#5E6E64; --mist:#BFD3C8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.7;font-weight:300}
+  ::selection{background:var(--gold);color:var(--deep)}
+
+  .serif{font-family:'Fraunces',serif}
+  .kicker{font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .rule{width:56px;height:2px;background:var(--gold);border:none;margin:1.6rem 0}
+
+  /* reveal on scroll */
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+  .rv.in{opacity:1;transform:none}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:100vh;background:var(--deep);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:6rem 8vw}
+  .hero::after{content:"";position:absolute;inset:auto -20% -55% -20%;height:80%;
+    background:radial-gradient(ellipse at center,rgba(201,162,39,.14),transparent 65%);pointer-events:none}
+  .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(3rem,9vw,7rem);line-height:1.02;margin:1.4rem 0 1.6rem;letter-spacing:-.01em}
+  .hero h1 em{font-style:italic;font-weight:300;color:var(--gold-soft)}
+  .hero p.lede{font-size:clamp(1.05rem,1.6vw,1.35rem);max-width:38em;color:var(--mist);font-weight:300}
+  .scrollcue{position:absolute;bottom:2.2rem;left:8vw;color:var(--mist);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase}
+  .scrollcue::after{content:"";display:block;width:1px;height:52px;background:linear-gradient(var(--gold),transparent);margin-top:.7rem}
+
+  /* ---------- CHAPTERS ---------- */
+  section{padding:7rem 8vw}
+  .chapter-head{max-width:46em;margin-bottom:3rem}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.9rem,4vw,3rem);line-height:1.15;color:var(--deep);margin-top:.9rem}
+  .on-dark h2{color:#fff}
+  .prose{max-width:41em;font-size:1.08rem}
+  .prose p{margin-bottom:1.5rem}
+  .prose p:first-of-type::first-letter{font-family:'Fraunces',serif;font-size:3.4em;float:left;line-height:.82;padding-right:.14em;color:var(--gold);font-weight:600}
+  .prose strong{font-weight:600;color:var(--deep)}
+  .on-dark .prose{color:var(--mist)}
+  .on-dark .prose strong{color:#fff}
+
+  .ivory{background:var(--ivory)}
+  .on-dark{background:var(--deep2);color:#fff}
+
+  /* pull quote */
+  .pull{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.35;color:var(--deep);max-width:26em;margin:4.5rem auto;text-align:center;padding:0 8vw}
+  .pull span{color:var(--gold);font-style:normal}
+
+  /* corridor diagram */
+  .corridor{margin:4rem 0 1rem;max-width:900px}
+  .corridor svg{width:100%;height:auto;display:block}
+
+  /* stat tiles */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:3.4rem}
+  .tile{background:var(--card);border-radius:14px;padding:1.9rem 1.7rem}
+  .light .tile{background:#fff;box-shadow:0 6px 30px rgba(20,53,43,.07)}
+  .tile .num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2rem,3.4vw,2.9rem);color:var(--gold);line-height:1.05}
+  .light .tile .num{color:var(--deep)}
+  .tile .lbl{margin-top:.55rem;font-size:.86rem;color:var(--mist);line-height:1.45}
+  .light .tile .lbl{color:var(--muted)}
+
+  /* engine cards */
+  .engines{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;margin-top:3.4rem}
+  .engine{background:#fff;border-radius:16px;padding:2.1rem 1.9rem;box-shadow:0 6px 30px rgba(20,53,43,.07)}
+  .engine .glyph{width:46px;height:46px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem}
+  .engine .glyph svg{width:22px;height:22px;fill:#fff}
+  .engine h3{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--deep);font-weight:600;margin-bottom:.5rem}
+  .engine .qty{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.7rem}
+  .engine p{font-size:.95rem;color:var(--muted)}
+
+  /* milestones */
+  .miles{margin-top:3.6rem;display:grid;gap:0}
+  .mile{display:grid;grid-template-columns:64px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(191,211,200,.25)}
+  .mile:last-child{border-bottom:1px solid rgba(191,211,200,.25)}
+  .mile .n{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--gold);font-weight:600;line-height:1}
+  .mile h3{font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:.25rem}
+  .mile p{font-size:.93rem;color:var(--mist)}
+  .mile .when{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
+
+  /* invitation */
+  .invite{background:var(--deep);color:#fff;text-align:center;padding:8rem 8vw}
+  .invite h2{color:#fff;max-width:20em;margin:1rem auto 1.6rem}
+  .invite p{max-width:36em;margin:0 auto 1.2rem;color:var(--mist)}
+  .cta{display:inline-block;margin-top:2.2rem;background:var(--gold);color:var(--deep);font-weight:600;letter-spacing:.06em;padding:1rem 2.6rem;border-radius:999px;text-decoration:none;transition:transform .25s ease,box-shadow .25s ease}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(201,162,39,.35)}
+  .invite .fine{margin-top:3rem;font-size:.8rem;color:#7E948A}
+
+  footer{background:var(--deep);color:#7E948A;font-size:.78rem;padding:2.5rem 8vw;border-top:1px solid rgba(191,211,200,.15);line-height:1.6}
+
+  @media(max-width:640px){
+    section{padding:5rem 7vw}
+    .hero{padding:5rem 7vw}
+    .scrollcue{left:7vw}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="kicker">Kigali &middot; Rwanda &middot; An invitation to build</div>
+  <h1>Kacyiru<br><em>Gateway</em></h1>
+  <p class="lede">On the main road of Kigali's diplomatic district, beside the Embassy of Egypt, there is a piece of land waiting for its building. This is the story of what it could become, and of the partners who will make it real.</p>
+  <div class="scrollcue">Scroll</div>
+</header>
+
+<!-- ================= CH 1 : THE CORNER ================= -->
+<section>
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter One</div>
+    <h2>A corner the city grew around</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>Stand on the RN3 in Kacyiru in the early morning and you can watch a capital go to work. Ministry staff and diplomats, UN agency teams, consultants landing from three continents. The President's Office is up the hill. The flags of embassies line the road. In one direction, ten minutes away, the towers of the CBD. In the other, five minutes, the dome of the Kigali Convention Centre catching the sun.</p>
+    <p>In the middle of all this sits <strong>7,853 square metres of land</strong>: flat, titled, zoned C3 city-commercial under the Kigali Master Plan, with full frontage on the national road, right beside the Embassy of Egypt. Land like this almost never comes to market in Kacyiru. It has now, at $3&ndash;4 million.</p>
+    <p>Everything a great building needs is already there. The demand walks past every day. Only the building is missing.</p>
+  </div>
+  <div class="corridor rv" aria-label="The site sits on RN3 between the CBD, the Convention Centre and the airport">
+    <svg viewBox="0 0 900 150" role="img">
+      <line x1="40" y1="60" x2="860" y2="60" stroke="#9DC3B2" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="90" cy="60" r="13" fill="#1B4332"/>
+      <circle cx="340" cy="60" r="21" fill="#C9A227"/>
+      <circle cx="340" cy="60" r="8" fill="#FFFFFF"/>
+      <circle cx="610" cy="60" r="13" fill="#1B4332"/>
+      <circle cx="810" cy="60" r="13" fill="#1B4332"/>
+      <text x="90" y="105" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" fill="#22322A" font-weight="600">CBD</text>
+      <text x="90" y="124" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#5E6E64">~10 min</text>
+      <text x="340" y="105" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" fill="#C9A227" font-weight="700">THE SITE</text>
+      <text x="340" y="124" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#5E6E64">RN3, beside Embassy of Egypt</text>
+      <text x="610" y="105" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" fill="#22322A" font-weight="600">Convention Centre</text>
+      <text x="610" y="124" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#5E6E64">~5 min</text>
+      <text x="810" y="105" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" fill="#22322A" font-weight="600">Airport</text>
+      <text x="810" y="124" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#5E6E64">~15 min</text>
+    </svg>
+  </div>
+</section>
+
+<div class="pull rv">&ldquo;The demand already walks past the site every morning. <span>Only the building is missing.</span>&rdquo;</div>
+
+<!-- ================= CH 2 : THE CITY ================= -->
+<section class="ivory light">
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Two</div>
+    <h2>The city that decided to matter</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>Kigali did not become one of Africa's most watched capitals by accident. It was decided. A convention centre was built before the demand existed, and the demand came. Visas were opened, direct flights multiplied, and the summits followed: heads of state, global health, finance, technology. The international hotel groups noticed, and kept building.</p>
+    <p>Around the conference calendar grew something more durable: a permanent community of diplomats, development professionals and firms that need to be next to government. They need somewhere to stay for three months, not three nights. They need offices worthy of a headquarters. Kacyiru, their district, has surprisingly little of either.</p>
+  </div>
+  <div class="tiles rv">
+    <div class="tile"><div class="num">$94.7m</div><div class="lbl">business-events revenue in 2025, across 165 international events</div></div>
+    <div class="tile"><div class="num">~7&ndash;8%</div><div class="lbl">GDP growth trend, among the fastest in Africa</div></div>
+    <div class="tile"><div class="num">65,000+</div><div class="lbl">conference delegates hosted in a peak year</div></div>
+    <div class="tile"><div class="num">4 brands</div><div class="lbl">Marriott, Hilton, Radisson and Accor all expanding in Kigali</div></div>
+  </div>
+</section>
+
+<!-- ================= CH 3 : WHAT WE BUILD ================= -->
+<section>
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Three</div>
+    <h2>One address, four engines</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>Kacyiru Gateway is a single landmark of roughly <strong>21,400 square metres</strong> designed around the people who already live their working lives on this corridor. Not another hotel competing with the global brands, but the things the district visibly lacks, combined under one roof so that each strengthens the others: residences fill the restaurants, offices fill the parking by day, events fill the residences.</p>
+  </div>
+  <div class="engines light rv">
+    <div class="engine">
+      <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg></div>
+      <div class="qty">90 keys</div>
+      <h3>Serviced residences</h3>
+      <p>Upscale extended-stay suites for diplomatic rotations, development postings and corporate missions that last weeks or months. The district's most under-served need.</p>
+    </div>
+    <div class="engine">
+      <div class="glyph"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
+      <div class="qty">~7,900 sqm</div>
+      <h3>Grade A offices</h3>
+      <p>Efficient floor plates with parking, backup power and RN3 visibility, for the firms, donors and country headquarters that want to sit beside their clients: government.</p>
+    </div>
+    <div class="engine">
+      <div class="glyph"><svg viewBox="0 0 24 24"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2z"/></svg></div>
+      <div class="qty">~2,200 sqm</div>
+      <h3>Retail &amp; dining</h3>
+      <p>Cafés, restaurants, banking and daily services animating the road frontage, serving a large professional daytime population that currently drives elsewhere.</p>
+    </div>
+    <div class="engine">
+      <div class="glyph"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+      <div class="qty">~1,700 sqm</div>
+      <h3>Conference &amp; events</h3>
+      <p>Meeting and banqueting space five minutes from the Convention Centre, catching the overflow and satellite events of every summit week. Plus 230 parking bays below.</p>
+    </div>
+  </div>
+</section>
+
+<div class="pull rv">&ldquo;Residences fill the restaurants, offices fill the parking, <span>events fill the residences.</span>&rdquo;</div>
+
+<!-- ================= CH 4 : THE NUMBERS ================= -->
+<section class="on-dark">
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Four</div>
+    <h2>Numbers that tell the same story</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>The economics rest on a simple spread: we build income at a cost the market no longer offers, then own an asset the market prices dearly. Every assumption behind these figures sits in an open financial model that partners can stress-test line by line, and each one is deliberately set below the top of its market range.</p>
+  </div>
+  <div class="tiles rv">
+    <div class="tile"><div class="num">$31.2m</div><div class="lbl">total development cost, including the land</div></div>
+    <div class="tile"><div class="num">$3.6m</div><div class="lbl">stabilized annual net operating income</div></div>
+    <div class="tile"><div class="num">11.5%</div><div class="lbl">yield on cost, against an 8.25% exit valuation rate</div></div>
+    <div class="tile"><div class="num">21%</div><div class="lbl">base-case equity IRR over an eight-year hold, 3.1x multiple</div></div>
+  </div>
+  <div class="miles rv">
+    <div class="mile"><div class="n">1</div><div><div class="when">Now</div><h3>Secure the corner</h3><p>A purchase option on the land. Control first, capital later: no one funds a blind land bet.</p></div></div>
+    <div class="mile"><div class="n">2</div><div><div class="when">Months 3&ndash;12</div><h3>Prove everything</h3><p>Title diligence, confirmed building envelope, surveyor-priced costs, permits. A $300&ndash;500k seed phase that converts to equity on preferential terms.</p></div></div>
+    <div class="mile"><div class="n">3</div><div><div class="when">Months 12&ndash;15</div><h3>Close</h3><p>$14m equity round alongside senior bank financing, once permits and costs are locked.</p></div></div>
+    <div class="mile"><div class="n">4</div><div><div class="when">Months 15&ndash;39</div><h3>Build</h3><p>A 24-month fixed-price construction contract, independently certified at every drawdown.</p></div></div>
+    <div class="mile"><div class="n">5</div><div><div class="when">Year 3 onward</div><h3>Operate &amp; harvest</h3><p>Opening in year three, stabilization by year five, sale or refinance around year eight.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= CH 5 : INVITATION ================= -->
+<section class="invite">
+  <div class="rv">
+    <div class="kicker">Chapter Five</div>
+    <h2 class="serif">Some buildings are bought.<br>The best ones are begun.</h2>
+    <p>Kacyiru Gateway is at the moment every great project passes through exactly once: the land is available, the story is clear, and the first partners are being chosen. The people who join now, at the seed stage, will hold the best terms this project will ever offer.</p>
+    <p>If you want to walk the site, open the model, or challenge every assumption in it, I would genuinely enjoy that conversation.</p>
+    <a class="cta" href="mailto:a.fastenakels@gmail.com?subject=Kacyiru%20Gateway">Start the conversation</a>
+    <div class="fine">Amaury Fastenakels &middot; a.fastenakels@gmail.com &middot; Kigali / Brussels</div>
+  </div>
+</section>
+
+<footer>
+  This page is an invitation to discuss a project under development, not an offer of securities or investment advice. All figures are preliminary estimates from a feasibility-stage financial model; land price, zoning parameters and construction costs remain subject to confirmation. &copy; 2026 Amaury Fastenakels.
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
