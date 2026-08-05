@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kacyiru Gateway — An invitation to co-develop</title>
+<meta name="description" content="Kacyiru Gateway, Kigali: an invitation to co-developers and sponsors.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#14352B; --deep2:#1B4332; --card:#1F4A38;
+    --gold:#C9A227; --gold-soft:#D9B84A;
+    --ivory:#F7F5EF; --paper:#FFFFFF;
+    --ink:#22322A; --muted:#5E6E64; --mist:#BFD3C8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.7;font-weight:300}
+  ::selection{background:var(--gold);color:var(--deep)}
+  .serif{font-family:'Fraunces',serif}
+  .kicker{font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .rule{width:56px;height:2px;background:var(--gold);border:none;margin:1.6rem 0}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+  .rv.in{opacity:1;transform:none}
+
+  .hero{min-height:100vh;background:var(--deep);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:6rem 8vw}
+  .hero::after{content:"";position:absolute;inset:auto -20% -55% -20%;height:80%;
+    background:radial-gradient(ellipse at center,rgba(201,162,39,.14),transparent 65%);pointer-events:none}
+  .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.6rem,7.5vw,5.8rem);line-height:1.05;margin:1.4rem 0 1.6rem;letter-spacing:-.01em}
+  .hero h1 em{font-style:italic;font-weight:300;color:var(--gold-soft)}
+  .hero p.lede{font-size:clamp(1.05rem,1.6vw,1.35rem);max-width:40em;color:var(--mist)}
+  .scrollcue{position:absolute;bottom:2.2rem;left:8vw;color:var(--mist);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase}
+  .scrollcue::after{content:"";display:block;width:1px;height:52px;background:linear-gradient(var(--gold),transparent);margin-top:.7rem}
+
+  section{padding:7rem 8vw}
+  .chapter-head{max-width:46em;margin-bottom:3rem}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.9rem,4vw,3rem);line-height:1.15;color:var(--deep);margin-top:.9rem}
+  .on-dark h2{color:#fff}
+  .prose{max-width:41em;font-size:1.08rem}
+  .prose p{margin-bottom:1.5rem}
+  .prose p:first-of-type::first-letter{font-family:'Fraunces',serif;font-size:3.4em;float:left;line-height:.82;padding-right:.14em;color:var(--gold);font-weight:600}
+  .prose strong{font-weight:600;color:var(--deep)}
+  .on-dark .prose{color:var(--mist)}
+  .on-dark .prose strong{color:#fff}
+  .ivory{background:var(--ivory)}
+  .on-dark{background:var(--deep2);color:#fff}
+
+  .pull{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.35;color:var(--deep);max-width:26em;margin:4.5rem auto;text-align:center;padding:0 8vw}
+  .pull span{color:var(--gold);font-style:normal}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:3.4rem}
+  .tile{background:var(--card);border-radius:14px;padding:1.9rem 1.7rem}
+  .light .tile{background:#fff;box-shadow:0 6px 30px rgba(20,53,43,.07)}
+  .tile .num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2rem,3.4vw,2.9rem);color:var(--gold);line-height:1.05}
+  .light .tile .num{color:var(--deep)}
+  .tile .lbl{margin-top:.55rem;font-size:.86rem;color:var(--mist);line-height:1.45}
+  .light .tile .lbl{color:var(--muted)}
+
+  /* two-column bring/seek */
+  .duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.6rem;margin-top:3.4rem}
+  .duo .col{background:#fff;border-radius:16px;padding:2.3rem 2.1rem;box-shadow:0 6px 30px rgba(20,53,43,.07)}
+  .duo h3{font-family:'Fraunces',serif;font-size:1.35rem;color:var(--deep);font-weight:600;margin-bottom:1.1rem}
+  .duo h3 span{color:var(--gold)}
+  .duo ul{list-style:none}
+  .duo li{padding:.55rem 0 .55rem 1.7rem;position:relative;font-size:.98rem;color:var(--ink)}
+  .duo li::before{content:"";position:absolute;left:0;top:1.05rem;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+  .duo li em{color:var(--muted);font-style:normal;font-size:.88rem;display:block}
+
+  .miles{margin-top:3.6rem}
+  .mile{display:grid;grid-template-columns:64px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(191,211,200,.25)}
+  .mile:last-child{border-bottom:1px solid rgba(191,211,200,.25)}
+  .mile .n{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--gold);font-weight:600;line-height:1}
+  .mile h3{font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:.25rem}
+  .mile p{font-size:.93rem;color:var(--mist)}
+  .mile .when{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
+
+  .invite{background:var(--deep);color:#fff;text-align:center;padding:8rem 8vw}
+  .invite h2{color:#fff;max-width:20em;margin:1rem auto 1.6rem}
+  .invite p{max-width:36em;margin:0 auto 1.2rem;color:var(--mist)}
+  .cta{display:inline-block;margin-top:2.2rem;background:var(--gold);color:var(--deep);font-weight:600;letter-spacing:.06em;padding:1rem 2.6rem;border-radius:999px;text-decoration:none;transition:transform .25s ease,box-shadow .25s ease}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(201,162,39,.35)}
+  .invite .fine{margin-top:3rem;font-size:.8rem;color:#7E948A}
+  footer{background:var(--deep);color:#7E948A;font-size:.78rem;padding:2.5rem 8vw;border-top:1px solid rgba(191,211,200,.15);line-height:1.6}
+  @media(max-width:640px){section{padding:5rem 7vw}.hero{padding:5rem 7vw}.scrollcue{left:7vw}}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="kicker">Kigali &middot; Rwanda &middot; For co-developers &amp; sponsors</div>
+  <h1>I found the site.<br><em>Let's build it together.</em></h1>
+  <p class="lede">Kacyiru Gateway is a ~21,400 sqm mixed-use landmark proposed for the RN3, beside the Embassy of Egypt, in Kigali's diplomatic district. The concept is designed, the model is built, the land is on the market. What it needs now is a co-developer. This page is for you.</p>
+  <div class="scrollcue">Scroll</div>
+</header>
+
+<!-- ================= CH 1 : THE DEAL ON THE TABLE ================= -->
+<section>
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter One</div>
+    <h2>A site the market will not offer twice</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>Kacyiru is where Rwanda governs: the President's Office, the ministries, the UN agencies, embassy row. Through it runs the RN3, connecting the CBD to the Convention Centre district in minutes. On that road, beside the Embassy of Egypt, <strong>7,853 sqm of titled, C3-zoned commercial land</strong> has come to market at $3&ndash;4 million, roughly $380&ndash;510 per square metre.</p>
+    <p>I have walked the site, pulled the zoning report, built the development case and stress-tested the numbers. The district visibly lacks extended-stay residences and Grade A offices; the demand is permanent, USD-linked and sits within walking distance. The full investor pack exists: model, memorandum, deck. What the project needs next is not analysis. It is <strong>a sponsor team strong enough to close it</strong>.</p>
+  </div>
+  <div class="tiles light rv">
+    <div class="tile"><div class="num">7,853</div><div class="lbl">sqm of C3 land with full RN3 frontage</div></div>
+    <div class="tile"><div class="num">$31.2m</div><div class="lbl">total development cost, including land</div></div>
+    <div class="tile"><div class="num">11.5%</div><div class="lbl">yield on cost vs. an 8.25% exit valuation rate</div></div>
+    <div class="tile"><div class="num">21%</div><div class="lbl">base-case investor IRR — a raise that sells itself</div></div>
+  </div>
+</section>
+
+<div class="pull rv">&ldquo;The analysis is done. What this project needs now is <span>a sponsor team strong enough to close it.</span>&rdquo;</div>
+
+<!-- ================= CH 2 : THE PARTNERSHIP ================= -->
+<section class="ivory light">
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Two</div>
+    <h2>What I bring. What I'm looking for.</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>I am not looking for passive money on this page; that conversation exists separately, and the investor pack for it is ready. I am looking for one or two partners who want to <strong>stand on the sponsor side of the table</strong>: sharing the work, the risk of the seed phase, and the sponsor economics that reward both.</p>
+  </div>
+  <div class="duo rv">
+    <div class="col">
+      <h3>On the table <span>from my side</span></h3>
+      <ul>
+        <li>The deal itself<em>site identified, seller conversation open, zoning verified, before any competitor has moved</em></li>
+        <li>A complete development case<em>full financial model, investment memorandum and investor deck, ready for diligence</em></li>
+        <li>The equity raise<em>my network of HNWIs and diaspora investors, plus the DFI/lender narrative, driven by me</em></li>
+        <li>Day-to-day drive<em>I carry the project as managing sponsor: seller, city, permits, investors</em></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>What the project <span>needs from you</span></h3>
+      <ul>
+        <li>A development track record<em>delivered buildings that give lenders and investors confidence in execution</em></li>
+        <li>Technical delivery capability<em>design management, procurement, construction supervision in East Africa or comparable markets</em></li>
+        <li>A share of the seed capital<em>co-funding the $300&ndash;500k option and feasibility phase, at risk alongside me</em></li>
+        <li>Relationships that shorten the road<em>banks, operators, anchor tenants, contractors you have worked with before</em></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CH 3 : SPONSOR ECONOMICS ================= -->
+<section class="on-dark">
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Three</div>
+    <h2>The sponsor economics we would share</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>The structure is a single-asset Rwandan SPV. Investors put in <strong>$14.0m of equity</strong> alongside roughly $17.2m of senior debt, and receive a 10% preferred return. Above that hurdle, profits split 80% to investors and <strong>20% to the sponsor side</strong>. The sponsor team also earns a market-standard 3% development management fee through the build. In the base case, that sponsor pool looks like this:</p>
+  </div>
+  <div class="tiles rv">
+    <div class="tile"><div class="num">$0.7m</div><div class="lbl">development fee, paid across the ~24-month build</div></div>
+    <div class="tile"><div class="num">$3.5m</div><div class="lbl">promote at exit (20% above the 10% hurdle), base case, year 8</div></div>
+    <div class="tile"><div class="num">$4.2m</div><div class="lbl">total sponsor pool to share, before any co-invested equity returns</div></div>
+    <div class="tile"><div class="num">21%</div><div class="lbl">IRR earned on any equity we co-invest personally, same terms as investors</div></div>
+  </div>
+  <div class="prose rv" style="margin-top:3rem">
+    <p>How that pool splits between us is a function of what each side puts at risk: seed capital, guarantees, balance sheet, and work. I have a view, and it is negotiable. In the bear case (rents 7.5% under model, exit at a 9.25% valuation rate) the project still returns a ~15% development profit on cost, the fee is still earned, and the promote thins. We would be paid the way sponsors should be: <strong>mostly for succeeding</strong>.</p>
+  </div>
+</section>
+
+<!-- ================= CH 4 : THE PROJECT ================= -->
+<section>
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Four</div>
+    <h2>What we would build</h2>
+    <hr class="rule">
+  </div>
+  <div class="prose rv">
+    <p>One address, four income engines, each matched to demand that already walks past the site: <strong>90 upscale serviced residences</strong> for diplomatic and development-sector stays that run weeks to months; <strong>~7,900 sqm of Grade A offices</strong> for the firms and donor programs that want to sit beside government; <strong>~2,200 sqm of retail and dining</strong> animating the road; and <strong>~1,700 sqm of conference and event space</strong> five minutes from the Kigali Convention Centre, with 230 parking bays below.</p>
+    <p>Mixed income staggers lease maturities and de-risks debt service. Offices and retail can phase first if the raise favors it. The building answers what Kacyiru measurably lacks, without competing head-on with the international hotel brands' new full-service supply.</p>
+  </div>
+</section>
+
+<!-- ================= CH 5 : 90 DAYS ================= -->
+<section class="on-dark">
+  <div class="chapter-head rv">
+    <div class="kicker">Chapter Five</div>
+    <h2>Our first 90 days together</h2>
+    <hr class="rule">
+  </div>
+  <div class="miles rv">
+    <div class="mile"><div class="n">1</div><div><div class="when">Week 1&ndash;2</div><h3>Walk the site, open the model</h3><p>You challenge every assumption: rents, costs, cap rate, program. If it doesn't survive your scrutiny, better to know now.</p></div></div>
+    <div class="mile"><div class="n">2</div><div><div class="when">Week 3&ndash;6</div><h3>Term sheet between sponsors</h3><p>Roles, seed contributions, fee and promote split, governance, and what happens if either of us walks. Short, written, signed.</p></div></div>
+    <div class="mile"><div class="n">3</div><div><div class="when">Week 6&ndash;10</div><h3>Secure the option</h3><p>Negotiate a 6&ndash;12 month purchase option with the seller, funded from our joint seed. Control of the land is control of the deal.</p></div></div>
+    <div class="mile"><div class="n">4</div><div><div class="when">Week 10&ndash;13</div><h3>Launch feasibility</h3><p>Title diligence, FAR confirmation with the City of Kigali, QS cost plan, EIA scoping — the package that unlocks the $14m raise at close.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= INVITATION ================= -->
+<section class="invite">
+  <div class="rv">
+    <div class="kicker">The invitation</div>
+    <h2 class="serif">Deals like this are not analyzed into existence.<br>They are partnered into existence.</h2>
+    <p>If you have built before, know East Africa or want to, and like the idea of earning sponsor economics on a landmark in one of the world's fastest-improving capitals, let's talk. Bring your hardest questions.</p>
+    <a class="cta" href="mailto:a.fastenakels@gmail.com?subject=Kacyiru%20Gateway%20%E2%80%94%20co-development">Let's walk the site</a>
+    <div class="fine">Amaury Fastenakels &middot; a.fastenakels@gmail.com &middot; Kigali / Brussels</div>
+  </div>
+</section>
+
+<footer>
+  This page is an invitation to discuss a prospective co-development partnership, not an offer of securities or investment advice. All figures are preliminary estimates from a feasibility-stage financial model; land price, zoning parameters, construction costs and all partnership terms remain subject to negotiation and confirmation. &copy; 2026 Amaury Fastenakels.
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
