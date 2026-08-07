@@ -76,7 +76,7 @@
       <div class="card"><div class="big ok">17.1%</div><div class="lbl">Equity IRR at a conservative 185 GWh/yr delivered volume, 70% debt, 15-year tenor.</div></div>
       <div class="card"><div class="big ok">96–100%</div><div class="lbl">Share of the power invoice settled in copper from day 1, depending on offtake volume.</div></div>
     </div>
-    <div class="note">Consolidated return including the copper trading margin: 18.9–21.7% IRR depending on offtake scenario.</div>
+    <div class="note">Consolidated return including the copper trading margin at $350/t: 19.1–22.5% IRR depending on offtake scenario. Scenario B (800 t/mo) is the working case.</div>
   </div>
 </section>
 
@@ -96,8 +96,8 @@
     <h2>Settlement mechanics <span class="pill">interactive</span></h2>
     <div class="lead">Toggle the offtake scenario. The invoice is ~$34m/yr at the realistic 185 GWh volume.</div>
     <div class="toggle">
-      <button class="tbtn active" id="btnA" onclick="setScen('A')">A &middot; 300 t/month (secured)</button>
-      <button class="tbtn" id="btnB" onclick="setScen('B')">B &middot; 800 t/month (target)</button>
+      <button class="tbtn" id="btnA" onclick="setScen('A')">A &middot; 300 t/month (secured)</button>
+      <button class="tbtn active" id="btnB" onclick="setScen('B')">B &middot; 800 t/month (target)</button>
     </div>
     <div class="grid g2">
       <div class="card">
@@ -112,9 +112,9 @@
       <div class="card">
         <h3>What Minexx earns</h3>
         <ul style="padding-left:18px">
-          <li style="font-size:14px">Trading margin at $300/t: <b id="marg">$1.08m/yr</b></li>
+          <li style="font-size:14px">Trading margin at $350/t: <b id="marg">$3.36m/yr</b></li>
           <li style="font-size:14px">Margin NPV over 15 yrs @15%: <b id="mnpv">$6.3m</b></li>
-          <li style="font-size:14px">Consolidated equity IRR: <b id="cirr">18.9%</b></li>
+          <li style="font-size:14px">Consolidated equity IRR: <b id="cirr">22.5%</b></li>
           <li style="font-size:14px">Cash exposure to mine credit: <b id="exp">$1.5m/yr</b></li>
         </ul>
         <div class="note" id="scennote">Scenario A is contractually secured today. The framework ratchets to 1,500 t/mo when the existing offtake expires (~2029).</div>
@@ -135,7 +135,7 @@
       <div class="card">
         <h3>2 &middot; Build-and-flip</h3>
         <p>A trading house funds construction, sells at COD to a solar asset manager, keeps the offtake.</p>
-        <ul><li>At a 12% buyer return the flip loses ~$10m</li><li>Breakeven needs a buyer at ~11%</li><li>Real prize is retaining the offtake</li></ul>
+        <ul><li>At an 8% buyer return: flip profit ~$28m (1.18x)</li><li>Still positive to ~10%; negative at 12%</li><li>Plus retained offtake margin NPV ~$26m</li></ul>
       </div>
       <div class="card">
         <h3>3 &middot; 100% self-funded</h3>
@@ -185,9 +185,9 @@
 
 <script>
 const S = {
-  A: {cu:95.7, cuv:'$32.6m (96%)', cashv:'$1.5m', cap:'$32.6m/yr', disc:'$9,050/t', marg:'$1.08m/yr', mnpv:'$6.3m', cirr:'18.9%', exp:'$1.5m/yr',
+  A: {cu:95.7, cuv:'$32.6m (96%)', cashv:'$1.5m', cap:'$32.6m/yr', disc:'$9,050/t', marg:'$1.26m/yr', mnpv:'$7.4m', cirr:'19.1%', exp:'$1.5m/yr',
       note:'Scenario A is contractually secured today. The framework ratchets to 1,500 t/mo when the existing offtake expires (~2029).'},
-  B: {cu:100, cuv:'$34.0m (100%)', cashv:'$0', cap:'$86.9m/yr', disc:'$3,545/t', marg:'$2.88m/yr', mnpv:'$16.8m', cirr:'21.7%', exp:'None — fully metal-settled',
+  B: {cu:100, cuv:'$34.0m (100%)', cashv:'$0', cap:'$86.9m/yr', disc:'$3,545/t', marg:'$3.36m/yr', mnpv:'$19.6m', cirr:'22.5%', exp:'None — fully metal-settled',
       note:'Scenario B is the negotiation target: 800 t/mo from day 1, 2.6x settlement headroom, and the invoice never touches cash.'}
 };
 function setScen(k){
@@ -199,6 +199,7 @@ function setScen(k){
   document.getElementById('btnA').classList.toggle('active', k==='A');
   document.getElementById('btnB').classList.toggle('active', k==='B');
 }
+setScen('B');
 </script>
 </body>
 </html>
