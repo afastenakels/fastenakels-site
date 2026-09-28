@@ -12,14 +12,14 @@
   .top h1 { font-size: 18px; font-weight: 700; }
   .top .sub { font-size: 11px; color: #6d6c66; margin-top: 2px; }
   .board { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 8px; }
-  .col { flex: 1 1 0; min-width: 232px; background: #f1efe8; border-radius: 8px; display: flex; flex-direction: column; }
+  .col { flex: 1 1 0; min-width: 210px; background: #f1efe8; border-radius: 8px; display: flex; flex-direction: column; }
   .col h2 { font-size: 12px; font-weight: 700; color: #fff; padding: 7px 10px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
   .col h2 .n { background: rgba(255,255,255,.28); border-radius: 10px; padding: 0 7px; font-size: 11px; }
-  .col .stack { padding: 8px; display: flex; flex-direction: column; gap: 8px; }
-  .ft h2 { background: #2f7d54; } .pt h2 { background: #1d6e8c; }
+  .col .stack { padding: 8px; display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
+  .ft h2 { background: #2f7d54; } .hi h2 { background: #b8860b; } .pt h2 { background: #1d6e8c; }
   .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .no h2 { background: #a32d2d; }
   .card { background: #fff; border: 1px solid #e4e2da; border-left: 3px solid #bbb; border-radius: 6px; padding: 7px 9px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-  .card.ft { border-left-color: #2f7d54; } .card.pt { border-left-color: #1d6e8c; }
+  .card.ft { border-left-color: #2f7d54; } .card.hi { border-left-color: #b8860b; } .card.pt { border-left-color: #1d6e8c; }
   .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.no { border-left-color: #a32d2d; }
   .card .nm { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
   .lin { font-size: 9px; font-weight: 600; color: #1d6e8c; text-decoration: none; white-space: nowrap; }
@@ -42,29 +42,27 @@
 <script>
 const COLS = [
   { id: "ft", name: "Recommendation - Full time" },
+  { id: "hi", name: "Hired" },
   { id: "mb", name: "Maybe - Full time" },
   { id: "pt", name: "Experts - Part time" },
   { id: "iv", name: "To interview" },
   { id: "no", name: "Rejected" }
 ];
 const DATA = [
-  { id:"bodunrin", col:"ft", nm:"Gael-Germain Godonou", sen:"Mid-level", exp:"Finance", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"IESE", li:"https://www.linkedin.com/in/gaelggodonou" },
-  { id:"jacquot", col:"ft", nm:"Grégoire Jacquot", sen:"Senior", exp:"Deals / transactions", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Harvard / MIT", li:"https://www.linkedin.com/in/gr%C3%A9goire-jacquot-41a0a483" },
-  { id:"vanmalderen", col:"ft", nm:"Erik Van Malderen", sen:"Senior", exp:"Energy", rel:"Yes - Togo", tim:"August", lang:"FR near-native", brand:"Enabel", li:"https://www.linkedin.com/in/erik-m-van-malderen-a9b7911b/" },
   { id:"patetif", col:"ft", nm:"Delphine Patetif", sen:"Mid-level", exp:"Advisor · poss. Head of Secretariat", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Harvard", note:"Advisor to CAR president", li:"https://www.linkedin.com/in/delphine-patetif-ba14372b5" },
-  { id:"coulibaly", col:"ft", nm:"Tibilé Coulibaly", sen:"Mid-level", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"EDHEC", li:"https://www.linkedin.com/in/tibil%C3%A9-coulibaly-a5857149/" },
-  { id:"barry", col:"mb", nm:"Julian Barry", sen:"Junior", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Accenture / KPMG", note:"Strong culture fit", li:"https://www.linkedin.com/in/julian-barry/" },
-  { id:"sigles", col:"mb", nm:"Julie Sigles", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"Cambridge", li:"https://www.linkedin.com/in/jsigles/?locale=en" },
-  { id:"boes", col:"mb", nm:"Viviana Boes", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"GIZ", li:"https://www.linkedin.com/in/viviana-boes-alvarez/" },
+  { id:"nassim", col:"ft", nm:"Nassim", sen:"Senior", exp:"Strategy / consulting", rel:"TBD", tim:"TBD", lang:"TBD", brand:"McKinsey", note:"Ex-associate partner, McKinsey", li:"" },
+  { id:"sigles", col:"ft", nm:"Julie Sigles", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"Cambridge", li:"https://www.linkedin.com/in/jsigles/?locale=en" },
+  { id:"coulibaly", col:"hi", nm:"Tibilé Coulibaly", sen:"Mid-level", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"EDHEC", li:"https://www.linkedin.com/in/tibil%C3%A9-coulibaly-a5857149/" },
+  { id:"vanmalderen", col:"pt", nm:"Erik Van Malderen", sen:"Senior", exp:"Energy", rel:"Yes - Togo", tim:"August", lang:"FR near-native", brand:"Enabel", li:"https://www.linkedin.com/in/erik-m-van-malderen-a9b7911b/" },
   { id:"vaccari", col:"pt", nm:"Simone Vaccari", sen:"Mid-level", exp:"Credit / securitization", rel:"No", tim:"—", lang:"FR non-native", brand:"Bboxx", note:"Prior collaboration · manage (talks a lot)", li:"https://www.linkedin.com/in/simonevaccari/" },
   { id:"jomaux", col:"pt", nm:"Julien Jomaux", sen:"Senior / advisor", exp:"Energy markets · Africa", rel:"No", tim:"Free September", lang:"FR native", brand:"Enabel", li:"https://www.linkedin.com/in/julien-jomaux/" },
   { id:"akber", col:"pt", nm:"Fawad Akber", sen:"Senior", exp:"Phosphate/fertilizer · Sovereign AI · deals", rel:"No", tim:"Part-time", lang:"EN", brand:"Credit Suisse", li:"https://www.linkedin.com/in/fawad-akber/" },
   { id:"latour", col:"pt", nm:"Côme de La Tour", sen:"Junior", exp:"On-ground research · agri", rel:"Flexible", tim:"ASAP", lang:"FR native", brand:"None", li:"http://linkedin.com/in/c%C3%B4me-de-la-tour-57202022" },
   { id:"ebale", col:"pt", nm:"Aurélien Ebalé", sen:"Mid-level", exp:"Grid", rel:"Yes - Togo", tim:"~6 months", lang:"FR native", brand:"EDF", note:"Very technical - no long term fit", li:"https://www.linkedin.com/in/bienvenu-aur%C3%A9lien-ebale-m-eng-pmp-8a13a876/" },
-  { id:"kruisheer", col:"no", nm:"Maurits Kruisheer", sen:"Mid-level", exp:"Consulting", rel:"Yes - W. Africa", tim:"September", lang:"FR not fluent", brand:"None", note:"Potential culture fit", li:"https://www.linkedin.com/in/maurits-kruisheer-44778a138/" },
   { id:"notokpe", col:"iv", nm:"Alexandre Notokpe", sen:"Senior", exp:"Project mgmt / PMO (IT/cyber)", rel:"Yes - Togo", tim:"TBD", lang:"FR native", brand:"Presidency of Togo", note:"PMP/PRINCE2/ITIL/ISO27001 · ex-Presidency M&E · applied Manager Projets Stratégiques", li:"https://www.linkedin.com/in/komlan-elikplim-alexandre-notokpe/" },
   { id:"itoua", col:"iv", nm:"Martial Itoua", sen:"Senior", exp:"Telecom / digital infra · project mgmt", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Helios Towers", note:"10+ yrs telecom infra, Central Africa · applied Manager Projets Stratégiques", li:"" },
   { id:"dedingar", col:"iv", nm:"Sabine Dedingar", sen:"Junior", exp:"Data analysis · research · project support", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"CEMP", note:"MSc Sustainable Cities · 2 yrs public-sector/infra (WB/AfDB/IFC) · applied Project Analyst", li:"" },
+  { id:"kruisheer", col:"no", nm:"Maurits Kruisheer", sen:"Mid-level", exp:"Consulting", rel:"Yes - W. Africa", tim:"September", lang:"FR not fluent", brand:"None", note:"Potential culture fit", li:"https://www.linkedin.com/in/maurits-kruisheer-44778a138/" },
   { id:"dinar", col:"no", nm:"Amine Dinar", sen:"Low mid-level", exp:"Freelance consulting", rel:"Yes - Togo", tim:"Mid-July", lang:"FR native", brand:"None", note:"Strong culture fit · ex-pro footballer", li:"https://www.linkedin.com/in/aminedinar" },
   { id:"molinier", col:"no", nm:"Frédéric Molinier", sen:"Senior", exp:"Finance / GM", rel:"—", tim:"—", lang:"FR", brand:"—", note:"'Cowboy' profile", li:"https://cg.linkedin.com/in/frederic-r-molinier-1a15217" },
   { id:"brun", col:"no", nm:"Grégory Brun", sen:"Mid-level", exp:"Retail", rel:"—", tim:"—", lang:"FR", brand:"—", note:"Too much retail experience", li:"https://www.linkedin.com/in/gregory-brun-331a692b/?locale=en" },
@@ -72,7 +70,11 @@ const DATA = [
   { id:"mur", col:"no", nm:"Cyril Mur", sen:"Mid-level", exp:"Finance", rel:"—", tim:"—", lang:"—", brand:"—", note:"Likely too finance-focused", li:"https://www.linkedin.com/in/cyrilmur/" },
   { id:"blanchard", col:"no", nm:"Julien Blanchard", sen:"—", exp:"Operational", rel:"—", tim:"—", lang:"FR native", brand:"—", note:"Too operational", li:"http://linkedin.com/in/julien-blanchard-55872923" },
   { id:"pearson", col:"no", nm:"Nick Pearson", sen:"—", exp:"Operational", rel:"—", tim:"—", lang:"FR non-native", brand:"Bboxx", note:"Too operational · good (ex-Bboxx)", li:"https://www.linkedin.com/in/nick-pearson-3579832a/" },
-  { id:"napo", col:"no", nm:"Silvère Napo", sen:"—", exp:"Technical", rel:"—", tim:"—", lang:"—", brand:"—", note:"Too technical", li:"https://www.linkedin.com/in/silv%C3%A8re-napo-500b5197/" }
+  { id:"napo", col:"no", nm:"Silvère Napo", sen:"—", exp:"Technical", rel:"—", tim:"—", lang:"—", brand:"—", note:"Too technical", li:"https://www.linkedin.com/in/silv%C3%A8re-napo-500b5197/" },
+  { id:"bodunrin", col:"no", nm:"Gael-Germain Godonou", sen:"Mid-level", exp:"Finance", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"IESE", li:"https://www.linkedin.com/in/gaelggodonou" },
+  { id:"jacquot", col:"no", nm:"Grégoire Jacquot", sen:"Senior", exp:"Deals / transactions", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Harvard / MIT", li:"https://www.linkedin.com/in/gr%C3%A9goire-jacquot-41a0a483" },
+  { id:"barry", col:"no", nm:"Julian Barry", sen:"Junior", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Accenture / KPMG", note:"Strong culture fit", li:"https://www.linkedin.com/in/julian-barry/" },
+  { id:"boes", col:"no", nm:"Viviana Boes", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"GIZ", li:"https://www.linkedin.com/in/viviana-boes-alvarez/" }
 ];
 
 function esc(s){ return (s==null?"":String(s)).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
