@@ -17,10 +17,10 @@
   .col h2 .n { background: rgba(255,255,255,.28); border-radius: 10px; padding: 0 7px; font-size: 11px; }
   .col .stack { padding: 8px; display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
   .ft h2 { background: #2f7d54; } .hi h2 { background: #b8860b; } .pt h2 { background: #1d6e8c; }
-  .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .no h2 { background: #a32d2d; }
+  .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .tbi h2 { background: #b5347f; } .no h2 { background: #a32d2d; }
   .card { background: #fff; border: 1px solid #e4e2da; border-left: 3px solid #bbb; border-radius: 6px; padding: 7px 9px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
   .card.ft { border-left-color: #2f7d54; } .card.hi { border-left-color: #b8860b; } .card.pt { border-left-color: #1d6e8c; }
-  .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.no { border-left-color: #a32d2d; }
+  .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.tbi { border-left-color: #b5347f; } .card.no { border-left-color: #a32d2d; }
   .card .nm { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
   .lin { font-size: 9px; font-weight: 600; color: #1d6e8c; text-decoration: none; white-space: nowrap; }
   .lin:hover { text-decoration: underline; }
@@ -46,6 +46,7 @@ const COLS = [
   { id: "mb", name: "Maybe - Full time" },
   { id: "pt", name: "Experts - Part time" },
   { id: "iv", name: "To interview" },
+  { id: "tbi", name: "To be interviewed" },
   { id: "no", name: "Rejected" }
 ];
 const DATA = [
@@ -62,6 +63,10 @@ const DATA = [
   { id:"notokpe", col:"iv", nm:"Alexandre Notokpe", sen:"Senior", exp:"Project mgmt / PMO (IT/cyber)", rel:"Yes - Togo", tim:"TBD", lang:"FR native", brand:"Presidency of Togo", note:"PMP/PRINCE2/ITIL/ISO27001 · ex-Presidency M&E · applied Manager Projets Stratégiques", li:"https://www.linkedin.com/in/komlan-elikplim-alexandre-notokpe/" },
   { id:"itoua", col:"iv", nm:"Martial Itoua", sen:"Senior", exp:"Telecom / digital infra · project mgmt", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Helios Towers", note:"10+ yrs telecom infra, Central Africa · applied Manager Projets Stratégiques", li:"" },
   { id:"dedingar", col:"iv", nm:"Sabine Dedingar", sen:"Junior", exp:"Data analysis · research · project support", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"CEMP", note:"MSc Sustainable Cities · 2 yrs public-sector/infra (WB/AfDB/IFC) · applied Project Analyst", li:"" },
+  { id:"kotia", col:"tbi", nm:"Salome Kotia", sen:"Senior", exp:"Impact / dev strategy consulting", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Hystra", note:"Sourced via LinkedIn · messaged", li:"" },
+  { id:"leblay", col:"tbi", nm:"Hugo Le Blay", sen:"Mid-level", exp:"Strategy / data / AI (dev sector)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Freelance", note:"Sourced via LinkedIn · messaged", li:"" },
+  { id:"deluze", col:"tbi", nm:"Théo de Luze", sen:"Junior", exp:"Strategy (ex-BCG)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"BCG (ex)", note:"Sourced via LinkedIn · messaged", li:"" },
+  { id:"gabriel", col:"tbi", nm:"Damien Gabriel", sen:"TBD", exp:"Sustainability / climate finance / civic tech", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Sourced via LinkedIn · messaged", li:"" },
   { id:"kruisheer", col:"no", nm:"Maurits Kruisheer", sen:"Mid-level", exp:"Consulting", rel:"Yes - W. Africa", tim:"September", lang:"FR not fluent", brand:"None", note:"Potential culture fit", li:"https://www.linkedin.com/in/maurits-kruisheer-44778a138/" },
   { id:"dinar", col:"no", nm:"Amine Dinar", sen:"Low mid-level", exp:"Freelance consulting", rel:"Yes - Togo", tim:"Mid-July", lang:"FR native", brand:"None", note:"Strong culture fit · ex-pro footballer", li:"https://www.linkedin.com/in/aminedinar" },
   { id:"molinier", col:"no", nm:"Frédéric Molinier", sen:"Senior", exp:"Finance / GM", rel:"—", tim:"—", lang:"FR", brand:"—", note:"'Cowboy' profile", li:"https://cg.linkedin.com/in/frederic-r-molinier-1a15217" },
