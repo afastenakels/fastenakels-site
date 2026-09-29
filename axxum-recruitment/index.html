@@ -17,10 +17,10 @@
   .col h2 .n { background: rgba(255,255,255,.28); border-radius: 10px; padding: 0 7px; font-size: 11px; }
   .col .stack { padding: 8px; display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
   .ft h2 { background: #2f7d54; } .hi h2 { background: #b8860b; } .pt h2 { background: #1d6e8c; }
-  .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .tbi h2 { background: #b5347f; } .no h2 { background: #a32d2d; }
+  .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .r2 h2 { background: #b5347f; } .no h2 { background: #a32d2d; }
   .card { background: #fff; border: 1px solid #e4e2da; border-left: 3px solid #bbb; border-radius: 6px; padding: 7px 9px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
   .card.ft { border-left-color: #2f7d54; } .card.hi { border-left-color: #b8860b; } .card.pt { border-left-color: #1d6e8c; }
-  .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.tbi { border-left-color: #b5347f; } .card.no { border-left-color: #a32d2d; }
+  .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.r2 { border-left-color: #b5347f; } .card.no { border-left-color: #a32d2d; }
   .card .nm { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
   .lin { font-size: 9px; font-weight: 600; color: #1d6e8c; text-decoration: none; white-space: nowrap; }
   .lin:hover { text-decoration: underline; }
@@ -42,6 +42,7 @@
 <script>
 const COLS = [
   { id: "iv", name: "To interview" },
+  { id: "r2", name: "2nd round" },
   { id: "ft", name: "Recommendation - Full time" },
   { id: "hi", name: "Hired" },
   { id: "mb", name: "Maybe - Full time" },
@@ -66,7 +67,7 @@ const DATA = [
   { id:"leblay", col:"iv", nm:"Hugo Le Blay", sen:"Mid-level", exp:"Strategy / data / AI (dev sector)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Freelance", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/hugo-le-blay-336135b2/" },
   { id:"deluze", col:"iv", nm:"Théo de Luze", sen:"Junior", exp:"Strategy (ex-BCG)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"BCG (ex)", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/theodeluze/" },
   { id:"gabriel", col:"iv", nm:"Damien Gabriel", sen:"TBD", exp:"Sustainability / climate finance / civic tech", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/damien-gabriel/" },
-  { id:"cote", col:"iv", nm:"Jean Coté", sen:"TBD", exp:"Strategy & transformation", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Casablanca · Western-trained, Africa-based · sourced via LinkedIn", li:"https://www.linkedin.com/in/jean-cot%C3%A9-63218a108/" },
+  { id:"cote", col:"r2", nm:"Jean Coté", sen:"TBD", exp:"Strategy & transformation", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Casablanca · very good · 2nd round (interview w/ Mansoor)", li:"https://www.linkedin.com/in/jean-cot%C3%A9-63218a108/" },
   { id:"kruisheer", col:"no", nm:"Maurits Kruisheer", sen:"Mid-level", exp:"Consulting", rel:"Yes - W. Africa", tim:"September", lang:"FR not fluent", brand:"None", note:"Potential culture fit", li:"https://www.linkedin.com/in/maurits-kruisheer-44778a138/" },
   { id:"dinar", col:"no", nm:"Amine Dinar", sen:"Low mid-level", exp:"Freelance consulting", rel:"Yes - Togo", tim:"Mid-July", lang:"FR native", brand:"None", note:"Strong culture fit · ex-pro footballer", li:"https://www.linkedin.com/in/aminedinar" },
   { id:"molinier", col:"no", nm:"Frédéric Molinier", sen:"Senior", exp:"Finance / GM", rel:"—", tim:"—", lang:"FR", brand:"—", note:"'Cowboy' profile", li:"https://cg.linkedin.com/in/frederic-r-molinier-1a15217" },
