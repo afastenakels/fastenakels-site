@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Togo — Generation Planning Scenarios 2026–2035</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page:      #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --muted:     #898781;
+    --grid:      #e1e0d9;
+    --baseline:  #c3c2b7;
+    --border:    rgba(11,11,11,0.10);
+    --s1: #2a78d6; /* blue */
+    --s2: #eb6834; /* orange */
+    --s3: #1baf7a; /* aqua */
+    --div-neg: #e34948; /* diverging warm pole (deficit) */
+    --div-pos: #2a78d6; /* diverging cool pole (surplus) */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface-1: #1a1a19;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+      --div-neg: #e66767; --div-pos: #3987e5;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --div-neg: #e66767; --div-pos: #3987e5;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { margin: 0; }
+  .viz-root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--text-primary); min-height: 100vh; padding: 28px 20px 60px; }
+  .wrap { max-width: 1060px; margin: 0 auto; }
+  header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+  h1 { font-size: 21px; font-weight: 650; letter-spacing: -0.01em; }
+  .sub { color: var(--text-secondary); font-size: 13.5px; margin-top: 4px; max-width: 80ch;}
+  .theme-btn { border:1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
+    border-radius: 8px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; white-space:nowrap;}
+  .filters { display:flex; flex-wrap:wrap; gap: 18px; margin: 16px 0 4px; align-items:center;}
+  .fgroup { display:flex; align-items:center; gap:8px; }
+  .fgroup .flab { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing:.03em;}
+  .seg { display:flex; border:1px solid var(--border); border-radius: 9px; overflow:hidden; background: var(--surface-1);}
+  .seg button { border:none; background:transparent; color: var(--text-secondary); font-size: 13px;
+    padding: 7px 14px; cursor:pointer; font-family:inherit; border-right:1px solid var(--border);}
+  .seg button:last-child { border-right:none; }
+  .seg button.on { background: var(--s1); color:#fff; font-weight:600; }
+  .tiles { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap:10px; margin: 14px 0 20px;}
+  .tile { background: var(--surface-1); border:1px solid var(--border); border-radius: 12px; padding: 13px 15px 12px;}
+  .tile .lab { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight:600;}
+  .tile .val { font-size: 25px; font-weight: 650; margin-top: 3px; letter-spacing:-0.01em;}
+  .tile .note { font-size: 11.5px; color: var(--text-secondary); margin-top: 3px;}
+  .card { background: var(--surface-1); border:1px solid var(--border); border-radius: 14px;
+    padding: 18px 18px 12px; margin-bottom: 18px; }
+  .card h2 { font-size: 15px; font-weight: 650; }
+  .card .desc { font-size: 12.5px; color: var(--text-secondary); margin: 3px 0 6px; max-width: 90ch;}
+  .legend { display:flex; flex-wrap:wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 6px 0 2px;}
+  .legend .it { display:flex; align-items:center; gap:6px; }
+  .sw { width: 14px; height: 4px; border-radius: 2px; display:inline-block;}
+  .sw.box { width: 11px; height: 11px; border-radius: 3px; }
+  svg { display:block; width: 100%; height: auto; }
+  svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-variant-numeric: tabular-nums; }
+  .axis-t { fill: var(--muted); font-size: 11px; }
+  .anno { fill: var(--text-secondary); font-size: 11px; }
+  .tip { position: fixed; pointer-events:none; background: var(--surface-1); border:1px solid var(--border);
+    box-shadow: 0 4px 14px rgba(0,0,0,.14); border-radius: 9px; padding: 8px 11px; font-size: 12px;
+    color: var(--text-primary); z-index: 10; display:none; min-width: 150px;}
+  .tip .th { font-weight: 650; margin-bottom: 4px; font-size: 11.5px;}
+  .tip .r { display:flex; justify-content:space-between; gap: 14px; margin: 2px 0;}
+  .tip .r .n { color: var(--text-secondary); display:flex; align-items:center; gap:6px;}
+  .tip .r .v { font-variant-numeric: tabular-nums; font-weight: 600;}
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  th, td { padding: 7px 10px; text-align: right; font-variant-numeric: tabular-nums; border-top: 1px solid var(--grid);}
+  th:first-child, td:first-child, th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3) { text-align: left; }
+  thead th { border-top:none; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing:.03em;}
+  td.excl { color: var(--muted); text-decoration: line-through; }
+  .foot { color: var(--muted); font-size: 11.5px; margin-top: 18px; line-height:1.5; max-width:110ch;}
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Togo — Generation Planning Scenarios</h1>
+      <div class="sub">Firm capacity at the evening peak vs projected demand, 2026–2035. Base: CEET load curve Jan–Jun 2026 (robust peak 358 MW, energy 2,453 GWh/yr unsuppressed). Mirrors the Excel model; edit assumptions there.</div>
+    </div>
+    <button class="theme-btn" id="themeBtn">Toggle dark mode</button>
+  </header>
+
+  <div class="filters">
+    <div class="fgroup"><span class="flab">Demand growth</span>
+      <div class="seg" id="segG">
+        <button data-v="0.06">Low 6%</button>
+        <button data-v="0.07" class="on">Central 7%</button>
+        <button data-v="0.08">High 8%</button>
+      </div>
+    </div>
+    <div class="fgroup"><span class="flab">Reserve margin</span>
+      <div class="seg" id="segR">
+        <button data-v="0.10">10%</button>
+        <button data-v="0.15" class="on">15%</button>
+        <button data-v="0.20">20%</button>
+      </div>
+    </div>
+    <div class="fgroup"><span class="flab">Supply</span>
+      <div class="seg" id="segS">
+        <button data-v="committed">Existing + committed</button>
+        <button data-v="all" class="on">Incl. candidates</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="card">
+    <h2>Firm capacity vs peak demand</h2>
+    <div class="desc">Firm MW = capacity available at the 19h–22h system peak (solar credited 10%, solar+BESS 40–50%, thermal/imports/BESS 100%). The dotted line adds the reserve margin.</div>
+    <div class="legend">
+      <span class="it"><span class="sw" style="background:var(--s3)"></span>Firm capacity online</span>
+      <span class="it"><span class="sw" style="background:var(--s1)"></span>Peak demand</span>
+      <span class="it"><span class="sw" style="background:var(--s2)"></span>Peak + reserve</span>
+    </div>
+    <div id="ch_main"></div>
+  </div>
+
+  <div class="card">
+    <h2>Capacity balance by year</h2>
+    <div class="desc">Firm capacity minus (peak + reserve). Below zero is the firm MW still to be procured beyond the listed projects.</div>
+    <div class="legend">
+      <span class="it"><span class="sw box" style="background:var(--div-pos)"></span>Surplus</span>
+      <span class="it"><span class="sw box" style="background:var(--div-neg)"></span>Shortfall</span>
+    </div>
+    <div id="ch_gap"></div>
+  </div>
+
+  <div class="card">
+    <h2>What each source actually cost CEET in 2025 (FCFA/kWh)</h2>
+    <div class="desc">Direct purchase cost by source from CEET's own cost-of-supply decomposition (variable + take-or-pay capacity + CEB transport). The merit order is clear; the cheapest sources are the ones that cannot carry the evening peak (solar) or cut deliveries (imports). Weighted average 82; average selling price 106.5.</div>
+    <div id="ch_actuals"></div>
+  </div>
+
+  <div class="card">
+    <h2>What new supply could cost (LCOE benchmarks, $/MWh)</h2>
+    <div class="desc">Levelized cost per MWh, 2025–26 global benchmarks at 10% WACC (editable in the Excel). Orders of magnitude to be validated against offers: the Blitta PPA (54 FCFA ≈ $90/MWh incl. transport) sits above the solar benchmark.</div>
+    <div id="ch_lcoe"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cost of firm capacity at the evening peak ($/kW-yr)</h2>
+    <div class="desc">Annualized capex + fixed O&M of the asset that provides the 19h–22h MW. For a solar + battery plant that is the battery only (the solar capex is paid by the energy it sells). This is why solar alone cannot close the gap, and why 4h batteries, alone or paired with solar, are the cheapest firm MW. HFO and imports need no new capex but carry the highest energy cost and delivery risk.</div>
+    <div id="ch_firm"></div>
+  </div>
+
+  <div class="card">
+    <h2>Supply stack</h2>
+    <div class="desc">Projects and firm-capacity credits mirrored from the Excel model. Candidate rows grey out when the supply filter is set to committed only.</div>
+    <table id="ptable"></table>
+  </div>
+
+  <div class="foot" id="foot"></div>
+</div>
+<div class="tip" id="tip"></div>
+</div>
+<script>
+const BASE_YEAR = 2026, BASE_PEAK = 358, BASE_ENERGY = 2452.6;
+const YEARS = Array.from({length:10},(_,i)=>2026+i);
+const PROJECTS = [
+  {name:'Existing domestic fleet (incl. Kekeli 65 MW)', tech:'Thermal', status:'Existing', mw:180, firm:1.00, cod:2026},
+  {name:'Blitta solar PV', tech:'Solar', status:'Existing', mw:50, firm:0.10, cod:2026},
+  {name:'Emergency thermal unit 1', tech:'Thermal', status:'Existing', mw:20, firm:1.00, cod:2026},
+  {name:'Ghana imports (current firm level)', tech:'Import', status:'Existing', mw:20, firm:1.00, cod:2026},
+  {name:'Nigeria imports (current firm level)', tech:'Import', status:'Existing', mw:70, firm:1.00, cod:2026},
+  {name:'Emergency thermal unit 2', tech:'Thermal', status:'Committed', mw:20, firm:1.00, cod:2027},
+  {name:'Dapaong solar + 40 MWh BESS', tech:'Solar+BESS', status:'Committed', mw:25, firm:0.40, cod:2027},
+  {name:'Awandjélo solar PV', tech:'Solar', status:'Committed', mw:42, firm:0.10, cod:2027},
+  {name:'Sokodé solar PV', tech:'Solar', status:'Committed', mw:60, firm:0.10, cod:2028},
+  {name:'Blitta expansion', tech:'Solar', status:'Candidate', mw:30, firm:0.10, cod:2028},
+  {name:'Grid-scale BESS program', tech:'BESS', status:'Candidate', mw:50, firm:1.00, cod:2029},
+  {name:'Lomé thermal plant', tech:'Thermal', status:'Candidate', mw:120, firm:1.00, cod:2029},
+  {name:'Solar + BESS program tranche 1', tech:'Solar+BESS', status:'Candidate', mw:100, firm:0.50, cod:2031},
+  {name:'Firm capacity placeholder (post-2032)', tech:'TBD', status:'Candidate', mw:100, firm:1.00, cod:2033},
+];
+let G = 0.07, RM = 0.15, SUP = 'all';
+
+const css = v => getComputedStyle(document.querySelector('.viz-root')).getPropertyValue(v).trim();
+const tip = document.getElementById('tip');
+const fmt = (x,d=0) => x.toLocaleString('en-US',{minimumFractionDigits:d, maximumFractionDigits:d});
+function showTip(html, ev){
+  tip.innerHTML = html; tip.style.display='block';
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = ev.clientX + 14, y = ev.clientY - h - 10;
+  if (x + w > window.innerWidth - 8) x = ev.clientX - w - 14;
+  if (y < 8) y = ev.clientY + 14;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+function hideTip(){ tip.style.display='none'; }
+
+const included = () => PROJECTS.filter(p => SUP==='all' || p.status!=='Candidate');
+const firmAt = y => included().filter(p=>p.cod<=y).reduce((s,p)=>s+p.mw*p.firm,0);
+const peakAt = y => BASE_PEAK*Math.pow(1+G, y-BASE_YEAR);
+const reqAt  = y => peakAt(y)*(1+RM);
+const energyAt = y => BASE_ENERGY*Math.pow(1+G, y-BASE_YEAR);
+
+function scale(domain, range){ const [d0,d1]=domain,[r0,r1]=range; return v => r0 + (v-d0)/(d1-d0)*(r1-r0); }
+function niceTicks(min,max,n){ const span=max-min, step0=span/n, mag=Math.pow(10,Math.floor(Math.log10(step0)));
+  let step=mag; for (const m of [1,2,2.5,5,10]) if (m*mag>=step0){step=m*mag;break;}
+  const t=[]; for(let v=Math.ceil(min/step)*step; v<=max+1e-9; v+=step) t.push(+v.toFixed(6)); return t; }
+const W=1020, ML=50, MR=16;
+function svgEl(html, H){ const d=document.createElement('div'); d.innerHTML=
+  `<svg viewBox="0 0 ${W} ${H}" role="img">${html}</svg>`; return d.firstChild; }
+function gridAndAxis(y, yticks, H, MB){
+  let g='';
+  for (const t of yticks){
+    g += `<line x1="${ML}" x2="${W-MR}" y1="${y(t)}" y2="${y(t)}" stroke="${css('--grid')}" stroke-width="1"/>`;
+    g += `<text class="axis-t" x="${ML-7}" y="${y(t)+3.5}" text-anchor="end">${fmt(t)}</text>`;
+  }
+  return g;
+}
+
+function renderTiles(){
+  const g30 = firmAt(2030)-reqAt(2030), g35 = firmAt(2035)-reqAt(2035);
+  const tiles = [
+    {lab:'Peak 2030', val: fmt(peakAt(2030))+' MW', note: 'energy '+fmt(energyAt(2030))+' GWh'},
+    {lab:'Peak 2035', val: fmt(peakAt(2035))+' MW', note: 'energy '+fmt(energyAt(2035))+' GWh'},
+    {lab:'Balance 2030', val: (g30<0?'−':'+')+fmt(Math.abs(g30))+' MW', note: g30<0?'to procure vs peak+reserve':'surplus vs peak+reserve'},
+    {lab:'Balance 2035', val: (g35<0?'−':'+')+fmt(Math.abs(g35))+' MW', note: g35<0?'to procure vs peak+reserve':'surplus vs peak+reserve'},
+    {lab:'Firm capacity 2035', val: fmt(firmAt(2035))+' MW', note: SUP==='all'?'existing + committed + candidates':'existing + committed only'},
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(t =>
+    `<div class="tile"><div class="lab">${t.lab}</div><div class="val">${t.val}</div><div class="note">${t.note}</div></div>`).join('');
+}
+
+function renderMain(){
+  const H=320, MT=16, MB=28;
+  const el = document.getElementById('ch_main'); el.innerHTML='';
+  const x = scale([2026,2035],[ML,W-MR]);
+  const vmax = Math.max(reqAt(2035), firmAt(2035))*1.06;
+  const y = scale([0,vmax],[H-MB,MT]);
+  let g = gridAndAxis(y, niceTicks(0,vmax,5), H, MB);
+  for (const yr of YEARS) g += `<text class="axis-t" x="${x(yr)}" y="${H-MB+17}" text-anchor="middle">${yr}</text>`;
+  g += `<line x1="${ML}" x2="${W-MR}" y1="${H-MB}" y2="${H-MB}" stroke="${css('--baseline')}" stroke-width="1"/>`;
+  // firm capacity as step line
+  let d='';
+  YEARS.forEach((yr,i)=>{
+    const yy = y(firmAt(yr));
+    if(i===0) d += `M${x(yr)} ${yy}`;
+    else d += `L${x(yr)} ${y(firmAt(YEARS[i-1]))}L${x(yr)} ${yy}`;
+  });
+  d += `L${x(2035)} ${y(firmAt(2035))}`;
+  g += `<path d="${d}" fill="none" stroke="${css('--s3')}" stroke-width="2" stroke-linejoin="round"/>`;
+  const line = (fn,col,dash)=>`<path d="${YEARS.map((yr,i)=>(i?'L':'M')+x(yr).toFixed(1)+' '+y(fn(yr)).toFixed(1)).join('')}" fill="none" stroke="${col}" stroke-width="2" ${dash?'stroke-dasharray="5 4"':''} stroke-linejoin="round"/>`;
+  g += line(peakAt, css('--s1'), false);
+  g += line(reqAt, css('--s2'), true);
+  g += `<line id="crossM" x1="0" x2="0" y1="${MT}" y2="${H-MB}" stroke="${css('--baseline')}" stroke-width="1" style="display:none"/>`;
+  g += `<rect x="${ML}" y="${MT}" width="${W-ML-MR}" height="${H-MT-MB}" fill="transparent" id="ovM"/>`;
+  const svg = svgEl(g,H); el.appendChild(svg);
+  const cross=svg.querySelector('#crossM');
+  svg.querySelector('#ovM').addEventListener('mousemove', ev=>{
+    const r=svg.getBoundingClientRect(), sx=W/r.width;
+    const px=(ev.clientX-r.left)*sx;
+    const yr=Math.max(2026,Math.min(2035,Math.round(2026+(px-ML)/(W-MR-ML)*9)));
+    cross.setAttribute('x1',x(yr)); cross.setAttribute('x2',x(yr)); cross.style.display='';
+    showTip(`<div class="th">${yr}</div>
+      <div class="r"><span class="n"><span class="sw" style="background:${css('--s3')}"></span>Firm capacity</span><span class="v">${fmt(firmAt(yr))} MW</span></div>
+      <div class="r"><span class="n"><span class="sw" style="background:${css('--s1')}"></span>Peak demand</span><span class="v">${fmt(peakAt(yr))} MW</span></div>
+      <div class="r"><span class="n"><span class="sw" style="background:${css('--s2')}"></span>Peak + reserve</span><span class="v">${fmt(reqAt(yr))} MW</span></div>
+      <div class="r"><span class="n">Balance</span><span class="v">${fmt(firmAt(yr)-reqAt(yr))} MW</span></div>`, ev);
+  });
+  svg.querySelector('#ovM').addEventListener('mouseleave', ()=>{ cross.style.display='none'; hideTip(); });
+}
+
+function renderGap(){
+  const H=260, MT=16, MB=28;
+  const el = document.getElementById('ch_gap'); el.innerHTML='';
+  const gaps = YEARS.map(yr => firmAt(yr)-reqAt(yr));
+  const vmax = Math.max(40, ...gaps.map(v=>Math.abs(v)))*1.15;
+  const x = scale([0,10],[ML,W-MR]);
+  const y = scale([-vmax,vmax],[H-MB,MT]);
+  let g = gridAndAxis(y, niceTicks(-vmax,vmax,6), H, MB);
+  const bw = (W-ML-MR)/10 - 10;
+  gaps.forEach((v,i)=>{
+    const col = v<0 ? css('--div-neg') : css('--div-pos');
+    const y0=y(0), y1=y(v);
+    g += `<rect x="${(x(i)+5).toFixed(1)}" y="${Math.min(y0,y1).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(Math.abs(y1-y0),1).toFixed(1)}" rx="3" fill="${col}"/>`;
+    g += `<text class="axis-t" x="${(x(i)+5+bw/2).toFixed(1)}" y="${H-MB+17}" text-anchor="middle">${YEARS[i]}</text>`;
+  });
+  g += `<line x1="${ML}" x2="${W-MR}" y1="${y(0)}" y2="${y(0)}" stroke="${css('--baseline')}" stroke-width="1.4"/>`;
+  g += `<rect x="${ML}" y="${MT}" width="${W-ML-MR}" height="${H-MT-MB}" fill="transparent" id="ovG"/>`;
+  const svg = svgEl(g,H); el.appendChild(svg);
+  svg.querySelector('#ovG').addEventListener('mousemove', ev=>{
+    const r=svg.getBoundingClientRect(), sx=W/r.width;
+    const px=(ev.clientX-r.left)*sx;
+    const i=Math.max(0,Math.min(9,Math.floor((px-ML)/(W-MR-ML)*10)));
+    const v=gaps[i];
+    showTip(`<div class="th">${YEARS[i]}</div>
+      <div class="r"><span class="n">${v<0?'Shortfall':'Surplus'}</span><span class="v">${fmt(v)} MW</span></div>`, ev);
+  });
+  svg.querySelector('#ovG').addEventListener('mouseleave', hideTip);
+}
+
+const LCOE = [
+  {name:'Utility solar PV', v:54, note:'~0–10% firm at evening peak'},
+  {name:'Firm imports (WAPP)', v:80, note:'delivery risk (2025–26 collapse)'},
+  {name:'Regional hydro', v:80, note:'long build, site-specific'},
+  {name:'Solar + BESS (firm evening)', v:86, note:'day energy + shifted 4h block'},
+  {name:'Gas engines / CCGT', v:99, note:'WAGP gas at $9/MMBtu'},
+  {name:'BESS 4h (per MWh shifted)', v:125, note:'charged from solar'},
+  {name:'HFO peaker (marginal)', v:131, note:'what emergency supply costs today'},
+];
+const TARIFF = 200;
+const ACTUALS = [
+  {name:'Blitta solar (AMEA)', v:54.3, note:'115.8 GWh · daytime only'},
+  {name:'Paras (Nigeria import)', v:54.6, note:'355.3 GWh · deliveries cut 2025–26'},
+  {name:'Nangbeto hydro (CEB)', v:58.0, note:'1.2 GWh · marginal volumes'},
+  {name:'VRA (Ghana import)', v:72.5, note:'352.3 GWh · 110→20 MW mid-2026'},
+  {name:'Calabar (Nigeria import)', v:73.5, note:'323.6 GWh'},
+  {name:'Kékéli gas (Lomé)', v:85.6, note:'307.7 GWh · incl. 37.7 take-or-pay'},
+  {name:'ContourGlobal thermal (Lomé)', v:99.1, note:'670.5 GWh · largest source, 31%'},
+  {name:'Emergency thermal (WAPG)', v:197.0, note:'49.8 GWh · capacity charge 127.9'},
+];
+const SELLPRICE = 106.5;
+const FIRMCOST = [
+  {name:'Standalone BESS 4h', v:74, note:'100% firm over the 4h peak'},
+  {name:'Solar + BESS hybrid', v:74, note:'battery only (1:1, 4h); solar capex is paid by its energy'},
+  {name:'Gas engines / CCGT', v:142, note:'firm, fuel + FX exposure'},
+  {name:'Regional hydro', v:493, note:'60% firm'},
+  {name:'Utility solar PV', v:946, note:'only 10% firm — wrong tool for the peak'},
+];
+
+function renderHBar(elId, data, vmax, refline, unit){
+  const el = document.getElementById(elId); el.innerHTML='';
+  const rowH = 34, MT = 8, MB = 26, LW = 230;
+  const H = MT + MB + data.length*rowH;
+  const x = scale([0, vmax], [LW, W-90]);
+  let g = '';
+  for (const t of niceTicks(0, vmax, 5)){
+    g += `<line x1="${x(t)}" x2="${x(t)}" y1="${MT}" y2="${H-MB}" stroke="${css('--grid')}" stroke-width="1"/>`;
+    g += `<text class="axis-t" x="${x(t)}" y="${H-MB+16}" text-anchor="middle">${fmt(t)}</text>`;
+  }
+  data.forEach((d,i)=>{
+    const y0 = MT + i*rowH + 7, bh = rowH - 14;
+    g += `<text x="${LW-10}" y="${y0+bh/2+4}" text-anchor="end" fill="${css('--text-primary')}" font-size="12.5">${d.name}</text>`;
+    g += `<rect class="hbar" data-i="${i}" x="${LW}" y="${y0}" width="${Math.max(x(d.v)-LW,1)}" height="${bh}" rx="4" fill="${css('--s1')}"/>`;
+    g += `<text x="${x(d.v)+7}" y="${y0+bh/2+4}" fill="${css('--text-secondary')}" font-size="12" font-weight="600" font-variant-numeric="tabular-nums">${fmt(d.v)}</text>`;
+  });
+  g += `<line x1="${LW}" x2="${LW}" y1="${MT}" y2="${H-MB}" stroke="${css('--baseline')}" stroke-width="1"/>`;
+  if (refline){
+    g += `<line x1="${x(refline.v)}" x2="${x(refline.v)}" y1="${MT}" y2="${H-MB}" stroke="${css('--muted')}" stroke-width="1.4" stroke-dasharray="5 4"/>`;
+    g += `<text class="anno" x="${x(refline.v)-6}" y="${MT+12}" text-anchor="end">${refline.label}</text>`;
+  }
+  const svg = svgEl(g, H); el.appendChild(svg);
+  svg.querySelectorAll('.hbar').forEach(rect=>{
+    rect.addEventListener('mousemove', ev=>{
+      const d = data[+rect.dataset.i];
+      showTip(`<div class="th">${d.name}</div>
+        <div class="r"><span class="n">${unit}</span><span class="v">${fmt(d.v)}</span></div>
+        <div class="r"><span class="n">${d.note}</span></div>`, ev);
+    });
+    rect.addEventListener('mouseleave', hideTip);
+  });
+}
+
+function renderEcon(){
+  renderHBar('ch_actuals', ACTUALS, 220, {v:SELLPRICE, label:'Average selling price 2025 ≈ 106.5 FCFA/kWh'}, 'Direct cost (FCFA/kWh)');
+  renderHBar('ch_lcoe', LCOE, 220, {v:TARIFF, label:'CEET retail tariff ≈ $200/MWh'}, 'LCOE ($/MWh)');
+  renderHBar('ch_firm', FIRMCOST, 1000, null, 'Firm cost ($/kW-yr)');
+}
+
+function renderTable(){
+  let html = '<thead><tr><th>Project</th><th>Tech</th><th>Status</th><th>MW</th><th>Firm share</th><th>Firm MW</th><th>COD</th></tr></thead><tbody>';
+  for (const p of PROJECTS){
+    const excl = (SUP!=='all' && p.status==='Candidate');
+    const cls = excl ? ' class="excl"' : '';
+    html += `<tr><td${cls}>${p.name}</td><td${cls}>${p.tech}</td><td${cls}>${p.status}</td><td${cls}>${fmt(p.mw)}</td><td${cls}>${Math.round(p.firm*100)}%</td><td${cls}>${fmt(p.mw*p.firm)}</td><td${cls}>${p.cod}</td></tr>`;
+  }
+  html += '</tbody>';
+  document.getElementById('ptable').innerHTML = html;
+}
+
+function renderFoot(){
+  document.getElementById('foot').textContent =
+    'Assumptions: base peak 358 MW and energy 2,453 GWh/yr from the CEET Jan–Jun 2026 load curve (unsuppressed demand incl. shed load, annualized ×2). ' +
+    'Supply situation mid-2026: ~180 MW effective domestic capacity; Ghana imports reduced 110→20 MW, Nigeria 115→70 MW (government statement, June 2026). ' +
+    'Candidate projects per government announcements 2025–2026; capacities and CODs are indicative placeholders. ' +
+    'Actual 2025 costs per source: CEET, Décomposition coût de revient par source 2024–2025 (Analytique_2025). Cost benchmarks: BESS turnkey ~$125/kWh and LCOS ~$65/MWh (Ember, Oct 2025); solar LCOE per regional benchmarks; CEET retail tariff XOF 108–116/kWh (Jun 2025); WACC 10%. ' +
+    'Status-quo cost of unserved energy ~100 GWh/yr × $750/MWh VoLL ≈ $75m (XOF ~45bn) per year. ' +
+    'Companion Excel model: Togo_generation_balance_2026-2035.xlsx. Axxum Thinking · Togo Vision 2035 · TF3 Energy. Internal working tool; verify before external use.';
+}
+
+function renderAll(){ renderTiles(); renderMain(); renderGap(); renderEcon(); renderTable(); renderFoot(); }
+
+function wireSeg(id, cb){
+  const seg = document.getElementById(id);
+  seg.querySelectorAll('button').forEach(b => b.addEventListener('click', ()=>{
+    seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); cb(b.dataset.v); renderAll();
+  }));
+}
+wireSeg('segG', v => G = parseFloat(v));
+wireSeg('segR', v => RM = parseFloat(v));
+wireSeg('segS', v => SUP = v);
+
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const r=document.documentElement;
+  const dark = r.getAttribute('data-theme')==='dark' ||
+    (!r.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  r.setAttribute('data-theme', dark?'light':'dark');
+  renderAll();
+});
+
+renderAll();
+</script>
+</body>
+</html>

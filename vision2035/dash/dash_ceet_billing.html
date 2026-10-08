@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CEET — Customer Billing &amp; Cash Receipts 2021–2025</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9faf9; --surface-1:#fdfdfc;
+  --text-primary:#0b0f0d; --text-secondary:#4e5450; --text-muted:#868c87;
+  --grid:#e2e4e0; --axis:#c2c6c1; --border:rgba(11,15,13,0.10);
+  --s1:#0e9166; --s2:#cf9c00; --s3:#d21034; --s4:#2a78d6; --s5:#e87ba4;
+  --o1:#62c69c; --o2:#33b283; --o3:#149c6c; --o4:#0a7350; --o5:#064430;
+  --pos:#0e9166; --neg:#d21034;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --accent:#0e9166; --flagY:#cf9c00; --flagR:#d21034;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0c0f0d; --surface-1:#171b18;
+  --text-primary:#ffffff; --text-secondary:#c1c6c1; --text-muted:#8a8f8a;
+  --grid:#292e2a; --axis:#363b37; --border:rgba(255,255,255,0.10);
+  --s1:#12a877; --s2:#c98500; --s3:#e0455c; --s4:#3987e5; --s5:#d55181;
+  --o1:#b5e7d1; --o2:#82d5b4; --o3:#4fc294; --o4:#17a578; --o5:#0c6b4a;
+  --pos:#12a877; --neg:#e0455c;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --accent:#12a877; --flagY:#c98500; --flagR:#e0455c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1220px;margin:0 auto;padding:24px 20px 80px}
+.flagbar{height:5px;border-radius:3px;margin-bottom:20px;
+  background:linear-gradient(90deg,var(--s1) 0 40%,var(--flagY) 40% 70%,var(--flagR) 70% 100%)}
+header.top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:6px}
+h1{font-size:23px;font-weight:650;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--text-secondary);font-size:13px;max-width:66ch}
+.src{color:var(--text-muted);font-size:11.5px;margin-top:6px}
+.ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button.btn{font:inherit;font-size:12.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface-1);color:var(--text-secondary);cursor:pointer}
+button.btn:hover{color:var(--text-primary)}
+button.btn[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff;font-weight:600}
+h2.sec{font-size:15.5px;font-weight:650;margin:38px 0 4px}
+h2.sec .num{color:var(--s1);font-weight:650;margin-right:8px}
+p.lead{color:var(--text-secondary);font-size:13px;margin:0 0 16px;max-width:90ch}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr)}
+.card{grid-column:span 12;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px 16px 12px}
+.c6{grid-column:span 6}.c5{grid-column:span 5}.c7{grid-column:span 7}.c4{grid-column:span 4}.c8{grid-column:span 8}
+@media(max-width:860px){.c6,.c5,.c7,.c4,.c8{grid-column:span 12}}
+.card h3{font-size:13.5px;font-weight:640;margin:0 0 2px}
+.card .note{font-size:12px;color:var(--text-secondary);margin:0 0 10px}
+.plot{position:relative;width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-secondary)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.take{font-size:12px;color:var(--text-secondary);margin:10px 0 0;padding-top:9px;border-top:1px solid var(--border)}
+.take b{color:var(--text-primary);font-weight:640}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:18px}
+@media(max-width:1080px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:14px 15px}
+.kpi .k{font-size:11.5px;color:var(--text-secondary)}
+.kpi .v{font-size:26px;font-weight:650;letter-spacing:-.02em;margin:3px 0 1px;line-height:1.15}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--text-secondary);margin-left:3px}
+.kpi .d{font-size:11.5px;color:var(--text-muted)}
+.kpi .d.up{color:var(--good)}.kpi .d.dn{color:var(--crit)}
+.hero{grid-column:span 2}.hero .v{font-size:44px}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .09s;z-index:30;
+  background:var(--surface-1);border:1px solid var(--border);border-radius:9px;padding:8px 10px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);font-size:12px;min-width:140px;color:var(--text-primary)}
+.tip b{font-size:12px;display:block;margin-bottom:5px}
+.tip .tr{display:flex;align-items:center;gap:7px;margin-top:3px;white-space:nowrap}
+.tip .sw{width:9px;height:9px;border-radius:2px;flex:0 0 auto}
+.tip .tn{color:var(--text-secondary)}
+.tip .tv{margin-left:auto;font-weight:640;font-variant-numeric:tabular-nums}
+.tip .tm{color:var(--text-muted);font-weight:400}
+.tblwrap{display:none;margin-top:12px;overflow-x:auto}
+body.tables .tblwrap{display:block}
+table{border-collapse:collapse;width:100%;font-size:11.5px}
+th,td{text-align:left;padding:5px 9px;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--text-muted);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.05em}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.dtable td:first-child{color:var(--text-secondary)}
+.callout{background:var(--surface-1);border:1px solid var(--border);border-left:3px solid var(--flagY);
+  border-radius:10px;padding:12px 15px;font-size:12.5px;color:var(--text-secondary);margin:16px 0 0}
+.callout b{color:var(--text-primary)}
+.callout.red{border-left-color:var(--flagR)}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="flagbar"></div>
+
+<header class="top">
+  <div>
+    <h1>CEET — customer billing &amp; cash receipts, 2021–2025</h1>
+    <div class="sub">Built from the raw settlement ledger: 13.6 million individual payment records and the 81,000-account termination register, covering every franc that entered CEET's tills over five years.</div>
+    <div class="src">Source: REGLEMENTS_2021–2025.xlsx + LISTE_CLIENTS_RESILIES.xlsx · Axxum analysis · amounts in FCFA</div>
+  </div>
+  <div class="ctrls">
+    <button class="btn" id="tblBtn" aria-pressed="false">Show data tables</button>
+    <button class="btn" id="thBtn">Dark mode</button>
+  </div>
+</header>
+
+<div class="kpis">
+  <div class="kpi hero">
+    <div class="k">Cash collected 2021–2025</div>
+    <div class="v">891.4<small>Bn FCFA</small></div>
+    <div class="d">13.65M payment records · avg 178 Bn/yr</div>
+  </div>
+  <div class="kpi">
+    <div class="k">Best year — 2024</div>
+    <div class="v">208.7<small>Bn</small></div>
+    <div class="d up">+16.9% vs 2023</div>
+  </div>
+  <div class="kpi">
+    <div class="k">Prepaid (Cash Power) share</div>
+    <div class="v">26.7%</div>
+    <div class="d">237.8 Bn over 5 years</div>
+  </div>
+  <div class="kpi">
+    <div class="k">Unique payers 2025</div>
+    <div class="v">462k</div>
+    <div class="d up">+15% vs 2024</div>
+  </div>
+  <div class="kpi">
+    <div class="k">Terminations 2025</div>
+    <div class="v">5,078</div>
+    <div class="d dn">Highest on record, +85% vs 2022</div>
+  </div>
+</div>
+
+<div class="callout red" style="margin-top:18px"><b>Read this first — the 2025 "collapse" is a booking break, not a business collapse.</b> Total receipts drop from 208.7 Bn (2024) to 176.5 Bn (2025), but the entire fall sits in the prepaid Cash Power line, which falls from ~5.5–6 Bn/month to ~0.6 Bn/month from August 2025 while its number of ledger entries stays constant. Postpaid LV and MV receipts are stable through year-end. Prepaid sales almost certainly moved to a channel that no longer posts through these tills. Before using 2025 totals anywhere, get the missing prepaid channel data from CEET.</div>
+
+<!-- 01 -->
+<h2 class="sec"><span class="num">01</span>The shape of the cash machine</h2>
+<p class="lead">This is receipts, not billing: what customers actually paid, month by month. Three engines — postpaid LV bills, prepaid Cash Power vending, and 985-odd MV accounts — plus a small works/connections line.</p>
+
+<div class="grid">
+  <div class="card">
+    <h3>Monthly cash receipts by engine, 60 months</h3>
+    <p class="note">Bn FCFA per month. The prepaid break in August 2025 is unmistakable.</p>
+    <div class="plot" id="ch_monthly" style="height:320px"></div>
+    <div class="legend" id="lg_monthly"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Prepaid was the fastest-growing engine until the break</b> — from ~3 Bn/month in 2021 to ~6 Bn/month by mid-2025. MV receipts are remarkably flat at 4.3–5.9 Bn/month across the whole five years.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Annual receipts by engine</h3>
+    <p class="note">Bn FCFA. Prepaid + postpaid + MV + works.</p>
+    <div class="plot" id="ch_engines" style="height:290px"></div>
+    <div class="legend" id="lg_engines"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Prepaid grew 64% in four years</b> (37.0 → 60.7 Bn, 2021→2024) while postpaid LV grew 39%. On trend, prepaid would have passed 40% of LV cash in 2026.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Who pays: receipts by customer category</h3>
+    <p class="note">Bn FCFA, five-year totals, ledger categories.</p>
+    <div class="plot" id="ch_cats" style="height:290px"></div>
+    <div class="legend" id="lg_cats"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Private customers put in 77% of all cash (688 Bn).</b> The whole public sector — state companies, administration, agencies, local authorities — paid 123.7 Bn (13.9%), less than its share of billing, which is exactly the arrears story in the datapack.</p>
+  </div>
+</div>
+
+<!-- 02 -->
+<h2 class="sec"><span class="num">02</span>How Togo pays its electricity bill</h2>
+<p class="lead">The settlement ledger records a payment mode on every one of the 13.6M receipts — a picture of payment behaviour the summary datapack cannot see.</p>
+
+<div class="grid">
+  <div class="card c7">
+    <h3>Payment modes by value</h3>
+    <p class="note">Bn FCFA per year. ES = cash at till, CH = cheque, AC = credit/offset, EB = electronic, VI = bank transfer, PT = phone/mobile.</p>
+    <div class="plot" id="ch_modes" style="height:300px"></div>
+    <div class="legend" id="lg_modes"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Cash at the till is still 46% of all value</b> and 64% of all transactions. Cheques are 27% of value on only 1.7% of transactions — that is the corporate/state channel.</p>
+  </div>
+
+  <div class="card c5">
+    <h3>Digital payments: counts vs value</h3>
+    <p class="note">EB + PT (electronic + phone) share of transactions and of value.</p>
+    <div class="plot" id="ch_digital" style="height:300px"></div>
+    <div class="legend" id="lg_digital"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>A third of all payment events are already digital, but under 10% of the money.</b> Digital is used for small tickets (avg ~18k FCFA vs 1M+ for cheques). PT (phone) tripled its transaction count from 65k (2022) to 172k (2025).</p>
+  </div>
+
+  <div class="card c6">
+    <h3>LV bill-payment ticket sizes</h3>
+    <p class="note">Postpaid LV energy receipts (piece FE), 10.8M records, five years pooled.</p>
+    <div class="plot" id="ch_tickets" style="height:290px"></div>
+    <div class="legend" id="lg_tickets"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>55% of receipts are under 25,000 FCFA, but 49% of the money comes from receipts over 100k</b> — the LV book is a mass of tiny payments carried by a thin commercial top end.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Payment discipline: months active per payer</h3>
+    <p class="note">Of ~400k LV references that paid in 2024, how many months did each appear?</p>
+    <div class="plot" id="ch_freq" style="height:290px"></div>
+    <div class="legend" id="lg_freq"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>The base is split in two:</b> 171k references touched the tills only once in 2024 (mostly prepaid buyers and one-off works), while a disciplined core of ~117k paid in 10+ months — the true monthly-bill population.</p>
+  </div>
+</div>
+
+<!-- 03 -->
+<h2 class="sec"><span class="num">03</span>Concentration and the MV cash base</h2>
+<p class="lead">The receipts ledger confirms the datapack's concentration warning, with names and numbers.</p>
+
+<div class="grid">
+  <div class="card c7">
+    <h3>Top MV cash contributors, 2021–2025</h3>
+    <p class="note">Bn FCFA of receipts. Cement, port and industry dominate.</p>
+    <div class="plot" id="ch_mvtop" style="height:360px"></div>
+    <div class="legend" id="lg_mvtop"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>CIMTOGO alone paid 18.3 Bn</b>; the three cement groups (CIMTOGO + CIMCO + Diamond + Fortia + CIMTOGO Kara) together ~47 Bn — 16% of all MV cash. KALYAN, the datapack's arrears flag, still paid 5.4 Bn.</p>
+  </div>
+
+  <div class="card c5">
+    <h3>MV concentration curve</h3>
+    <p class="note">Share of five-year MV cash by count of accounts.</p>
+    <div class="plot" id="ch_conc" style="height:220px"></div>
+    <div class="legend" id="lg_conc"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>36 accounts deliver half of all MV cash; 213 deliver 80%.</b> The remaining ~950 MV references contribute a fifth of the money — the receivable risk is a short, negotiable list.</p>
+    <h3 style="margin-top:18px">Payers by voltage class</h3>
+    <div class="plot" id="ch_payers" style="height:200px"></div>
+    <div class="legend" id="lg_payers"></div>
+    <div class="tblwrap"></div>
+  </div>
+
+  <div class="card c6">
+    <h3>Receipts by agency (code), 2024</h3>
+    <p class="note">Bn FCFA. First two digits of the customer reference = agency.</p>
+    <div class="plot" id="ch_agences" style="height:300px"></div>
+    <div class="legend" id="lg_agences"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Agency 10 books a third of everything</b> — it carries the bulk Cash Power vending entries and the head-office cheques. The Lomé agencies (01–06, 12) plus 10 are ~85% of national cash.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Cash seasonality (2021–2024 average)</h3>
+    <p class="note">Bn FCFA by calendar month, prepaid break year excluded.</p>
+    <div class="plot" id="ch_season" style="height:300px"></div>
+    <div class="legend" id="lg_season"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Cash peaks in March and September</b> — receipts follow the quarterly billing/dunning cycle more than consumption weather. The consumption seasonality in the datapack (April peak) barely shows in cash.</p>
+  </div>
+</div>
+
+<!-- 04 -->
+<h2 class="sec"><span class="num">04</span>Churn: the termination register</h2>
+<p class="lead">81,340 terminated accounts, with creation and termination dates — a subscriber-lifecycle view that exists nowhere in the summary datapack.</p>
+
+<div class="grid">
+  <div class="card c6">
+    <h3>Terminations per year</h3>
+    <p class="note">Accounts closed, by year of termination.</p>
+    <div class="plot" id="ch_term" style="height:280px"></div>
+    <div class="legend" id="lg_term"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Churn has doubled since 2022</b> (2,752 → 5,078). Against ~920k active accounts that is still only ~0.55%/year — but the trend line is the thing to watch, and it turned up exactly when the arrears crisis deepened.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Lifetime of terminated accounts</h3>
+    <p class="note">Years from creation to termination, accounts closed since 2015.</p>
+    <div class="plot" id="ch_tenure" style="height:280px"></div>
+    <div class="legend" id="lg_tenure"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Median life of a closed account: 6.5 years; 8% die within a year.</b> Those early deaths are connection-fee revenue that never became a customer — worth a look for the acquisition process.</p>
+  </div>
+</div>
+
+<!-- 05 -->
+<h2 class="sec"><span class="num">05</span>Arrears &amp; portfolio quality</h2>
+<p class="lead">A receivables view rebuilt from payment behaviour: since the ledger records when every account last paid and how often, the health of the postpaid book can be aged and tracked even without an invoice file.</p>
+
+<div class="grid">
+  <div class="card c6">
+    <h3>Payment-silence aging of the postpaid book</h3>
+    <p class="note">237k postpaid LV accounts (≥3 bill payments since 2023), by months since their last payment, as of Dec 2025.</p>
+    <div class="plot" id="ch_silence" style="height:280px"></div>
+    <div class="legend" id="lg_silence"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>82.3% of the book is current; 17.7% (42k accounts) has gone quiet for 2+ months.</b> The dangerous part: accounts silent 2–6 months carry average tickets of 61–80k FCFA — two to three times the book average of 29k. It is the bigger accounts that go quiet.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Where accounts go: discipline transitions 2024 → 2025</h3>
+    <p class="note">Each 2024 discipline bucket traced into 2025. Regular = paid 10–12 months, Semi = 5–9, Weak = 1–4.</p>
+    <div class="plot" id="ch_trans" style="height:280px"></div>
+    <div class="legend" id="lg_trans"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>The private core is stable: only 2.2% of regular payers deteriorate to weak or silent.</b> But weak payers are a trap door — 72% of them stay weak or vanish. Nearly identical to the 2021→2022 matrix, so the arrears crisis has not (yet) degraded private discipline.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Implied new arrears per year (billed − energy cash)</h3>
+    <p class="note">Bn FCFA. Billing from the Elyos datapack; cash from this ledger. Negative = catch-up year.</p>
+    <div class="plot" id="ch_flow" style="height:280px"></div>
+    <div class="legend" id="lg_flow"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Arrears build in a two-year cycle</b> — a bad year (2023: +17.7 Bn combined, 2025: +25.1 Bn) followed by a partial catch-up (2024: +0.9 Bn net). That is the state settling in bursts, not customers gradually slipping. 2025's LV gap carries the usual booking-break caveat.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Public-sector monthly receipts: the burst pattern</h3>
+    <p class="note">Bn FCFA per month from state categories, 60 months.</p>
+    <div class="plot" id="ch_burst" style="height:280px"></div>
+    <div class="legend" id="lg_burst"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Public receipts swing from 0.6 to 8.9 Bn/month (volatility 5× private).</b> Half a year's state cash can arrive in two months. This is why the arrears stock saw-tooths — and why a budget-escrow mechanism matters more than dunning.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Catch-up payments (2+ bills settled at once)</h3>
+    <p class="note">Share of postpaid account-months settling multiple bills in one visit.</p>
+    <div class="plot" id="ch_catchup" style="height:250px"></div>
+    <div class="legend" id="lg_catchup"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Steady at ~5.5–6% since 2022</b> (2021's 11.2% was the COVID backlog clearing). Roughly 250k bills a year are paid late-then-together — the measurable "late but recovered" slice of the book.</p>
+  </div>
+
+  <div class="card c6">
+    <h3>Recoveries from disconnected accounts</h3>
+    <p class="note">Bill payments made while the meter was already removed (état compteur D).</p>
+    <div class="plot" id="ch_dstate" style="height:250px"></div>
+    <div class="legend" id="lg_dstate"></div>
+    <div class="tblwrap"></div>
+    <p class="take"><b>Post-disconnection recoveries fell from 2.1 Bn (2021) to 0.25 Bn (2025)</b> — consistent with the datapack's rising disconnection execution rate (82.1% in 2025): debts are being cut earlier, before they grow, leaving less to chase afterwards.</p>
+  </div>
+</div>
+
+<div class="callout"><b>What to ask CEET for next.</b> (1) The post-July-2025 prepaid vending data — without it every 2025 total is understated by ~5 Bn/month. (2) The billing (invoice) file that pairs with this settlement file, so payment lag per account can be computed. (3) A mapping of MODE_REGL codes and of agency codes to names, to firm up the channel and geography reads.</div>
+
+<footer>
+  <a href="/ceet-billing-annex" style="color:var(--s1)">Annex: additional charts →</a><br><br>
+  Sources: REGLEMENTS_2021–2025.xlsx (13,648,167 settlement rows, TRIMESTRE sheets) and LISTE_CLIENTS_RESILIES.xlsx (81,340 accounts), converted to a partitioned Parquet + DuckDB dataset. Amounts are cash receipts incl. VAT as booked at the tills; "prepaid" = piece FP / Cash Power vending entries; MV = fourniture M. Mode-code readings (ES, CH, EB, PT…) are inferred from context and ticket profiles; confirm labels with CEET. 2025 totals carry the prepaid booking break flagged above. Cross-check: actual MV receipts here match the Elyos datapack's implied collections within 1–3% in every overlapping year (2025: 61.27 vs 61.25 Bn).
+</footer>
+</div>
+
+<script>const D={"years":[2021,2022,2023,2024,2025],"yearTotals":[153.665,174.013,178.539,208.737,176.453],"yearTx":[2894371,2603130,2663241,2705215,2782210],"yearPayers":[415511,376702,400669,401364,462653],"mLabels":["21-01","21-02","21-03","21-04","21-05","21-06","21-07","21-08","21-09","21-10","21-11","21-12","22-01","22-02","22-03","22-04","22-05","22-06","22-07","22-08","22-09","22-10","22-11","22-12","23-01","23-02","23-03","23-04","23-05","23-06","23-07","23-08","23-09","23-10","23-11","23-12","24-01","24-02","24-03","24-04","24-05","24-06","24-07","24-08","24-09","24-10","24-11","24-12","25-01","25-02","25-03","25-04","25-05","25-06","25-07","25-08","25-09","25-10","25-11","25-12"],"mPrepaid":[3.065,2.825,3.16,3.257,3.209,2.959,3.093,3.028,2.474,3.065,3.234,3.693,3.567,3.375,3.955,3.665,3.711,3.442,3.472,3.336,3.351,3.714,3.865,4.186,4.105,4.085,4.625,4.344,4.546,4.054,4.31,4.273,4.177,4.598,4.722,5.19,5.163,4.916,5.373,5.257,5.044,4.666,4.755,4.677,4.725,5.054,5.351,5.784,5.827,5.348,6.143,5.93,6.162,5.496,5.453,0.567,0.618,0.723,0.604,0.409],"mPostpaid":[4.304,4.709,6.01,4.409,4.745,5.317,6.09,4.405,4.261,4.659,4.711,5.309,4.968,8.806,4.306,4.719,6.156,7.227,5.372,5.397,4.359,3.878,4.776,4.739,5.066,4.994,4.706,4.411,4.843,5.517,5.482,4.31,4.47,4.971,5.606,5.042,6.229,4.626,7.61,6.407,5.085,4.743,6.737,4.854,11.821,4.386,5.183,4.897,5.862,4.369,5.862,4.465,5.07,7.889,5.711,5.278,4.32,4.61,4.025,4.573],"mMV":[4.364,3.459,5.274,3.501,4.372,4.595,5.542,3.541,3.062,5.199,3.576,5.642,4.988,4.228,4.796,4.276,5.97,5.187,4.782,6.501,4.07,4.011,5.438,4.803,5.204,5.002,4.864,4.576,5.311,4.022,6.196,5.459,5.048,4.159,4.168,5.046,7.095,4.426,7.711,6.816,5.668,4.206,6.192,5.256,5.17,6.177,5.965,3.887,5.659,5.155,5.571,5.084,4.603,5.892,5.527,4.837,4.703,5.364,4.314,4.561],"mTravaux":[0.611,0.423,0.564,0.493,0.559,0.762,0.535,0.543,0.462,0.532,0.543,0.688,0.829,0.564,0.58,0.648,0.988,0.554,0.52,0.827,0.722,0.691,0.77,0.688,0.514,0.594,0.815,0.696,0.646,0.635,0.759,0.991,0.704,0.731,0.569,0.701,0.677,0.917,0.639,0.847,0.692,0.514,0.587,0.45,0.561,1.126,0.688,0.932,1.344,1.014,1.029,1.166,0.804,0.666,0.916,0.813,0.843,0.865,0.763,1.024],"mTotal":[12.209,11.37,14.934,11.628,12.811,13.431,15.199,11.428,10.19,13.346,11.967,15.152,14.181,16.852,13.567,13.244,16.381,16.362,14.094,15.736,12.444,12.196,14.635,14.322,14.843,14.587,14.742,13.837,15.281,14.162,16.683,14.851,14.322,14.314,15.038,15.881,19.11,14.591,21.249,18.975,16.292,14.061,18.189,15.218,22.221,16.284,17.121,15.426,18.551,15.781,18.422,16.176,16.562,19.899,17.558,11.412,10.445,11.478,9.643,10.526],"split":{"lv":[101.539,114.965,119.485,140.166,115.184],"mv":[52.126,59.048,59.054,68.571,61.27],"prepaid":[37.062,43.639,53.029,60.764,43.281],"travaux":[6.714,8.381,8.354,8.63,11.247]},"cats":{"CLIENTS PRIVES":[120.472,130.282,145.08,155.173,137.16],"SOCIETES ETAT":[8.185,9.043,9.293,11.284,10.154],"ADMINISTRATION GENERALE":[8.271,8.404,4.666,16.396,6.401],"CLIENT ZONE FRANCHE":[10.475,8.331,7.89,7.244,8.778],"O.I ET C.D":[2.406,5.428,5.736,5.244,3.937],"COLLECTIVITES LOCALES":[0.617,7.595,0.231,6.892,2.407],"ORGANISMES ETAT":[2.584,2.415,2.77,3.032,3.1],"CLIENTS PRIVES PEPT":[0,1.468,2.171,2.236,3.961],"CLIENTS DIVERS":[0.358,0.783,0.419,0.954,0.257],"CONCESSION T.E":[0.296,0.266,0.284,0.281,0.297],"CONTENTIEUX COMMERCIAUX":[0.001,0.0,0,0.0,0]},"modes":{"ES":{"t":[71.934,76.558,87.567,96.721,80.546],"n":[1884588,1643149,1688948,1733929,1749612]},"CH":{"t":[40.095,44.747,49.611,50.819,52.987],"n":[48794,45853,44738,47144,47646]},"AC":{"t":[19.22,19.23,19.316,21.437,16.747],"n":[11520,10104,9767,11069,11368]},"EB":{"t":[12.849,16.376,14.483,14.131,14.326],"n":[749078,804336,805060,778625,779555]},"VI":{"t":[8.3,8.321,4.427,16.393,5.433],"n":[19736,20356,9071,23424,9339]},"EP":{"t":[0,6.806,0,6.521,1.966],"n":[0,3826,0,2082,1413]},"PT":{"t":[0,1.465,2.166,2.22,3.939],"n":[0,64940,94608,98408,172484]},"SA":{"t":[0.255,0.234,0.242,0.247,0.265],"n":[7793,7788,7750,7856,8179]}},"tickets":[["<5k",2338775,7.552],["5\u201310k",2640317,18.753],["10\u201325k",3626846,55.752],["25\u201350k",1234350,41.906],["50\u2013100k",511844,34.656],["100k\u20131M",438375,112.589],[">1M",20598,38.863]],"mvTop":[["CIMTOGO",18.261],["MANUMETAL",14.736],["CIMCO S.A",11.736],["LCT LOME CONTAINER TERMINAL",10.652],["STEEL CUBE",10.639],["BRASSERIE DU BENIN",10.631],["DIAMOND  CEMENT TOGO (DCT)",6.21],["FORTIA CEMENT",5.78],["KALYAN HOSPITALITY DEVELOP.",5.414],["INDUPLAST",5.348],["CIMTOGO KARA",4.731],["WHITE WAY",4.699],["ABAYOCO S.A./WAFO INDUSTRY",4.211],["S.G.M.T.",4.055],["S.A.L.T. NOUVELLE AEROGARE",3.073]],"mvConc":[36,213,1161],"activeMonths":[171609,9041,5507,6590,8630,12904,19347,21324,28653,34423,37142,45294],"payersLV":[414716,375849,399820,400464,461737],"payersMV":[797,854,850,901,917],"term":{"y":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"n":[2584,2334,2519,2521,3427,3137,3403,3680,3735,2972,2307,2860,2752,4298,4997,5078]},"tenure":[["<1",3132],["1\u20133",4048],["3\u20135",4476],["5\u201310",10413],["10\u201320",12890],[">20",2549]],"cashSeason":[15.086,14.35,16.123,14.421,15.191,14.504,16.041,14.308,14.794,14.035,14.69,15.195],"agences":[["10",58.792,17845],["02",28.373,20878],["01",18.675,20964],["03",15.74,19366],["04",12.054,26600],["12",10.528,24125],["05",10.04,38551],["50",7.2,10927],["22",6.194,4026],["06",5.33,28196],["09",4.964,15623],["21",2.958,13800]]};</script>
+<script>const AR={"silence":{"labels":["current (0-1 mo)","2-3 mo silent","4-6 mo silent","7-12 mo silent",">12 mo silent"],"n":[195117,12812,6042,6035,17077],"ticket":[28843.0,60931.0,79897.0,37026.0,30155.0]},"trans":{"Regular (10-12)":{"Regular":87941,"Semi":25402,"Silent":615,"Weak":1926},"Semi (5-9)":{"Regular":25393,"Semi":51450,"Silent":3320,"Weak":9926},"Weak (1-4)":{"Regular":1004,"Semi":5614,"Silent":9498,"Weak":7829}},"flow":{"years":[2022,2023,2024,2025],"lv":[4.4,12.4,3.1,14.4],"mv":[2.4,5.3,-2.2,10.7]},"catchup":[11.2,5.27,5.75,5.98,5.95],"pubM":[1.18,0.82,2.98,0.93,1.37,1.88,3.07,0.63,0.83,2.51,1.43,2.03,2.56,5.98,0.68,1.23,2.32,3.56,2.87,2.79,1.3,0.79,2.13,1.23,1.46,2.52,0.59,0.95,0.86,1.51,2.35,0.88,1.17,0.9,1.63,2.12,4.35,0.7,6.43,4.13,1.8,1.14,3.05,1.78,8.9,0.71,3.65,0.98,3.78,1.39,1.82,1.13,1.03,5.43,1.71,1.12,1.13,1.23,1.28,1.01],"dstate":{"n":[67843,48608,35708,19727,6364],"t":[2.07,1.67,1.19,0.76,0.25]}};</script>
+<script>/* Minimal SVG chart engine — line / column / stacked / bar / diverging */
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (n, a = {}) => { const e = document.createElementNS(NS, n); for (const k in a) if (a[k] != null) e.setAttribute(k, a[k]); return e; };
+const T = (e, s) => { e.appendChild(document.createTextNode(s)); return e; };
+
+const CSSV = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function tok() {
+  const g = n => CSSV('--' + n);
+  return { surface: g('surface-1'), ink: g('text-primary'), ink2: g('text-secondary'), muted: g('text-muted'), grid: g('grid'), axis: g('axis') };
+}
+
+function niceTicks(min, max, count = 5) {
+  if (min === max) { max = min + 1; }
+  const span = max - min;
+  const raw = span / count;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw / mag;
+  const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  const out = []; for (let v = lo; v <= hi + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+
+const FMT = {
+  bn: v => v == null ? '—' : v.toFixed(1),
+  bn2: v => v == null ? '—' : v.toFixed(2),
+  gwh: v => v == null ? '—' : v.toFixed(0),
+  gwh1: v => v == null ? '—' : v.toFixed(1),
+  pct: v => v == null ? '—' : (v * 100).toFixed(1) + '%',
+  pct0: v => v == null ? '—' : (v * 100).toFixed(0) + '%',
+  num: v => v == null ? '—' : v.toLocaleString('en-US'),
+  mo: v => v == null ? '—' : v.toFixed(2),
+  fcfa: v => v == null ? '—' : v.toFixed(1)
+};
+
+/* ---------- tooltip ---------- */
+function ensureTip(host) {
+  let t = host.querySelector('.tip');
+  if (!t) { t = document.createElement('div'); t.className = 'tip'; host.appendChild(t); }
+  return t;
+}
+function showTip(host, tip, html, x, y) {
+  tip.innerHTML = html; tip.style.opacity = '1';
+  const hb = host.getBoundingClientRect(), tb = tip.getBoundingClientRect();
+  let left = x + 14; if (left + tb.width > hb.width - 4) left = x - tb.width - 14;
+  if (left < 4) left = 4;
+  let top = y - tb.height / 2; if (top < 2) top = 2; if (top + tb.height > hb.height - 2) top = hb.height - tb.height - 2;
+  tip.style.left = left + 'px'; tip.style.top = top + 'px';
+}
+const hideTip = tip => tip.style.opacity = '0';
+
+/* ---------- generic renderer ---------- */
+function render(host, cfg) {
+  host.querySelectorAll('svg').forEach(s => s.remove());
+  const W = host.clientWidth || 700;
+  const H = cfg.height || 300;
+  const t = tok();
+  const svg = mk('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': cfg.aria || '' });
+  host.insertBefore(svg, host.firstChild);
+  const tip = ensureTip(host);
+  ({ line: rLine, column: rColumn, stack: rColumn, stack100: rColumn, bar: rBar, diverge: rBar }[cfg.type])(svg, host, tip, cfg, W, H, t);
+  const tw = host.parentElement && host.parentElement.querySelector('.tblwrap');
+  if (tw) tw.innerHTML = tableHTML(cfg);
+}
+
+function tableHTML(cfg) {
+  const f = cfg.valFmt || cfg.yFmt || FMT.bn;
+  const u = cfg.unit ? ` <span class="tm">(${cfg.unit})</span>` : '';
+  if (cfg.items) {
+    let h = `<table><thead><tr><th>Item</th><th class="n">Value${u}</th></tr></thead><tbody>`;
+    cfg.items.forEach(d => h += `<tr><td>${d.label}</td><td class="n">${f(d.v)}</td></tr>`);
+    return h + '</tbody></table>';
+  }
+  let h = `<table><thead><tr><th>Series${u}</th>` + cfg.x.map(x => `<th class="n">${x}</th>`).join('') + '</tr></thead><tbody>';
+  cfg.series.forEach(s => { h += `<tr><td>${s.name}</td>` + s.values.map(v => `<td class="n">${f(v)}</td>`).join('') + '</tr>'; });
+  return h + '</tbody></table>';
+}
+
+/* ---------- vertical: line / grouped columns / stacked ---------- */
+function rColumn(svg, host, tip, cfg, W, H, t) { vertical(svg, host, tip, cfg, W, H, t); }
+function rLine(svg, host, tip, cfg, W, H, t) { vertical(svg, host, tip, cfg, W, H, t); }
+
+function vertical(svg, host, tip, cfg, W, H, t) {
+  const S = cfg.series, X = cfg.x, n = X.length;
+  const stack = cfg.type === 'stack' || cfg.type === 'stack100';
+  const pct100 = cfg.type === 'stack100';
+  const fmt = cfg.yFmt || FMT.bn;
+  const m = { t: cfg.mt ?? 16, r: cfg.mr ?? (cfg.labelLast ? 54 : 14), b: 34, l: cfg.ml ?? 46 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+
+  let vals = [];
+  let stacked = [];
+  if (stack) {
+    for (let i = 0; i < n; i++) {
+      let tot = S.reduce((a, s) => a + (s.values[i] || 0), 0);
+      let acc = 0; const col = [];
+      S.forEach(s => { const v = pct100 ? (s.values[i] || 0) / tot : (s.values[i] || 0); col.push([acc, acc + v]); acc += v; });
+      stacked.push(col); vals.push(acc);
+    }
+  } else { S.forEach(s => s.values.forEach(v => { if (v != null) vals.push(v); })); }
+  let dmin = cfg.min != null ? cfg.min : Math.min(0, ...vals);
+  let dmax = cfg.max != null ? cfg.max : Math.max(...vals);
+  if (cfg.zoom) { dmin = Math.min(...vals); dmax = Math.max(...vals); const p = (dmax - dmin) * 0.18; dmin -= p; dmax += p; }
+  const ticks = pct100 ? [0, .25, .5, .75, 1] : niceTicks(dmin, dmax, cfg.ticks || 5);
+  const y0 = ticks[0], y1 = ticks[ticks.length - 1];
+  const Y = v => m.t + ph - (v - y0) / (y1 - y0) * ph;
+  const band = pw / n;
+  const CX = i => m.l + band * (i + .5);
+
+  // grid
+  ticks.forEach(v => {
+    svg.appendChild(mk('line', { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: v === 0 ? t.axis : t.grid, 'stroke-width': 1 }));
+    const lb = mk('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end', fill: t.muted, 'font-size': 11, 'font-variant-numeric': 'tabular-nums' });
+    svg.appendChild(T(lb, pct100 ? (v * 100) + '%' : (cfg.tickFmt || fmt)(v)));
+  });
+  // x labels
+  X.forEach((lb, i) => {
+    const e = mk('text', { x: CX(i), y: H - 12, 'text-anchor': 'middle', fill: t.muted, 'font-size': 11 });
+    svg.appendChild(T(e, lb));
+  });
+  if (cfg.yTitle) { const e = mk('text', { x: m.l, y: 11, 'text-anchor': 'start', fill: t.muted, 'font-size': 10.5 }); svg.appendChild(T(e, cfg.yTitle)); }
+
+  // forecast divider
+  if (cfg.splitAfter != null) {
+    const sx = m.l + band * (cfg.splitAfter + 1);
+    svg.appendChild(mk('line', { x1: sx, x2: sx, y1: m.t, y2: m.t + ph, stroke: t.axis, 'stroke-width': 1 }));
+    const e = mk('text', { x: sx + 5, y: m.t + 11, fill: t.muted, 'font-size': 10 }); svg.appendChild(T(e, 'forecast →'));
+  }
+
+  if (stack) {
+    const bw = Math.min(cfg.barW || 30, band * 0.62);
+    for (let i = 0; i < n; i++) {
+      S.forEach((s, si) => {
+        const [a, b] = stacked[i][si]; if (b - a <= 0) return;
+        let yTop = Y(b), yBot = Y(a); let h = Math.max(0, yBot - yTop - 2);
+        const isTop = si === S.length - 1;
+        const r = isTop ? Math.min(4, h / 2) : 0;
+        svg.appendChild(mk('path', { d: roundRect(CX(i) - bw / 2, yTop, bw, h, r, r, 0, 0), fill: s.color }));
+      });
+      const hit = mk('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, fill: 'transparent' });
+      const idx = i;
+      hit.addEventListener('mousemove', ev => {
+        const r = host.getBoundingClientRect();
+        showTip(host, tip, tipRows(X[idx], S, idx, fmt, pct100 ? stacked[idx] : null, cfg.unit), ev.clientX - r.left, ev.clientY - r.top);
+      });
+      hit.addEventListener('mouseleave', () => hideTip(tip));
+      svg.appendChild(hit);
+    }
+  } else if (cfg.type === 'column') {
+    const k = S.length, gw = Math.min(band * 0.72, (cfg.barW || 22) * k + 2 * (k - 1));
+    const bw = Math.min(24, (gw - 2 * (k - 1)) / k);
+    for (let i = 0; i < n; i++) {
+      S.forEach((s, si) => {
+        const v = s.values[i]; if (v == null) return;
+        const x = CX(i) - gw / 2 + si * (bw + 2);
+        const yv = Y(v), yb = Y(Math.max(y0, 0));
+        const top = Math.min(yv, yb), h = Math.abs(yb - yv);
+        svg.appendChild(mk('path', { d: roundRect(x, top, bw, h, 4, 4, 0, 0), fill: s.color }));
+      });
+      const hit = mk('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, fill: 'transparent' });
+      const idx = i;
+      hit.addEventListener('mousemove', ev => { const r = host.getBoundingClientRect(); showTip(host, tip, tipRows(X[idx], S, idx, fmt, null, cfg.unit), ev.clientX - r.left, ev.clientY - r.top); });
+      hit.addEventListener('mouseleave', () => hideTip(tip));
+      svg.appendChild(hit);
+    }
+  } else { // line
+    if (cfg.area && S.length === 1) {
+      const s = S[0]; let d = '';
+      s.values.forEach((v, i) => { if (v == null) return; d += (d ? 'L' : 'M') + CX(i) + ',' + Y(v); });
+      d += `L${CX(n - 1)},${Y(y0)}L${CX(0)},${Y(y0)}Z`;
+      svg.appendChild(mk('path', { d, fill: s.color, opacity: .10 }));
+    }
+    S.forEach(s => {
+      let d = ''; s.values.forEach((v, i) => { if (v == null) return; d += (d ? 'L' : 'M') + CX(i) + ',' + Y(v); });
+      svg.appendChild(mk('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-dasharray': s.dash || null }));
+    });
+    S.forEach(s => s.values.forEach((v, i) => {
+      if (v == null) return;
+      svg.appendChild(mk('circle', { cx: CX(i), cy: Y(v), r: 4, fill: s.color, stroke: t.surface, 'stroke-width': 2 }));
+    }));
+    if (cfg.labelLast) S.forEach(s => {
+      let li = -1; s.values.forEach((v, i) => { if (v != null) li = i; }); if (li < 0) return;
+      const e = mk('text', { x: CX(li) + 10, y: Y(s.values[li]) + 4, fill: t.ink2, 'font-size': 11, 'font-weight': 600, 'font-variant-numeric': 'tabular-nums' });
+      svg.appendChild(T(e, fmt(s.values[li])));
+    });
+    // crosshair
+    const cross = mk('line', { y1: m.t, y2: m.t + ph, stroke: t.axis, 'stroke-width': 1, opacity: 0 });
+    svg.appendChild(cross);
+    const ov = mk('rect', { x: m.l, y: m.t, width: pw, height: ph, fill: 'transparent' });
+    ov.addEventListener('mousemove', ev => {
+      const r = host.getBoundingClientRect(), sb = svg.getBoundingClientRect();
+      const i = Math.max(0, Math.min(n - 1, Math.floor((ev.clientX - sb.left - m.l) / band)));
+      cross.setAttribute('x1', CX(i)); cross.setAttribute('x2', CX(i)); cross.setAttribute('opacity', 1);
+      showTip(host, tip, tipRows(X[i], S, i, fmt, null, cfg.unit), ev.clientX - r.left, ev.clientY - r.top);
+    });
+    ov.addEventListener('mouseleave', () => { cross.setAttribute('opacity', 0); hideTip(tip); });
+    svg.appendChild(ov);
+  }
+}
+
+function tipRows(label, S, i, fmt, share, unit) {
+  let h = `<b>${label}</b>`;
+  S.forEach((s, si) => {
+    const v = s.values[i]; if (v == null) return;
+    const extra = share ? ` <span class="tm">(${((share[si][1] - share[si][0]) * 100).toFixed(1)}%)</span>` : '';
+    h += `<div class="tr"><span class="sw" style="background:${s.color}"></span><span class="tn">${s.name}</span><span class="tv">${fmt(v)}${unit ? ' <span class="tm">' + unit + '</span>' : ''}${extra}</span></div>`;
+  });
+  return h;
+}
+
+/* ---------- horizontal bars / diverging ---------- */
+function rBar(svg, host, tip, cfg, W, H, t) {
+  const items = cfg.items, n = items.length;
+  const div = cfg.type === 'diverge';
+  const fmt = cfg.yFmt || FMT.bn;
+  const m = { t: 6, r: cfg.mr ?? 56, b: 22, l: cfg.ml ?? 150 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const vals = items.map(d => d.v);
+  let lo = div ? Math.min(0, ...vals) : 0, hi = Math.max(...vals, 0);
+  const ticks = niceTicks(lo, hi, 4);
+  const x0 = ticks[0], x1 = ticks[ticks.length - 1];
+  const X = v => m.l + (v - x0) / (x1 - x0) * pw;
+  const band = ph / n, bh = Math.min(cfg.barH || 20, band * 0.66);
+
+  ticks.forEach(v => {
+    svg.appendChild(mk('line', { x1: X(v), x2: X(v), y1: m.t, y2: m.t + ph, stroke: v === 0 ? t.axis : t.grid, 'stroke-width': 1 }));
+    const e = mk('text', { x: X(v), y: H - 6, 'text-anchor': 'middle', fill: t.muted, 'font-size': 10.5, 'font-variant-numeric': 'tabular-nums' });
+    svg.appendChild(T(e, (cfg.tickFmt || fmt)(v)));
+  });
+  items.forEach((d, i) => {
+    const cy = m.t + band * (i + .5);
+    const lab = mk('text', { x: m.l - 10, y: cy + 4, 'text-anchor': 'end', fill: t.ink2, 'font-size': 11.5 });
+    svg.appendChild(T(lab, d.label));
+    const zx = X(Math.max(x0, 0)), vx = X(d.v);
+    const x = Math.min(zx, vx), w = Math.max(1, Math.abs(vx - zx));
+    const neg = d.v < 0;
+    const r = Math.min(4, w);
+    svg.appendChild(mk('path', {
+      d: neg ? roundRect(x, cy - bh / 2, w, bh, r, 0, 0, r) : roundRect(x, cy - bh / 2, w, bh, 0, r, r, 0),
+      fill: d.color || cfg.color
+    }));
+    const val = mk('text', { x: neg ? x - 7 : x + w + 7, y: cy + 4, 'text-anchor': neg ? 'end' : 'start', fill: t.ink2, 'font-size': 11, 'font-weight': 600, 'font-variant-numeric': 'tabular-nums' });
+    svg.appendChild(T(val, (cfg.valFmt || fmt)(d.v)));
+    const hit = mk('rect', { x: m.l, y: m.t + band * i, width: pw, height: band, fill: 'transparent' });
+    hit.addEventListener('mousemove', ev => {
+      const rr = host.getBoundingClientRect();
+      showTip(host, tip, `<b>${d.label}</b><div class="tr"><span class="sw" style="background:${d.color || cfg.color}"></span><span class="tv">${(cfg.valFmt || fmt)(d.v)}${cfg.unit ? ' <span class="tm">' + cfg.unit + '</span>' : ''}</span></div>${d.note ? '<div class="tm">' + d.note + '</div>' : ''}`, ev.clientX - rr.left, ev.clientY - rr.top);
+    });
+    hit.addEventListener('mouseleave', () => hideTip(tip));
+    svg.appendChild(hit);
+  });
+}
+
+function roundRect(x, y, w, h, tl, tr, br, bl) {
+  tl = Math.min(tl, w / 2, h); tr = Math.min(tr, w / 2, h); br = Math.min(br, w / 2, h); bl = Math.min(bl, w / 2, h);
+  return `M${x + tl},${y}H${x + w - tr}${tr ? `a${tr},${tr} 0 0 1 ${tr},${tr}` : ''}V${y + h - br}${br ? `a${br},${br} 0 0 1 ${-br},${br}` : ''}H${x + bl}${bl ? `a${bl},${bl} 0 0 1 ${-bl},${-bl}` : ''}V${y + tl}${tl ? `a${tl},${tl} 0 0 1 ${tl},${-tl}` : ''}Z`;
+}
+
+/* ---------- registry ---------- */
+const CHARTS = [];
+function chart(id, cfgFn) { CHARTS.push({ id, cfgFn }); }
+function drawAll() {
+  CHARTS.forEach(c => { const h = document.getElementById(c.id); if (h) render(h, c.cfgFn()); });
+}
+</script>
+<script>
+const V = n => getComputedStyle(document.documentElement).getPropertyValue('--' + n).trim();
+function legend(id, series){const el=document.getElementById(id); if(el) el.innerHTML=series.map(s=>`<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');}
+const YRC = () => [V('o1'),V('o2'),V('o3'),V('o4'),V('o5')];
+
+chart('ch_monthly', () => {
+  const s=[{name:'Prepaid (Cash Power)',color:V('s2'),values:D.mPrepaid},
+           {name:'Postpaid LV energy',color:V('s1'),values:D.mPostpaid},
+           {name:'Medium voltage',color:V('s3'),values:D.mMV}];
+  legend('lg_monthly',s);
+  return {type:'line',x:D.mLabels.map((l,i)=>i%6==0?l:''),xRaw:D.mLabels,series:s,height:320,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',min:0,ml:40,yTitle:'Bn FCFA per month'};
+});
+chart('ch_engines', () => {
+  const s=[{name:'Postpaid LV',color:V('s1'),values:D.split.lv.map((v,i)=>+(v-D.split.prepaid[i]-0).toFixed(1))},
+           {name:'Prepaid (Cash Power)',color:V('s2'),values:D.split.prepaid},
+           {name:'Medium voltage',color:V('s3'),values:D.split.mv}];
+  legend('lg_engines',s);
+  return {type:'stack',x:D.years,series:s,height:290,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',yTitle:'Bn FCFA'};
+});
+chart('ch_cats', () => {
+  const order=Object.keys(D.cats);
+  const label={'CLIENTS PRIVES':'Private customers','SOCIETES ETAT':'State-owned companies','ADMINISTRATION GENERALE':'General administration','CLIENT ZONE FRANCHE':'Free-zone customers','O.I ET C.D':'IOs & diplomatic corps','COLLECTIVITES LOCALES':'Local authorities','ORGANISMES ETAT':'State agencies','CLIENTS PRIVES PEPT':'Private (PEPT scheme)','CLIENTS DIVERS':'Miscellaneous','CONCESSION T.E':'CEET concession','CONTENTIEUX COMMERCIAUX':'Commercial litigation'};
+  const pub=['SOCIETES ETAT','ADMINISTRATION GENERALE','COLLECTIVITES LOCALES','ORGANISMES ETAT'];
+  const items=order.slice(0,9).map(k=>({label:label[k]||k, v:+D.cats[k].reduce((a,b)=>a+b,0).toFixed(1),
+    color: pub.includes(k)?V('s3'):V('s1'), note: pub.includes(k)?'Public sector':'Non-state'}));
+  legend('lg_cats',[{name:'Non-state',color:V('s1')},{name:'Public sector',color:V('s3')}]);
+  return {type:'bar',items,height:290,ml:190,mr:64,yFmt:v=>v.toFixed(1),valFmt:v=>v<1?v.toFixed(2):v.toFixed(1),unit:'Bn FCFA, 2021–25',tickFmt:v=>v.toFixed(0)};
+});
+chart('ch_modes', () => {
+  const label={ES:'Cash at till (ES)',CH:'Cheque (CH)',AC:'Credit/offset (AC)',EB:'Electronic (EB)',VI:'Bank transfer (VI)',EP:'EP',PT:'Phone/mobile (PT)',SA:'SA'};
+  const keys=['ES','CH','AC','EB','VI','PT'];
+  const c=[V('s1'),V('s3'),V('s2'),V('s4'),V('s5'),V('o5')];
+  const s=keys.map((k,i)=>({name:label[k],color:c[i],values:D.modes[k].t.map(v=>+v.toFixed(1))}));
+  legend('lg_modes',s);
+  return {type:'stack',x:D.years,series:s,height:300,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',yTitle:'Bn FCFA'};
+});
+chart('ch_digital', () => {
+  const digN=D.years.map((y,i)=>(D.modes.EB.n[i]+D.modes.PT.n[i]));
+  const totN=D.yearTx;
+  const digT=D.years.map((y,i)=>(D.modes.EB.t[i]+D.modes.PT.t[i]));
+  const s=[{name:'Share of transactions',color:V('s1'),values:digN.map((v,i)=>v/totN[i])},
+           {name:'Share of value',color:V('s2'),values:digT.map((v,i)=>v/D.yearTotals[i])}];
+  legend('lg_digital',s);
+  return {type:'line',x:D.years,series:s,height:300,yFmt:v=>(v*100).toFixed(1)+'%',tickFmt:v=>(v*100).toFixed(0)+'%',min:0,max:0.4,labelLast:true,yTitle:'share of yearly total'};
+});
+chart('ch_tickets', () => {
+  const items=D.tickets.map(t=>({label:t[0]+' FCFA',v:t[2],color:V('s1'),note:(t[1]/1e6).toFixed(2)+'M receipts'}));
+  legend('lg_tickets',[{name:'Value collected (Bn FCFA)',color:V('s1')}]);
+  return {type:'bar',items,height:290,ml:110,mr:60,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',tickFmt:v=>v.toFixed(0)};
+});
+chart('ch_freq', () => {
+  const s=[{name:'LV payers, 2024',color:V('s1'),values:D.activeMonths.map(v=>v/1000)}];
+  return {type:'column',x:[1,2,3,4,5,6,7,8,9,10,11,12],series:s,height:290,yFmt:v=>v.toFixed(1)+'k',tickFmt:v=>v+'k',unit:'payers (thousands)',yTitle:'payers (thousands) by months active'};
+});
+chart('ch_mvtop', () => {
+  const items=D.mvTop.map(t=>({label:t[0].length>26?t[0].slice(0,25)+'…':t[0],v:t[1],color:/KALYAN/.test(t[0])?V('s3'):V('s1')}));
+  legend('lg_mvtop',[{name:'MV receipts 2021–25',color:V('s1')},{name:'KALYAN (arrears flag in datapack)',color:V('s3')}]);
+  return {type:'bar',items,height:360,ml:200,mr:56,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',tickFmt:v=>v.toFixed(0),barH:16};
+});
+chart('ch_conc', () => {
+  const [n50,n80,tot]=D.mvConc;
+  const items=[{label:'50% of MV cash',v:n50,color:V('s3')},{label:'80% of MV cash',v:n80,color:V('s2')},{label:'100% (all payers)',v:tot,color:V('s1')}];
+  legend('lg_conc',[{name:'Accounts needed',color:V('s1')}]);
+  return {type:'bar',items,height:220,ml:120,mr:62,yFmt:v=>v.toFixed(0),unit:'MV accounts',tickFmt:v=>v.toFixed(0),barH:20};
+});
+chart('ch_payers', () => {
+  const s=[{name:'LV payers (k)',color:V('s1'),values:D.payersLV.map(v=>v/1000)}];
+  return {type:'column',x:D.years,series:s,height:200,yFmt:v=>v.toFixed(0)+'k',tickFmt:v=>v+'k',unit:'thousand unique refs',mt:10};
+});
+chart('ch_agences', () => {
+  const items=D.agences.map(a=>({label:'Agency '+a[0],v:a[1],color:a[0]==='10'?V('s2'):V('s1'),note:a[2].toLocaleString()+' refs'}));
+  legend('lg_agences',[{name:'Agency receipts 2024',color:V('s1')},{name:'Agency 10 (bulk prepaid + HQ)',color:V('s2')}]);
+  return {type:'bar',items,height:300,ml:104,mr:58,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',tickFmt:v=>v.toFixed(0),barH:16};
+});
+chart('ch_season', () => {
+  const s=[{name:'Avg monthly receipts 2021–24',color:V('s1'),values:D.cashSeason}];
+  return {type:'column',x:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],series:s,height:300,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',min:0,yTitle:'Bn FCFA'};
+});
+chart('ch_term', () => {
+  const s=[{name:'Accounts terminated',color:V('s3'),values:D.term.n}];
+  return {type:'column',x:D.term.y,series:s,height:280,yFmt:v=>v.toFixed(0),unit:'accounts',yTitle:'accounts closed'};
+});
+chart('ch_tenure', () => {
+  const items=D.tenure.map(t=>({label:t[0]+' yrs',v:t[1]/1000,color:V('s1')}));
+  legend('lg_tenure',[{name:'Closed accounts since 2015 (thousands)',color:V('s1')}]);
+  return {type:'bar',items,height:280,ml:90,mr:64,yFmt:v=>v.toFixed(1)+'k',unit:'accounts (k)',tickFmt:v=>v.toFixed(0)+'k',barH:20};
+});
+chart('ch_silence', () => {
+  const c=[V('s1'),V('s2'),V('s2'),V('s3'),V('s3')];
+  const items=AR.silence.labels.map((l,i)=>({label:l,v:AR.silence.n[i]/1000,color:c[i],
+    note:'avg ticket '+Math.round(AR.silence.ticket[i]/1000)+'k FCFA'}));
+  legend('lg_silence',[{name:'Current',color:V('s1')},{name:'Recently silent',color:V('s2')},{name:'Long silent',color:V('s3')}]);
+  return {type:'bar',items,height:280,ml:140,mr:62,yFmt:v=>v.toFixed(1)+'k',unit:'accounts (k)',tickFmt:v=>v.toFixed(0)+'k',barH:20};
+});
+chart('ch_trans', () => {
+  const order=['Regular (10-12)','Semi (5-9)','Weak (1-4)'];
+  const dest=['Regular','Semi','Weak','Silent'];
+  const c=[V('s1'),V('s2'),V('s3'),V('s5')];
+  const s=dest.map((d,i)=>({name:'→ '+d+' in 2025',color:c[i],
+    values:order.map(o=>{const row=AR.trans[o];const tot=Object.values(row).reduce((a,b)=>a+b,0);return (row[d]||0)/tot;})}));
+  legend('lg_trans',s);
+  return {type:'stack100',x:['Regular 2024','Semi 2024','Weak 2024'],series:s,height:280,yFmt:v=>(v*100).toFixed(1)+'%'};
+});
+chart('ch_flow', () => {
+  const s=[{name:'LV implied new arrears',color:V('s1'),values:AR.flow.lv},
+           {name:'MV implied new arrears',color:V('s3'),values:AR.flow.mv}];
+  legend('lg_flow',s);
+  return {type:'column',x:AR.flow.years,series:s,height:280,yFmt:v=>v.toFixed(1),unit:'Bn FCFA',yTitle:'Bn FCFA of new unpaid billing'};
+});
+chart('ch_burst', () => {
+  const s=[{name:'Public-sector receipts',color:V('s3'),values:AR.pubM}];
+  return {type:'line',x:D.mLabels.map((l,i)=>i%6==0?l:''),series:s,height:280,yFmt:v=>v.toFixed(2),unit:'Bn FCFA',min:0,ml:40,area:true,yTitle:'Bn FCFA per month'};
+});
+chart('ch_catchup', () => {
+  const s=[{name:'Account-months settling 2+ bills',color:V('s2'),values:AR.catchup}];
+  return {type:'column',x:D.years,series:s,height:250,yFmt:v=>v.toFixed(1)+'%',tickFmt:v=>v.toFixed(0)+'%',unit:'% of account-months',yTitle:'% of account-months'};
+});
+chart('ch_dstate', () => {
+  const s=[{name:'Recovered after disconnection',color:V('s3'),values:AR.dstate.t}];
+  return {type:'column',x:D.years,series:s,height:250,yFmt:v=>v.toFixed(2),unit:'Bn FCFA',yTitle:'Bn FCFA'};
+});
+
+function wire(){
+  document.getElementById('tblBtn').addEventListener('click', e=>{
+    const on=document.body.classList.toggle('tables');
+    e.target.setAttribute('aria-pressed',on);
+    e.target.textContent=on?'Hide data tables':'Show data tables';
+  });
+  document.getElementById('thBtn').addEventListener('click', e=>{
+    const dark=document.documentElement.getAttribute('data-theme')==='dark';
+    document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+    e.target.textContent=dark?'Dark mode':'Light mode';
+    drawAll();
+  });
+  if(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('thBtn').textContent='Light mode';
+  }
+}
+wire(); drawAll();
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,120);});
+</script>
+</body>
+</html>
