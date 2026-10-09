@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axxum Thinking - Recruitment Pipeline</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #1c1c1a; background: #faf9f5; padding: 14px; }
+  .top { border-bottom: 2px solid #1c1c1a; padding-bottom: 8px; margin-bottom: 12px; }
+  .top h1 { font-size: 18px; font-weight: 700; }
+  .top .sub { font-size: 11px; color: #6d6c66; margin-top: 2px; }
+  .board { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 8px; }
+  .col { flex: 1 1 0; min-width: 210px; background: #f1efe8; border-radius: 8px; display: flex; flex-direction: column; }
+  .col h2 { font-size: 12px; font-weight: 700; color: #fff; padding: 7px 10px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+  .col h2 .n { background: rgba(255,255,255,.28); border-radius: 10px; padding: 0 7px; font-size: 11px; }
+  .col .stack { padding: 8px; display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
+  .ft h2 { background: #2f7d54; } .hi h2 { background: #b8860b; } .pt h2 { background: #1d6e8c; }
+  .mb h2 { background: #b97a12; } .iv h2 { background: #5a4ab0; } .r2 h2 { background: #b5347f; } .no h2 { background: #a32d2d; }
+  .card { background: #fff; border: 1px solid #e4e2da; border-left: 3px solid #bbb; border-radius: 6px; padding: 7px 9px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .card.ft { border-left-color: #2f7d54; } .card.hi { border-left-color: #b8860b; } .card.pt { border-left-color: #1d6e8c; }
+  .card.mb { border-left-color: #b97a12; } .card.iv { border-left-color: #5a4ab0; } .card.r2 { border-left-color: #b5347f; } .card.no { border-left-color: #a32d2d; }
+  .card .nm { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .lin { font-size: 9px; font-weight: 600; color: #1d6e8c; text-decoration: none; white-space: nowrap; }
+  .lin:hover { text-decoration: underline; }
+  .kv { display: grid; grid-template-columns: 54px 1fr; column-gap: 5px; row-gap: 1px; margin-top: 4px; }
+  .k { font-size: 7.5px; color: #a09e93; text-transform: uppercase; letter-spacing: .3px; font-weight: 600; padding-top: 1px; }
+  .v { font-size: 9.5px; color: #33322e; line-height: 1.3; }
+  .v.tbd, .v.dash { color: #c4c2b8; }
+  .v.yes { color: #2f7d54; font-weight: 600; } .v.no { color: #a32d2d; font-weight: 600; } .v.flex { color: #b97a12; font-weight: 600; }
+  .note { font-size: 8.5px; color: #8a897f; font-style: italic; margin-top: 4px; line-height: 1.3; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>Axxum Thinking - Recruitment Pipeline</h1>
+    <div class="sub">Togo Vision 2035 · team build-out · June 2026</div>
+  </div>
+  <div class="board" id="board"></div>
+
+<script>
+const COLS = [
+  { id: "iv", name: "To interview" },
+  { id: "r2", name: "2nd round" },
+  { id: "ft", name: "Recommendation - Full time" },
+  { id: "hi", name: "Hired" },
+  { id: "mb", name: "Maybe - Full time" },
+  { id: "pt", name: "Experts - Part time" },
+  { id: "no", name: "Rejected" }
+];
+const DATA = [
+  { id:"patetif", col:"ft", nm:"Delphine Patetif", sen:"Mid-level", exp:"Advisor · poss. Head of Secretariat", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Harvard", note:"Advisor to CAR president", li:"https://www.linkedin.com/in/delphine-patetif-ba14372b5" },
+  { id:"nassim", col:"ft", nm:"Nassim", sen:"Senior", exp:"Strategy / consulting", rel:"TBD", tim:"TBD", lang:"TBD", brand:"McKinsey", note:"Ex-associate partner, McKinsey", li:"https://www.linkedin.com/in/nassim-berrached-97bb0b55/" },
+  { id:"sigles", col:"ft", nm:"Julie Sigles", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"Cambridge", li:"https://www.linkedin.com/in/jsigles/?locale=en" },
+  { id:"coulibaly", col:"hi", nm:"Tibilé Coulibaly", sen:"Mid-level", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"EDHEC", li:"https://www.linkedin.com/in/tibil%C3%A9-coulibaly-a5857149/" },
+  { id:"vanmalderen", col:"pt", nm:"Erik Van Malderen", sen:"Senior", exp:"Energy", rel:"Yes - Togo", tim:"August", lang:"FR near-native", brand:"Enabel", li:"https://www.linkedin.com/in/erik-m-van-malderen-a9b7911b/" },
+  { id:"vaccari", col:"pt", nm:"Simone Vaccari", sen:"Mid-level", exp:"Credit / securitization", rel:"No", tim:"—", lang:"FR non-native", brand:"Bboxx", note:"Prior collaboration · manage (talks a lot)", li:"https://www.linkedin.com/in/simonevaccari/" },
+  { id:"jomaux", col:"pt", nm:"Julien Jomaux", sen:"Senior / advisor", exp:"Energy markets · Africa", rel:"No", tim:"Free September", lang:"FR native", brand:"Enabel", li:"https://www.linkedin.com/in/julien-jomaux/" },
+  { id:"akber", col:"pt", nm:"Fawad Akber", sen:"Senior", exp:"Phosphate/fertilizer · Sovereign AI · deals", rel:"No", tim:"Part-time", lang:"EN", brand:"Credit Suisse", li:"https://www.linkedin.com/in/fawad-akber/" },
+  { id:"latour", col:"pt", nm:"Côme de La Tour", sen:"Junior", exp:"On-ground research · agri", rel:"Flexible", tim:"ASAP", lang:"FR native", brand:"None", li:"http://linkedin.com/in/c%C3%B4me-de-la-tour-57202022" },
+  { id:"ebale", col:"pt", nm:"Aurélien Ebalé", sen:"Mid-level", exp:"Grid", rel:"Yes - Togo", tim:"~6 months", lang:"FR native", brand:"EDF", note:"Very technical - no long term fit", li:"https://www.linkedin.com/in/bienvenu-aur%C3%A9lien-ebale-m-eng-pmp-8a13a876/" },
+  { id:"notokpe", col:"r2", nm:"Alexandre Notokpe", sen:"Senior", exp:"Project mgmt / PMO (IT/cyber)", rel:"Yes - Togo", tim:"TBD", lang:"FR native", brand:"Presidency of Togo", note:"PMP/PRINCE2/ITIL/ISO27001 · ex-Presidency M&E · applied Manager Projets Stratégiques", li:"https://www.linkedin.com/in/komlan-elikplim-alexandre-notokpe/" },
+  { id:"itoua", col:"iv", nm:"Martial Itoua", sen:"Senior", exp:"Telecom / digital infra · project mgmt", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Helios Towers", note:"10+ yrs telecom infra, Central Africa · applied Manager Projets Stratégiques", li:"" },
+  { id:"dedingar", col:"no", nm:"Sabine Dedingar", sen:"Junior", exp:"Data analysis · research · project support", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"CEMP", note:"MSc Sustainable Cities · 2 yrs public-sector/infra (WB/AfDB/IFC) · applied Project Analyst", li:"" },
+  { id:"kotia", col:"no", nm:"Salome Kotia", sen:"Senior", exp:"Impact / dev strategy consulting", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Hystra", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/salome-kotia-25687911a/" },
+  { id:"leblay", col:"no", nm:"Hugo Le Blay", sen:"Mid-level", exp:"Strategy / data / AI (dev sector)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Freelance", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/hugo-le-blay-336135b2/" },
+  { id:"deluze", col:"iv", nm:"Théo de Luze", sen:"Junior", exp:"Strategy (ex-BCG)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"BCG (ex)", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/theodeluze/" },
+  { id:"gabriel", col:"iv", nm:"Damien Gabriel", sen:"TBD", exp:"Sustainability / climate finance / civic tech", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Sourced via LinkedIn · messaged", li:"https://www.linkedin.com/in/damien-gabriel/" },
+  { id:"yameogo", col:"no", nm:"Jean Racine Yaméogo", sen:"Senior", exp:"Infra / PPP / telecoms · deal execution", rel:"TBD", tim:"TBD", lang:"FR", brand:"TBD", note:"30+ yrs PPP/infra, West Africa incl Togo · €300M PPP road · inbound via post", li:"https://www.linkedin.com/in/jean-racine-yameogo-5567ba100/" },
+  { id:"mseux", col:"iv", nm:"Marianne Seux", sen:"Mid-level", exp:"M&A & strategy (Africa)", rel:"TBD", tim:"TBD", lang:"FR native", brand:"HEC Paris", note:"Sourced · replied to outreach · inbound", li:"https://www.linkedin.com/in/marianne-seux/" },
+  { id:"djikpo", col:"no", nm:"Kodjo Michael Djikpo", sen:"TBD", exp:"Finance", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Finance Manager, Togo · inbound via post", li:"https://www.linkedin.com/in/kodjo-michael-djikpo-17a750110/" },
+  { id:"kiange", col:"no", nm:"Jordy Kiange Beni", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"TBD", note:"Inbound via post · wants JDs", li:"https://www.linkedin.com/in/jordy-k/" },
+  { id:"able", col:"no", nm:"Yaovi M. Able", sen:"TBD", exp:"TBD", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Togo · inbound via post", li:"https://www.linkedin.com/in/yaovi-m-able-875a077b/" },
+  { id:"aokou", col:"no", nm:"Komi Ognadon Aokou", sen:"TBD", exp:"TBD", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Togo · inbound (mutual: S. Frendo)", li:"https://www.linkedin.com/in/komi-ognadon-aokou/" },
+  { id:"hingorani", col:"no", nm:"Kamal Hingorani", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"TBD", note:"Inbound · wants role details", li:"https://www.linkedin.com/in/kamal-hingorani-34247510/" },
+  { id:"ahouenon", col:"no", nm:"Ahouenon Komlan Dohatto", sen:"TBD", exp:"TBD", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Togo · sent CV · inbound", li:"https://www.linkedin.com/in/ahouenon-komlan-dohatto-4b3b55174/" },
+  { id:"kutor", col:"no", nm:"Mawunyo Kwasi Kutor", sen:"7 yrs", exp:"IT", rel:"Yes - W. Africa", tim:"TBD", lang:"EN", brand:"TBD", note:"Ghana · BSc IT · off-profile (IT/EN)", li:"https://www.linkedin.com/in/mkutorson/" },
+  { id:"kessougbo", col:"no", nm:"Yawo Claude Kessougbo", sen:"Senior", exp:"Corporate / project finance & tax", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"blackroots / FMVA", note:"Lomé · Finance & Tax Manager · wants senior role · inbound", li:"https://www.linkedin.com/in/yawo-claude-kessougbo-5b226044/" },
+  { id:"wassy", col:"no", nm:"Wassy Kambale", sen:"Recent grad", exp:"Media & climate", rel:"Flexible", tim:"TBD", lang:"FR", brand:"MSc Media & Climate", note:"Recent grad · sent CV · you replied (WhatsApp) · off-core", li:"https://www.linkedin.com/in/wassy-kambale-2962998a/" },
+  { id:"adonijah", col:"no", nm:"Adonijah Otieno Ogara", sen:"6+ yrs", exp:"Mech R&D / data science (e-mobility, energy)", rel:"Flexible", tim:"TBD", lang:"EN", brand:"IEng MIMechE", note:"East Africa · technical · off-core (EN/technical)", li:"https://www.linkedin.com/in/adonijahotieno/" },
+  { id:"cdossa", col:"no", nm:"Christelle Lorraine Dossa", sen:"TBD", exp:"Energy", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Togo · brief message", li:"https://www.linkedin.com/in/cldossa/" },
+  { id:"tchandao", col:"no", nm:"Christian Tchandao", sen:"TBD", exp:"Strategic projects / delivery", rel:"Yes - Togo", tim:"TBD", lang:"FR", brand:"TBD", note:"Togo · strategic projects / high-impact initiatives", li:"https://www.linkedin.com/in/christian-tchandao%F0%9F%8E%A5-0bb992243/" },
+  { id:"oumarou", col:"no", nm:"Hassane Oumarou", sen:"TBD", exp:"Deals · energy / infra / transactions", rel:"Flexible", tim:"TBD", lang:"FR", brand:"TBD", note:"FR · deal experience · UAE/Benin · inbound", li:"https://www.linkedin.com/in/hassan-omar-126a3114/" },
+  { id:"arzika", col:"no", nm:"Arzika Mahamane Laouali", sen:"TBD", exp:"Logistics & supply chain · sales", rel:"Flexible", tim:"TBD", lang:"FR / EN", brand:"TBD", note:"Bilingual · off-core", li:"https://www.linkedin.com/in/arzika-mahamane-laouali-7733a962/" },
+  { id:"mutabazi", col:"no", nm:"Claude Mutabazi", sen:"TBD", exp:"Deals", rel:"TBD", tim:"TBD", lang:"EN", brand:"TBD", note:"Kigali · working on deals · interested", li:"https://www.linkedin.com/in/claude-mutabazi/" },
+  { id:"walla", col:"no", nm:"Walla Mayika", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"FR", brand:"TBD", note:"Sent CV · little info yet", li:"https://www.linkedin.com/in/walla-mayika-39718b110/" },
+  { id:"mathieu", col:"r2", nm:"Mathieu Agnekethom", sen:"Junior", exp:"TBD", rel:"Yes - Togo", tim:"TBD", lang:"FR / EN", brand:"TBD", note:"Young professional recently returned to Togo · inbound", li:"https://www.linkedin.com/in/mathieu-agnekethom-940b6b225/" },
+  { id:"malabi", col:"no", nm:"M Alabi", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"MBA", note:"Declined · not consulting-specific", li:"https://www.linkedin.com/in/m-a-1925b471/" },
+  { id:"bawea", col:"no", nm:"Ikadri Michel Bawea", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"TBD", note:"Declined (repeat applicant)", li:"https://www.linkedin.com/in/ikadri-michel-bawea-a4674b41/" },
+  { id:"kalyo", col:"no", nm:"Daniel Kalyo", sen:"TBD", exp:"Generalist (CS / PM / supply chain / audit)", rel:"TBD", tim:"TBD", lang:"TBD", brand:"TBD", note:"Off-profile · declined", li:"https://www.linkedin.com/in/daniel-kalyo-038432135/" },
+  { id:"medwin", col:"no", nm:"Margaret (Meg) Edwin", sen:"TBD", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"MSc", note:"Declined", li:"https://www.linkedin.com/in/megedwin/" },
+  { id:"madjri", col:"r2", nm:"Madjri Bruce", sen:"MBA", exp:"TBD", rel:"TBD", tim:"TBD", lang:"TBD", brand:"TBD", note:"Inbound · advanced to 2nd round", li:"https://www.linkedin.com/in/madjri-bruce-m-b-a-57175623" },
+  { id:"kaberuka", col:"no", nm:"Marie Kaberuka", sen:"Mid-Senior", exp:"Strategy & ops · ex-Dalberg", rel:"TBD", tim:"TBD", lang:"FR native", brand:"Dalberg (ex)", note:"Sourced (ex-Dalberg, France)", li:"https://www.linkedin.com/in/marie-w-kaberuka-855b41aa/" },
+  { id:"mukwawaya", col:"r2", nm:"Sharon Tatenda Mukwawaya", sen:"TBD", exp:"Programme analysis & mgmt · gender & development", rel:"Yes - Togo", tim:"TBD", lang:"TBD", brand:"TBD", note:"Based in Togo · advanced to 2nd round", li:"https://www.linkedin.com/in/sharon-tatenda-mukwawaya-619875182/" },
+  { id:"cote", col:"r2", nm:"Jean Coté", sen:"TBD", exp:"Strategy & transformation", rel:"TBD", tim:"TBD", lang:"FR native", brand:"TBD", note:"Casablanca · very good · 2nd round (interview w/ Mansoor)", li:"https://www.linkedin.com/in/jean-cot%C3%A9-63218a108/" },
+  { id:"kruisheer", col:"no", nm:"Maurits Kruisheer", sen:"Mid-level", exp:"Consulting", rel:"Yes - W. Africa", tim:"September", lang:"FR not fluent", brand:"None", note:"Potential culture fit", li:"https://www.linkedin.com/in/maurits-kruisheer-44778a138/" },
+  { id:"dinar", col:"no", nm:"Amine Dinar", sen:"Low mid-level", exp:"Freelance consulting", rel:"Yes - Togo", tim:"Mid-July", lang:"FR native", brand:"None", note:"Strong culture fit · ex-pro footballer", li:"https://www.linkedin.com/in/aminedinar" },
+  { id:"molinier", col:"no", nm:"Frédéric Molinier", sen:"Senior", exp:"Finance / GM", rel:"—", tim:"—", lang:"FR", brand:"—", note:"'Cowboy' profile", li:"https://cg.linkedin.com/in/frederic-r-molinier-1a15217" },
+  { id:"brun", col:"no", nm:"Grégory Brun", sen:"Mid-level", exp:"Retail", rel:"—", tim:"—", lang:"FR", brand:"—", note:"Too much retail experience", li:"https://www.linkedin.com/in/gregory-brun-331a692b/?locale=en" },
+  { id:"frendo", col:"no", nm:"Sébastien Frendo", sen:"—", exp:"Own consulting co.", rel:"—", tim:"—", lang:"—", brand:"—", note:"Explore a partnership call", li:"https://www.linkedin.com/in/sebastien-frendo" },
+  { id:"mur", col:"no", nm:"Cyril Mur", sen:"Mid-level", exp:"Finance", rel:"—", tim:"—", lang:"—", brand:"—", note:"Likely too finance-focused", li:"https://www.linkedin.com/in/cyrilmur/" },
+  { id:"blanchard", col:"no", nm:"Julien Blanchard", sen:"—", exp:"Operational", rel:"—", tim:"—", lang:"FR native", brand:"—", note:"Too operational", li:"http://linkedin.com/in/julien-blanchard-55872923" },
+  { id:"pearson", col:"no", nm:"Nick Pearson", sen:"—", exp:"Operational", rel:"—", tim:"—", lang:"FR non-native", brand:"Bboxx", note:"Too operational · good (ex-Bboxx)", li:"https://www.linkedin.com/in/nick-pearson-3579832a/" },
+  { id:"napo", col:"no", nm:"Silvère Napo", sen:"—", exp:"Technical", rel:"—", tim:"—", lang:"—", brand:"—", note:"Too technical", li:"https://www.linkedin.com/in/silv%C3%A8re-napo-500b5197/" },
+  { id:"bodunrin", col:"no", nm:"Gael-Germain Godonou", sen:"Mid-level", exp:"Finance", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"IESE", li:"https://www.linkedin.com/in/gaelggodonou" },
+  { id:"jacquot", col:"no", nm:"Grégoire Jacquot", sen:"Senior", exp:"Deals / transactions", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Harvard / MIT", li:"https://www.linkedin.com/in/gr%C3%A9goire-jacquot-41a0a483" },
+  { id:"barry", col:"no", nm:"Julian Barry", sen:"Junior", exp:"Consulting", rel:"Yes - Togo", tim:"ASAP", lang:"FR native", brand:"Accenture / KPMG", note:"Strong culture fit", li:"https://www.linkedin.com/in/julian-barry/" },
+  { id:"boes", col:"no", nm:"Viviana Boes", sen:"Mid-level", exp:"Consulting (no big names)", rel:"Yes - Togo", tim:"Flexible", lang:"FR non-native", brand:"GIZ", li:"https://www.linkedin.com/in/viviana-boes-alvarez/" }
+];
+
+function esc(s){ return (s==null?"":String(s)).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function relClass(v){ const t=(v||"").toLowerCase(); if(t.startsWith("yes"))return"yes"; if(t==="no")return"no"; if(t.startsWith("flex"))return"flex"; if(t==="tbd"||t==="tbc")return"tbd"; if(t==="—"||t==="")return"dash"; return""; }
+function vClass(v){ const t=(v||"").toLowerCase(); if(t==="tbd"||t==="tbc")return"tbd"; if(t==="—"||t==="")return"dash"; return""; }
+
+function cardEl(c) {
+  const el = document.createElement("div");
+  el.className = "card " + c.col;
+  let rows = [["Seniority",c.sen,vClass(c.sen)],["Expertise",c.exp,vClass(c.exp)],
+    ["Relocate",c.rel,relClass(c.rel)],["Timeline",c.tim,vClass(c.tim)],
+    ["Language",c.lang,vClass(c.lang)],["Brand",c.brand,vClass(c.brand)]];
+  let kv = rows.map(r => '<span class="k">'+r[0]+'</span><span class="v '+r[2]+'">'+esc(r[1])+'</span>').join("");
+  let link = c.li ? '<a class="lin" href="'+esc(c.li)+'" target="_blank" rel="noopener">LinkedIn ↗</a>' : '';
+  let html = '<div class="nm"><span>'+esc(c.nm)+'</span>'+link+'</div><div class="kv">'+kv+'</div>';
+  if (c.note) html += '<div class="note">'+esc(c.note)+'</div>';
+  el.innerHTML = html;
+  return el;
+}
+
+const board = document.getElementById("board");
+COLS.forEach(col => {
+  const cards = DATA.filter(c => c.col === col.id);
+  const colEl = document.createElement("div");
+  colEl.className = "col " + col.id;
+  colEl.innerHTML = '<h2>' + esc(col.name) + '<span class="n">' + cards.length + '</span></h2>';
+  const stack = document.createElement("div");
+  stack.className = "stack";
+  cards.forEach(c => stack.appendChild(cardEl(c)));
+  colEl.appendChild(stack);
+  board.appendChild(colEl);
+});
+</script>
+</body>
+</html>
